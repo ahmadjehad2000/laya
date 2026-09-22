@@ -1,0 +1,56 @@
+name: Native Astra + Laya
+on:
+  workflow_dispatch:
+    inputs:
+      real_laya:
+        description: Also prepare the pinned checkpoint and run real CPU Laya inference
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    env:
+      CARGO_BUILD_JOBS: '2'
+      PYTHONUTF8: '1'
+      USE_TF: '0'
+      USE_TORCH: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.95.0 --profile minimal --component rustfmt,clippy,rust-src
+      - name: Build the complete pinned Windows package
+        run: python integrations/codex/native/build.py --home "$env:RUNNER_TEMP/laya-native"
+      - name: Verify native fallback against local Responses fixture
+        run: |
+          $nativeRoot = Join-Path $env:RUNNER_TEMP 'laya-native'
+          $receipt = Get-Content -Raw "$nativeRoot/build.json" | ConvertFrom-Json
+          $binary = Join-Path (Join-Path $nativeRoot $receipt.package) 'bin/codex.exe'
+          python integrations/codex/native/verify_native.py --binary "$binary" --missing-worker --output dist/native-fallback.json
+      - name: Install and prepare real CPU Laya
+        if: inputs.real_laya
+        run: |
+          python -m pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r integrations/codex/requirements.lock
+          python -m pip install --no-deps . ./integrations/codex
+          laya-for-codex prepare --model multilingual
+      - name: Verify real worker and native wire settings
+        if: inputs.real_laya
+        run: |
+          $nativeRoot = Join-Path $env:RUNNER_TEMP 'laya-native'
+          $receipt = Get-Content -Raw "$nativeRoot/build.json" | ConvertFrom-Json
+          $binary = Join-Path (Join-Path $nativeRoot $receipt.package) 'bin/codex.exe'
+          python integrations/codex/native/verify_controller.py --output dist/native-worker.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python integrations/codex/native/verify_native.py --binary "$binary" --output dist/native-controller.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-windows-verification
+          path: dist/native-*.json
+          if-no-files-found: ignore

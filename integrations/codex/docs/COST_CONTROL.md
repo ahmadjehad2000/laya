@@ -71,9 +71,20 @@ changes instructions, not the computation provider. OpenAI's
 carry opaque encrypted reasoning state that Laya cannot recreate.
 
 Consequently, no global interception hook, credential proxy, transcript mutation,
-or native-compaction disable switch is installed. Automatic same-thread replacement
-would require a supported host API or maintaining a Codex harness/fork. The shipped
-new-thread workflow is a working, explicit alternative with a narrower guarantee.
+or native-compaction disable switch is installed. The separate 0.2.0
+[native client](../native/README.md) maintains a pinned Codex patch for **reasoning
+effort**, not replacement compaction. It uses the upstream native configuration-update
+path, invalidates leases after a context-window change, and leaves Codex compaction
+in charge of its own state. The new-thread handoff remains an explicit alternative.
+
+Use `continue --target laya-codex --model laya-astra` after building that client.
+Optional `compact-file --controller-log decisions.jsonl` carries a deliberately
+supplied native log inside the workspace as historical provenance. It records the
+checkpoint, evidence hash, coverage and captured effort, archives the original log,
+and never resumes an old lease. It does not read your private Codex history automatically.
+
+The pilot below measured the original handoff and classification workflows. It does
+**not** establish native adaptive-effort cost savings, task quality or a speedup.
 
 ## Measured pilot
 

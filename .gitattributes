@@ -1,4 +1,7 @@
 integrations/codex/** text eol=lf
 .agents/plugins/marketplace.json text eol=lf
 .github/workflows/codex-companion.yml text eol=lf
+.github/workflows/laya-native.yml text eol=lf
+# Unified-diff context markers are significant, including space-only lines.
+integrations/codex/native/laya-native.patch text eol=lf -whitespace
 *.png binary

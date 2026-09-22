@@ -4,3 +4,8 @@ distributed under Apache License 2.0. The upstream source and license remain
 in the root of this fork. Model repositories have their own license metadata.
 No endorsement by OpenAI or Convai Innovations is implied.
 No Laya-MLX runtime, dependency, or vendored source is included.
+
+The optional native client builds OpenAI Codex from a pinned upstream commit under
+Apache License 2.0, retaining that checkout's LICENSE and NOTICE. Our native patch
+and Laya controller are independent integration work. Jev/TypeSafe and Astra-Ares
+were architectural references only; neither is a runtime dependency or vendored code.

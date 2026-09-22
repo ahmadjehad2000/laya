@@ -1,0 +1,2177 @@
+diff --git a/codex-rs/Cargo.lock b/codex-rs/Cargo.lock
+index 5394382df2..c0daede522 100644
+--- a/codex-rs/Cargo.lock
++++ b/codex-rs/Cargo.lock
+@@ -416,7 +416,7 @@ checksum = "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3"
+ 
+ [[package]]
+ name = "app_test_support"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -2040,7 +2040,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-core",
+@@ -2052,7 +2052,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-graph-store"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-state",
+@@ -2067,7 +2067,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-identity"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -2087,7 +2087,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-roles"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-config",
+  "codex-file-system",
+@@ -2100,7 +2100,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-analytics"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-app-server-protocol",
+  "codex-git-utils",
+@@ -2121,7 +2121,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-ansi-escape"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "ansi-to-tui",
+  "ratatui",
+@@ -2130,7 +2130,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-api"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "assert_matches",
+@@ -2165,7 +2165,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -2271,7 +2271,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-app-server",
+  "codex-app-server-protocol",
+@@ -2298,7 +2298,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-daemon"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "blake3",
+@@ -2321,7 +2321,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-protocol"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-app-server-protocol-noop-macros",
+@@ -2355,11 +2355,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-protocol-noop-macros"
+-version = "0.0.0"
++version = "0.155.1"
+ 
+ [[package]]
+ name = "codex-app-server-test-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2381,7 +2381,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-transport"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -2424,7 +2424,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-apply-patch"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
+@@ -2444,7 +2444,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-arg0"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-apply-patch",
+@@ -2466,7 +2466,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-async-utils"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+  "tokio",
+@@ -2475,7 +2475,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-attachment-store"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-utils-image",
+@@ -2486,7 +2486,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-aws-auth"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "aws-config",
+  "aws-credential-types",
+@@ -2501,7 +2501,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-backend-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-api",
+@@ -2521,7 +2521,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-backend-openapi-models"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "serde",
+  "serde_json",
+@@ -2530,7 +2530,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-build-info"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-install-context",
+  "pretty_assertions",
+@@ -2543,7 +2543,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-bwrap"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "cc",
+  "libc",
+@@ -2552,7 +2552,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-chatgpt"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2574,7 +2574,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cli"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -2667,7 +2667,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-http-client",
+  "eventsource-stream",
+@@ -2680,7 +2680,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-config"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "chrono",
+@@ -2705,7 +2705,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -2738,7 +2738,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -2753,7 +2753,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks-mock-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "chrono",
+  "codex-cloud-tasks-client",
+@@ -2762,7 +2762,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-code-mode-protocol",
+  "codex-http-client",
+@@ -2785,7 +2785,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-host"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -2813,7 +2813,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-protocol"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "glob",
+@@ -2831,7 +2831,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-runtime"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-code-mode-protocol",
+@@ -2849,11 +2849,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-collaboration-mode-templates"
+-version = "0.0.0"
++version = "0.155.1"
+ 
+ [[package]]
+ name = "codex-config"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -2903,7 +2903,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-config-schema"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2912,7 +2912,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-connectors"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -2934,7 +2934,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-connectors-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-connectors",
+  "codex-core-plugins",
+@@ -2948,7 +2948,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-context-fragments"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-string",
+@@ -2957,7 +2957,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3093,7 +3093,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core-api"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-analytics",
+  "codex-app-server-protocol",
+@@ -3116,7 +3116,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core-plugins"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3171,7 +3171,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-diagnostics"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "libc",
+  "pretty_assertions",
+@@ -3179,7 +3179,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
+@@ -3230,7 +3230,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3290,7 +3290,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server-protocol"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-file-system",
+@@ -3305,7 +3305,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server-test-support"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-exec-server",
+@@ -3320,7 +3320,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-execpolicy"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -3338,7 +3338,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-experimental-api-macros"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -3347,7 +3347,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-extension-api"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-config",
+  "codex-context-fragments",
+@@ -3365,7 +3365,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-extension-items"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "pretty_assertions",
+@@ -3377,7 +3377,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-external-agent-migration"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "chrono",
+  "codex-analytics",
+@@ -3407,7 +3407,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-features"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-network-proxy",
+  "codex-otel",
+@@ -3421,7 +3421,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-feedback"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "bytes",
+@@ -3444,7 +3444,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-search"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -3460,7 +3460,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-system"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "bytes",
+  "codex-protocol",
+@@ -3472,7 +3472,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-watcher"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "notify",
+  "pretty_assertions",
+@@ -3483,7 +3483,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-git-attribution"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-backend-client",
+  "codex-extension-api",
+@@ -3496,7 +3496,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-git-utils"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3522,7 +3522,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-goal-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3546,7 +3546,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-context"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-context-fragments",
+  "codex-history",
+@@ -3557,7 +3557,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-reviewer"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-analytics",
+@@ -3581,7 +3581,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-v2"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-analytics",
+@@ -3609,7 +3609,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-history"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-protocol",
+@@ -3621,7 +3621,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-history-notes-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-analytics",
+  "codex-api",
+@@ -3646,7 +3646,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-home"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-extension-api",
+  "codex-utils-absolute-path",
+@@ -3657,7 +3657,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-hooks"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "async-channel",
+@@ -3683,7 +3683,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-http-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "bytes",
+  "codex-utils-cargo-bin",
+@@ -3715,7 +3715,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-image-generation-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-api",
+@@ -3742,7 +3742,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-install-context"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "codex-utils-home-dir",
+@@ -3755,7 +3755,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-keyring-store"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "keyring",
+  "tracing",
+@@ -3763,7 +3763,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-linux-sandbox"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "clap",
+  "codex-core",
+@@ -3790,7 +3790,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-lmstudio"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-core",
+  "codex-http-client",
+@@ -3804,7 +3804,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-login"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -3847,7 +3847,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mcp"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3887,7 +3887,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mcp-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -3918,7 +3918,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-core",
+  "codex-extension-api",
+@@ -3940,7 +3940,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-read"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-shell-command",
+@@ -3950,7 +3950,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-write"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3987,7 +3987,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-message-history"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-config",
+  "memchr",
+@@ -4001,7 +4001,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-model-provider"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "chrono",
+@@ -4030,7 +4030,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-model-provider-info"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-api",
+  "codex-protocol",
+@@ -4047,7 +4047,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-models-manager"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "chrono",
+  "codex-collaboration-mode-templates",
+@@ -4066,7 +4066,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mxc-sandbox"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "appcontainer_common",
+@@ -4085,7 +4085,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-network-proxy"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -4129,7 +4129,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-ollama"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "assert_matches",
+  "async-stream",
+@@ -4149,7 +4149,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-otel"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "chrono",
+  "codex-api",
+@@ -4182,7 +4182,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-otel-trace-websocket"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -4193,7 +4193,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-plugin"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-config",
+  "codex-protocol",
+@@ -4207,7 +4207,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-process-hardening"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "libc",
+  "pretty_assertions",
+@@ -4215,7 +4215,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-prompts"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-context-fragments",
+@@ -4229,7 +4229,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-protocol"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chardetng",
+@@ -4273,7 +4273,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-queue-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-core",
+@@ -4294,7 +4294,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-realtime-webrtc"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-build-info",
+@@ -4311,7 +4311,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-response-debug-context"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-api",
+@@ -4322,7 +4322,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-responses-api-proxy"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4339,7 +4339,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rmcp-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -4387,7 +4387,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rollout"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -4414,7 +4414,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rollout-trace"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-code-mode",
+@@ -4430,7 +4430,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-sandboxing"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-mxc-sandbox",
+@@ -4456,7 +4456,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-secrets"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "age",
+  "anyhow",
+@@ -4477,7 +4477,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-shell-command"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -4500,7 +4500,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-shell-escalation"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4520,7 +4520,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-skills"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-shell-command",
+@@ -4537,7 +4537,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-skills-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "assert_matches",
+  "codex-analytics",
+@@ -4574,7 +4574,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-state"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -4598,7 +4598,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-stdio-to-uds"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-uds",
+@@ -4610,7 +4610,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-terminal-detection"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+  "tracing",
+@@ -4618,7 +4618,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-test-binary-support"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-arg0",
+  "tempfile",
+@@ -4626,7 +4626,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-thread-manager-sample"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4637,7 +4637,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-thread-store"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "chrono",
+  "codex-app-server-protocol",
+@@ -4667,7 +4667,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-tools"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "bitflags 2.13.1",
+  "codex-code-mode",
+@@ -4692,7 +4692,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-tui"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -4810,7 +4810,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-uds"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "async-io",
+  "pretty_assertions",
+@@ -4823,7 +4823,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-user-verification"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "core-foundation 0.10.1",
+@@ -4843,7 +4843,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-absolute-path"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "dirs",
+  "dunce",
+@@ -4857,14 +4857,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-approval-presets"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-audio"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-protocol",
+@@ -4878,7 +4878,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cache"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "lru",
+  "sha1 0.10.6",
+@@ -4887,7 +4887,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cargo-bin"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "assert_cmd",
+  "runfiles",
+@@ -4896,7 +4896,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cli"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "clap",
+  "codex-protocol",
+@@ -4908,15 +4908,15 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-elapsed"
+-version = "0.0.0"
++version = "0.155.1"
+ 
+ [[package]]
+ name = "codex-utils-fuzzy-match"
+-version = "0.0.0"
++version = "0.155.1"
+ 
+ [[package]]
+ name = "codex-utils-git-discovery"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-git-utils",
+  "codex-utils-absolute-path",
+@@ -4929,7 +4929,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-home-dir"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "dirs",
+@@ -4939,7 +4939,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-image"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-utils-cache",
+@@ -4952,7 +4952,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-json-to-toml"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+  "serde_json",
+@@ -4961,7 +4961,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-oss"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-core",
+  "codex-lmstudio",
+@@ -4971,7 +4971,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-output-truncation"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-string",
+@@ -4980,7 +4980,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-path"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "dunce",
+@@ -4991,7 +4991,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-path-uri"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-utils-absolute-path",
+@@ -5007,7 +5007,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-plugins"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-exec-server",
+  "codex-exec-server-protocol",
+@@ -5021,7 +5021,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-pty"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "filedescriptor",
+@@ -5037,7 +5037,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-readiness"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "assert_matches",
+  "thiserror 2.0.18",
+@@ -5047,7 +5047,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-redacted-string"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "schemars 0.8.22",
+  "serde",
+@@ -5055,14 +5055,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-rustls-provider"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "rustls",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-sandbox-summary"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-absolute-path",
+@@ -5071,7 +5071,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-sleep-inhibitor"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "core-foundation 0.9.4",
+  "libc",
+@@ -5081,14 +5081,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-stream-parser"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-string"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+  "regex-lite",
+@@ -5098,14 +5098,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-template"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+ ]
+ 
+ [[package]]
+ name = "codex-v8-poc"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "pretty_assertions",
+  "v8",
+@@ -5113,7 +5113,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-voice-host"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-install-context",
+@@ -5140,7 +5140,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-web-search-extension"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-api",
+  "codex-core",
+@@ -5161,7 +5161,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-websocket-client"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-http-client",
+  "codex-utils-rustls-provider",
+@@ -5177,7 +5177,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-windows-sandbox"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -5203,7 +5203,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-windows-sandbox-service"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-cloud-config",
+@@ -5220,7 +5220,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-workload-identity"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "codex-http-client",
+  "pretty_assertions",
+@@ -5235,7 +5235,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-worktree"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "codex-git-utils",
+@@ -5475,7 +5475,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "core_test_support"
+-version = "0.0.0"
++version = "0.155.1"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
+diff --git a/codex-rs/core/src/session/laya_controller.rs b/codex-rs/core/src/session/laya_controller.rs
+new file mode 100644
+index 0000000000..d8e01ff735
+--- /dev/null
++++ b/codex-rs/core/src/session/laya_controller.rs
+@@ -0,0 +1,427 @@
++//! Laya supplies typed effort decisions; Codex owns settings, history and execution.
++//! Child pipes keep inference local and work on Windows without a listening port.
++
++use super::session::Session;
++use super::step_context::StepContext;
++use super::step_settings::ResolvedStepSettings;
++use super::turn_context::TurnContext;
++use codex_async_utils::OrCancelExt;
++use codex_features::Feature;
++use codex_protocol::error::Result as CodexResult;
++use codex_protocol::items::TurnItem;
++use codex_protocol::models::ResponseItem;
++use codex_protocol::openai_models::ReasoningEffort;
++use codex_protocol::protocol::EventMsg;
++use codex_protocol::protocol::MultiAgentVersion;
++use codex_protocol::protocol::TurnSettingsUpdate;
++use codex_protocol::protocol::TurnSettingsUpdateOutcome;
++use codex_protocol::protocol::WarningEvent;
++use serde_json::Value;
++use serde_json::json;
++use std::collections::VecDeque;
++use std::process::Stdio;
++use std::sync::Arc;
++use std::time::Duration;
++use tokio::io::AsyncBufReadExt;
++use tokio::io::AsyncReadExt;
++use tokio::io::AsyncWriteExt;
++use tokio::io::BufReader;
++use tokio::process::Child;
++use tokio::process::ChildStdin;
++use tokio::process::ChildStdout;
++use tokio::process::Command;
++use tokio_util::sync::CancellationToken;
++
++const MAX_FRAME: usize = 1024 * 1024;
++
++struct Worker {
++    _child: Child,
++    input: ChildStdin,
++    output: BufReader<ChildStdout>,
++}
++
++impl Worker {
++    fn start() -> anyhow::Result<Self> {
++        let python = std::env::var_os("LAYA_CONTROLLER_PYTHON")
++            .ok_or_else(|| anyhow::anyhow!("launch this build with laya-codex"))?;
++        let mut command = Command::new(python);
++        // Do not pass provider credentials to the inference worker. It needs only
++        // OS/runtime/cache settings, not Codex's authentication environment.
++        command.env_clear();
++        for (key, value) in std::env::vars_os() {
++            let name = key.to_string_lossy().to_ascii_uppercase();
++            if matches!(
++                name.as_str(),
++                "PATH"
++                    | "USERNAME"
++                    | "USER"
++                    | "LOGNAME"
++                    | "COMSPEC"
++                    | "SYSTEMDRIVE"
++                    | "HOMEDRIVE"
++                    | "HOMEPATH"
++                    | "PROGRAMDATA"
++                    | "PATHEXT"
++                    | "SYSTEMROOT"
++                    | "WINDIR"
++                    | "APPDATA"
++                    | "LOCALAPPDATA"
++                    | "USERPROFILE"
++                    | "HOME"
++                    | "TEMP"
++                    | "TMP"
++                    | "TMPDIR"
++                    | "LD_LIBRARY_PATH"
++                    | "DYLD_LIBRARY_PATH"
++                    | "HF_HOME"
++                    | "HF_HUB_CACHE"
++                    | "TORCH_HOME"
++            ) || name.starts_with("LAYA_COMPANION_")
++                || name.starts_with("CUDA_")
++            {
++                command.env(key, value);
++            }
++        }
++        command
++            .args(["-I", "-m", "laya_codex_companion.controller"])
++            .stdin(Stdio::piped())
++            .stdout(Stdio::piped())
++            .stderr(Stdio::null())
++            .kill_on_drop(true);
++        #[cfg(windows)]
++        command.creation_flags(0x08000000); // CREATE_NO_WINDOW for the worker only.
++        let mut child = command.spawn()?;
++        Ok(Self {
++            input: child
++                .stdin
++                .take()
++                .ok_or_else(|| anyhow::anyhow!("missing worker stdin"))?,
++            output: BufReader::new(
++                child
++                    .stdout
++                    .take()
++                    .ok_or_else(|| anyhow::anyhow!("missing worker stdout"))?,
++            ),
++            _child: child,
++        })
++    }
++
++    async fn evaluate(&mut self, request: &Value) -> anyhow::Result<Value> {
++        let mut bytes = serde_json::to_vec(request)?;
++        bytes.push(b'\n');
++        anyhow::ensure!(bytes.len() <= MAX_FRAME, "evidence frame exceeds limit");
++        self.input.write_all(&bytes).await?;
++        self.input.flush().await?;
++        let mut reply = Vec::new();
++        (&mut self.output)
++            .take((MAX_FRAME + 1) as u64)
++            .read_until(b'\n', &mut reply)
++            .await?;
++        anyhow::ensure!(
++            reply.len() <= MAX_FRAME && reply.last() == Some(&b'\n'),
++            "invalid worker frame"
++        );
++        Ok(serde_json::from_slice(&reply)?)
++    }
++}
++
++#[derive(Default)]
++pub(super) struct Controller {
++    worker: Option<Worker>,
++    generation: u64,
++    remaining: u64,
++    settings: Option<Arc<ResolvedStepSettings>>,
++    baseline: Option<ReasoningEffort>,
++    request_signature: String,
++    failure_count: usize,
++    window: String,
++    pending: Option<Value>,
++    disabled: bool,
++}
++
++impl Controller {
++    pub(super) async fn before_generation(
++        &mut self,
++        session: &Session,
++        turn: &TurnContext,
++        cancellation: &CancellationToken,
++    ) -> CodexResult<bool> {
++        self.pending = None;
++        let current = turn.current_settings.load_full();
++        if current.selected_collaboration_mode().model() != "laya-astra" {
++            let recapture = self.settings.is_some();
++            self.worker = None;
++            self.remaining = 0;
++            self.settings = None;
++            return Ok(recapture);
++        }
++        self.generation += 1;
++        if self.disabled {
++            return Ok(false);
++        }
++        if !session.enabled(Feature::StepModelSwitching)
++            || !session.enabled(Feature::ReasoningEffortOverride)
++            || turn.multi_agent_version != MultiAgentVersion::Disabled
++            || current.model_info.slug != "gpt-6-astra"
++            || !current.model_info.use_responses_lite
++            || !session.provider().await.is_openai()
++        {
++            self.disabled = true;
++            self.notice(session, turn, "Laya inactive: adaptive Astra requires standard single-agent mode and native effort features.").await;
++            return Ok(false);
++        }
++        // Any externally published snapshot wins for this generation. In particular,
++        // never overwrite a manual setting while Python is evaluating evidence.
++        if let Some(previous) = &self.settings {
++            if !Arc::ptr_eq(previous, &current) {
++                self.baseline = current.effective_reasoning_effort();
++                self.remaining = 0;
++                self.settings = Some(current);
++                self.disabled = true;
++                self.notice(
++                    session,
++                    turn,
++                    "Laya paused for this turn: settings were changed externally.",
++                )
++                .await;
++                return Ok(true); // discard any pre-captured settings and honor the manual change
++            }
++        } else {
++            self.baseline = current.effective_reasoning_effort();
++        }
++        let window = session.current_window_id().await;
++        let history = session.clone_history().await;
++        let (evidence, failures) = project_evidence(history.raw_items());
++        let signature = evidence["requests"].to_string();
++        if self.request_signature != signature
++            || self.failure_count != failures
++            || self.window != window
++        {
++            self.remaining = 0;
++        }
++        self.request_signature = signature;
++        self.failure_count = failures;
++        self.window = window;
++        if self.remaining > 0 {
++            self.remaining -= 1;
++            return Ok(false);
++        }
++        let id = format!("{}:{}", turn.sub_id, self.generation);
++        let request = json!({"protocol": 1, "id": id, "generation": self.generation,
++            "model": current.model_info.slug, "evidence": evidence,
++            "supported_efforts": current.model_info.supported_reasoning_levels.iter()
++                .filter(|p| p.effort != ReasoningEffort::Ultra)
++                .map(|p| p.effort.to_string()).collect::<Vec<_>>()});
++        let evaluated = async {
++            let deadline = if self.worker.is_none() { 120 } else { 30 };
++            if self.worker.is_none() {
++                self.worker = Some(Worker::start()?);
++            }
++            let worker = self
++                .worker
++                .as_mut()
++                .ok_or_else(|| anyhow::anyhow!("worker unavailable"))?;
++            tokio::time::timeout(Duration::from_secs(deadline), worker.evaluate(&request)).await?
++        }
++        .or_cancel(cancellation)
++        .await?;
++        if !Arc::ptr_eq(&current, &turn.current_settings.load_full()) {
++            self.remaining = 0;
++            return Ok(true);
++        }
++        let decision = match evaluated {
++            Ok(reply) => validate_reply(reply, &id, self.generation, &request["supported_efforts"])
++                .and_then(|reply| {
++                    let effort: ReasoningEffort = serde_json::from_value(reply["effort"].clone())?;
++                    Ok((effort, reply))
++                }),
++            Err(error) => Err(error),
++        };
++        let (desired, record) = match decision {
++            Ok((effort, reply)) => {
++                self.remaining = reply["lease"].as_u64().unwrap_or(1) - 1;
++                (Some(effort), reply)
++            }
++            Err(error) => {
++                // One failure disables the worker for this turn; explicit fallback is
++                // stable and cannot create a restart/load storm on every generation.
++                self.disabled = true;
++                self.worker = None;
++                self.remaining = 0;
++                self.notice(
++                    session,
++                    turn,
++                    &format!("Laya fallback to configured effort: {error}"),
++                )
++                .await;
++                (
++                    self.baseline.clone(),
++                    json!({"id": id, "generation": self.generation,
++                    "status": "fallback", "reason": error.to_string()}),
++                )
++            }
++        };
++        match session
++            .apply_turn_settings_if_current(
++                &turn.sub_id,
++                TurnSettingsUpdate {
++                    effort: Some(desired.clone()),
++                    ..Default::default()
++                },
++                Some(&current),
++            )
++            .await
++        {
++            TurnSettingsUpdateOutcome::Applied => {
++                self.settings = Some(turn.current_settings.load_full());
++                self.pending = Some(json!({"decision": record, "expected_effort": desired}));
++                Ok(true)
++            }
++            TurnSettingsUpdateOutcome::TargetUnavailable => Ok(true),
++            TurnSettingsUpdateOutcome::Rejected { reason } => {
++                self.disabled = true;
++                self.notice(session, turn, &format!("Laya setting rejected: {reason}"))
++                    .await;
++                Ok(false)
++            }
++        }
++    }
++
++    pub(super) async fn acknowledge(&mut self, session: &Session, step: &StepContext) {
++        let Some(mut record) = self.pending.take() else {
++            return;
++        };
++        let actual =
++            serde_json::to_value(step.settings.effective_reasoning_effort()).unwrap_or(Value::Null);
++        let applied =
++            record["expected_effort"] == actual && step.settings.model_info.slug == "gpt-6-astra";
++        record["applied"] = json!(applied);
++        record["actual_effort"] = actual;
++        record["turn_id"] = json!(step.turn.sub_id);
++        if applied && record["decision"]["status"] == "decided" {
++            let effort = record["actual_effort"].as_str().unwrap_or("default");
++            self.notice(
++                session,
++                &step.turn,
++                &format!("Laya APPLIED: {effort}; generation {}", self.generation),
++            )
++            .await;
++        }
++        if let Some(dir) = std::env::var_os("LAYA_CONTROLLER_LOG_DIR") {
++            let dir = std::path::PathBuf::from(dir);
++            let result: std::io::Result<()> = async {
++                tokio::fs::create_dir_all(&dir).await?;
++                let path = dir.join(format!("{}.jsonl", session.thread_id));
++                let mut file = tokio::fs::OpenOptions::new()
++                    .create(true)
++                    .append(true)
++                    .open(path)
++                    .await?;
++                file.write_all(format!("{record}\n").as_bytes()).await
++            }
++            .await;
++            if let Err(error) = result {
++                self.notice(
++                    session,
++                    &step.turn,
++                    &format!("Laya audit log unavailable: {error}"),
++                )
++                .await;
++            }
++        }
++    }
++
++    async fn notice(&self, session: &Session, turn: &TurnContext, message: &str) {
++        session
++            .send_event(
++                turn,
++                EventMsg::Warning(WarningEvent {
++                    message: message.to_string(),
++                }),
++            )
++            .await;
++    }
++}
++
++fn validate_reply(
++    reply: Value,
++    id: &str,
++    generation: u64,
++    efforts: &Value,
++) -> anyhow::Result<Value> {
++    anyhow::ensure!(
++        reply["protocol"] == 1 && reply["id"] == id && reply["generation"] == generation,
++        "stale or malformed Laya response"
++    );
++    anyhow::ensure!(
++        reply["status"] == "decided",
++        "{}",
++        reply["reason"].as_str().unwrap_or("worker abstained")
++    );
++    anyhow::ensure!(
++        efforts
++            .as_array()
++            .is_some_and(|a| a.contains(&reply["effort"]))
++            && matches!(reply["lease"].as_u64(), Some(1 | 2)),
++        "invalid Laya effort or duration"
++    );
++    let _: ReasoningEffort = serde_json::from_value(reply["effort"].clone())?;
++    Ok(reply)
++}
++
++fn project_evidence<'a>(items: impl Iterator<Item = &'a ResponseItem>) -> (Value, usize) {
++    let mut requests = Vec::new();
++    let mut recent = VecDeque::new();
++    let mut omitted = 0;
++    let mut failures = 0;
++    let mut bytes = 0;
++    let mut incomplete = false;
++    for (index, item) in items.enumerate() {
++        if let Some(TurnItem::UserMessage(user)) = crate::event_mapping::parse_turn_item(item) {
++            let text = user.message();
++            bytes += text.len();
++            if bytes <= 128 * 1024 {
++                requests.push(text);
++            } else {
++                incomplete = true;
++            }
++            continue;
++        }
++        // Never serialize reasoning/encrypted items or injected developer instructions.
++        let include = matches!(item, ResponseItem::Message { role, .. } if role == "assistant")
++            || matches!(
++                item,
++                ResponseItem::FunctionCallOutput { .. } | ResponseItem::CustomToolCallOutput { .. }
++            );
++        if include && let Ok(raw) = serde_json::to_string(item) {
++            let lower = raw.to_lowercase();
++            failures += usize::from(
++                [
++                    "error",
++                    "failed",
++                    "traceback",
++                    "exit code: 1",
++                    "unsupported call:",
++                ]
++                .iter()
++                .any(|needle| lower.contains(needle)),
++            );
++            let preview: String = raw.chars().take(700).collect();
++            recent.push_back(json!({"history_index": index, "preview": preview,
++                "excerpted": raw.chars().count() > 700}));
++            if recent.len() > 6 {
++                recent.pop_front();
++                omitted += 1;
++            }
++        }
++    }
++    (
++        json!({"requests": requests, "recent": recent, "omitted_items": omitted,
++        "incomplete_requests": incomplete}),
++        failures,
++    )
++}
++
++#[cfg(test)]
++#[path = "laya_controller_tests.rs"]
++mod tests;
+diff --git a/codex-rs/core/src/session/laya_controller_tests.rs b/codex-rs/core/src/session/laya_controller_tests.rs
+new file mode 100644
+index 0000000000..feccf7f2a1
+--- /dev/null
++++ b/codex-rs/core/src/session/laya_controller_tests.rs
+@@ -0,0 +1,35 @@
++use super::*;
++use pretty_assertions::assert_eq;
++
++#[test]
++fn rejects_stale_identity_and_unadvertised_effort() {
++    let reply = json!({"protocol":1,"id":"turn:2","generation":2,"status":"decided","effort":"high","lease":1});
++    assert!(validate_reply(reply.clone(), "turn:1", 1, &json!(["high", "low"])).is_err());
++    assert!(validate_reply(reply.clone(), "turn:2", 2, &json!(["low", "medium"])).is_err());
++    assert_eq!(
++        validate_reply(reply.clone(), "turn:2", 2, &json!(["high", "low"])).unwrap(),
++        reply
++    );
++}
++
++#[test]
++fn evidence_excludes_private_reasoning_and_preserves_user_restrictions() {
++    let items: Vec<ResponseItem> = serde_json::from_value(json!([
++        {"type":"message","role":"user","content":[{"type":"input_text","text":"Fix tests. Never deploy."}]},
++        {"type":"reasoning","summary":[],"encrypted_content":"PRIVATE"},
++        {"type":"message","role":"assistant","content":[{"type":"output_text","text":"A test failed."}]}
++    ])).unwrap();
++    let (evidence, failures) = project_evidence(items.iter());
++    assert_eq!(evidence["requests"], json!(["Fix tests. Never deploy."]));
++    assert_eq!(failures, 1);
++    assert!(!evidence.to_string().contains("PRIVATE"));
++}
++
++#[test]
++fn oversized_essential_evidence_is_marked_incomplete() {
++    let items: Vec<ResponseItem> = serde_json::from_value(json!([
++        {"type":"message","role":"user","content":[{"type":"input_text","text":"x".repeat(140_000)}]}
++    ])).unwrap();
++    let (evidence, _) = project_evidence(items.iter());
++    assert_eq!(evidence["incomplete_requests"], json!(true));
++}
+diff --git a/codex-rs/core/src/session/mod.rs b/codex-rs/core/src/session/mod.rs
+index 98bfa792b2..0bdd5454a3 100644
+--- a/codex-rs/core/src/session/mod.rs
++++ b/codex-rs/core/src/session/mod.rs
+@@ -226,6 +226,7 @@ mod environment;
+ pub(crate) mod extension_metrics;
+ mod handlers;
+ mod inject;
++mod laya_controller;
+ mod reasoning_effort;
+ pub(crate) use reasoning_effort::RequestEffortUsage;
+ mod input_queue;
+diff --git a/codex-rs/core/src/session/step_activation.rs b/codex-rs/core/src/session/step_activation.rs
+index 8dc090315a..657de666a3 100644
+--- a/codex-rs/core/src/session/step_activation.rs
++++ b/codex-rs/core/src/session/step_activation.rs
+@@ -229,14 +229,24 @@ impl Session {
+     ///
+     /// Callers must serialize updates through completion, including model
+     /// resolution, so each sparse patch sees the preceding publication.
++    pub(super) async fn apply_turn_settings(
++        &self,
++        turn_id: &str,
++        update: TurnSettingsUpdate,
++    ) -> TurnSettingsUpdateOutcome {
++        self.apply_turn_settings_if_current(turn_id, update, None)
++            .await
++    }
++
+     #[expect(
+         clippy::await_holding_invalid_type,
+         reason = "the final managed-policy check and active settings publication must remain atomic"
+     )]
+-    pub(super) async fn apply_turn_settings(
++    pub(super) async fn apply_turn_settings_if_current(
+         &self,
+         turn_id: &str,
+         update: TurnSettingsUpdate,
++        expected: Option<&Arc<ResolvedStepSettings>>,
+     ) -> TurnSettingsUpdateOutcome {
+         let reviewer_only = update.approvals_reviewer.is_some()
+             && update.model.is_none()
+@@ -270,6 +280,9 @@ impl Session {
+         let Some((turn_context, task_done, current)) = target else {
+             return TurnSettingsUpdateOutcome::TargetUnavailable;
+         };
++        if expected.is_some_and(|snapshot| !Arc::ptr_eq(snapshot, &current)) {
++            return TurnSettingsUpdateOutcome::TargetUnavailable;
++        }
+         let TurnSettingsUpdate {
+             approvals_reviewer,
+             model,
+diff --git a/codex-rs/core/src/session/step_activation_tests.rs b/codex-rs/core/src/session/step_activation_tests.rs
+index f5887b10b0..c6f8daf53b 100644
+--- a/codex-rs/core/src/session/step_activation_tests.rs
++++ b/codex-rs/core/src/session/step_activation_tests.rs
+@@ -523,6 +523,49 @@ enum TaskChangeDuringLookup {
+     FinishedAndReusedContext,
+ }
+ 
++#[tokio::test]
++async fn laya_expected_snapshot_does_not_overwrite_a_later_manual_update() {
++    let ActivationFixture {
++        session,
++        turn,
++        finish,
++        ..
++    } = activation_fixture(activation_models()).await;
++    let old = turn.current_settings.load_full();
++    assert_eq!(
++        session
++            .apply_turn_settings(
++                &turn.sub_id,
++                TurnSettingsUpdate {
++                    effort: Some(Some(ReasoningEffort::Low)),
++                    ..Default::default()
++                }
++            )
++            .await,
++        TurnSettingsUpdateOutcome::Applied
++    );
++    let manual = turn.current_settings.load_full();
++    assert_eq!(
++        session
++            .apply_turn_settings_if_current(
++                &turn.sub_id,
++                TurnSettingsUpdate {
++                    effort: Some(Some(ReasoningEffort::High)),
++                    ..Default::default()
++                },
++                Some(&old)
++            )
++            .await,
++        TurnSettingsUpdateOutcome::TargetUnavailable
++    );
++    assert!(Arc::ptr_eq(&manual, &turn.current_settings.load_full()));
++    assert_eq!(
++        manual.effective_reasoning_effort(),
++        Some(ReasoningEffort::Low)
++    );
++    finish.notify_one();
++}
++
+ #[test_case(TaskChangeDuringLookup::CancelledWithRejectedDestination; "cancelled task is unavailable even when destination is rejected")]
+ #[test_case(TaskChangeDuringLookup::FinishedAndReplaced; "completed task is replaced")]
+ #[test_case(TaskChangeDuringLookup::FinishedAndReusedContext; "completed context is reused by another task")]
+diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
+index 5d5fa3a0aa..d3c8357351 100644
+--- a/codex-rs/core/src/session/turn.rs
++++ b/codex-rs/core/src/session/turn.rs
+@@ -420,6 +420,7 @@ pub(crate) async fn run_turn(
+ 
+     let mut next_step_context = Some(first_step_context);
+     let mut guardian_budget_compacted = false;
++    let mut laya = super::laya_controller::Controller::default();
+     loop {
+         // Note that pending_input would be something like a message the user
+         // submitted through the UI while the model was running. Though the UI
+@@ -454,6 +455,12 @@ pub(crate) async fn run_turn(
+         .await;
+ 
+         // Capture once so context, advertised tools, and tool calls share one request view.
++        if laya
++            .before_generation(&sess, &turn_context, &cancellation_token)
++            .await?
++        {
++            next_step_context = None;
++        }
+         let step_context = match next_step_context.take() {
+             Some(step_context) if pending_input.is_empty() => step_context,
+             None if pending_input.is_empty() => {
+@@ -491,6 +498,7 @@ pub(crate) async fn run_turn(
+                 .await?
+             }
+         };
++        laya.acknowledge(&sess, step_context.as_ref()).await;
+         let sampling_request_result: CodexResult<_> = async {
+             super::time_reminder::maybe_record_current_time_reminder(
+                 sess.as_ref(),
+diff --git a/codex-rs/models-manager/src/manager.rs b/codex-rs/models-manager/src/manager.rs
+index c7b1a19ad5..3a76cbbcd3 100644
+--- a/codex-rs/models-manager/src/manager.rs
++++ b/codex-rs/models-manager/src/manager.rs
+@@ -158,9 +158,20 @@ pub trait ModelsManager: fmt::Debug + Send + Sync {
+             .auth_manager()
+             .is_some_and(AuthManager::current_auth_uses_codex_backend);
+         presets = ModelPreset::filter_by_auth(presets, uses_codex_backend);
+-
+         ModelPreset::mark_default_by_picker_visibility(&mut presets);
+ 
++        if let Some(mut laya) = presets.iter().find(|p| p.model == "gpt-6-astra").cloned() {
++            laya.id = "laya-astra".to_string();
++            laya.model = "laya-astra".to_string();
++            laya.display_name = "Astra + Laya".to_string();
++            laya.description = "Local Laya selects reasoning effort before generations".to_string();
++            laya.is_default = false;
++            laya.multi_agent_version = Some(codex_protocol::protocol::MultiAgentVersion::Disabled);
++            laya.supported_reasoning_efforts
++                .retain(|p| p.effort != codex_protocol::openai_models::ReasoningEffort::Ultra);
++            presets.insert(0, laya);
++        }
++
+         presets
+     }
+ 
+@@ -730,6 +741,9 @@ pub(crate) fn construct_model_info_from_candidates(
+     candidates: &[ModelInfo],
+     config: &ModelsManagerConfig,
+ ) -> ModelInfo {
++    // Laya is a local controller selection; the provider always receives Astra.
++    let laya = model == "laya-astra";
++    let model = if laya { "gpt-6-astra" } else { model };
+     // First use the normal longest-prefix match. If that misses, allow a narrowly scoped
+     // retry for namespaced slugs like `custom/gpt-5.3-codex`.
+     let remote = find_model_by_longest_prefix(model, candidates)
+@@ -743,7 +757,15 @@ pub(crate) fn construct_model_info_from_candidates(
+     } else {
+         model_info::model_info_from_slug(model)
+     };
+-    model_info::with_config_overrides(model_info, config)
++    let mut model_info = model_info::with_config_overrides(model_info, config);
++    if laya {
++        model_info.multi_agent_version =
++            Some(codex_protocol::protocol::MultiAgentVersion::Disabled);
++        model_info
++            .supported_reasoning_levels
++            .retain(|p| p.effort != codex_protocol::openai_models::ReasoningEffort::Ultra);
++    }
++    model_info
+ }
+ 
+ #[cfg(test)]
+diff --git a/codex-rs/models-manager/src/manager_tests.rs b/codex-rs/models-manager/src/manager_tests.rs
+index 1408ad8928..4c9d79d873 100644
+--- a/codex-rs/models-manager/src/manager_tests.rs
++++ b/codex-rs/models-manager/src/manager_tests.rs
+@@ -39,6 +39,23 @@ mod model_info_overrides_tests;
+ const DEFAULT_HTTP_CLIENT_FACTORY: HttpClientFactory =
+     HttpClientFactory::new(OutboundProxyPolicy::ReqwestDefault);
+ 
++#[test]
++fn laya_alias_preserves_provider_slug_and_disables_multi_agent_mode() {
++    let astra = remote_model("gpt-6-astra", "Astra", 0);
++    let info = construct_model_info_from_candidates(
++        "laya-astra",
++        &[astra],
++        &ModelsManagerConfig::default(),
++    );
++    assert_eq!(info.slug, "gpt-6-astra");
++    assert!(!info.used_fallback_model_metadata);
++    assert_eq!(
++        info.multi_agent_version,
++        Some(codex_protocol::protocol::MultiAgentVersion::Disabled)
++    );
++    assert_eq!(info.supported_reasoning_levels.len(), 2);
++}
++
+ fn remote_model(slug: &str, display: &str, priority: i32) -> ModelInfo {
+     remote_model_with_visibility(slug, display, priority, "list")
+ }
+@@ -1484,6 +1501,19 @@ fn build_available_models_picks_default_after_hiding_hidden_models() {
+     assert_eq!(available, vec![expected_hidden, expected_visible]);
+ }
+ 
++#[test]
++fn laya_picker_alias_does_not_replace_the_catalog_default() {
++    let manager = static_manager_for_tests(ModelsResponse { models: Vec::new() });
++    let model = remote_model("gpt-6-astra", "Astra", 0);
++    let mut expected = ModelPreset::from(model.clone());
++    expected.is_default = true;
++    let available = manager.build_available_models(vec![model]);
++    assert_eq!(available.len(), 2);
++    assert_eq!(available[1], expected);
++    assert_eq!(available[0].model, "laya-astra");
++    assert!(!available[0].is_default);
++}
++
+ #[tokio::test]
+ async fn static_manager_reads_latest_auth_mode() {
+     let auth_manager =
+diff --git a/codex-rs/tui/src/chatwidget/model_popups.rs b/codex-rs/tui/src/chatwidget/model_popups.rs
+index 2155103740..54445c5dfb 100644
+--- a/codex-rs/tui/src/chatwidget/model_popups.rs
++++ b/codex-rs/tui/src/chatwidget/model_popups.rs
+@@ -241,7 +241,11 @@ impl ChatWidget {
+                 });
+             })];
+             items.push(SelectionItem {
+-                name: preset.model.clone(),
++                name: if preset.model == "laya-astra" {
++                    preset.display_name.clone()
++                } else {
++                    preset.model.clone()
++                },
+                 description,
+                 is_current,
+                 is_default: preset.is_default,
+@@ -500,7 +504,7 @@ impl ChatWidget {
+             .then(|| default_effort.clone());
+ 
+         let model_slug = preset.model.to_string();
+-        let model_label = if model_slug == LUNA_RESERVE_MODEL {
++        let model_label = if model_slug == LUNA_RESERVE_MODEL || model_slug == "laya-astra" {
+             preset.display_name.clone()
+         } else {
+             model_slug.clone()
+diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__model_picker_filters_hidden_models.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__model_picker_filters_hidden_models.snap
+index f3ab226535..aadb81cd74 100644
+--- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__model_picker_filters_hidden_models.snap
++++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__model_picker_filters_hidden_models.snap
+@@ -5,6 +5,8 @@ expression: popup
+   Select Model and Effort
+   Access legacy models by running codex -m <model_name> or in your config.toml
+ 
+-› 1. test-visible-model (current)  test-visible-model description
++  1. Astra + Laya                  Local Laya selects reasoning effort before
++                                   generations
++› 2. test-visible-model (current)  test-visible-model description
+ 
+   Press enter to confirm or esc to go back
+diff --git a/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs b/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
+index 6e538ad0c0..4e190a1bd7 100644
+--- a/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
++++ b/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
+@@ -3645,12 +3645,17 @@ async fn model_picker_hides_show_in_picker_false_models_from_cache() {
+         input_modalities: default_input_modalities(),
+     };
+ 
++    let mut laya = preset("laya-astra", true);
++    laya.display_name = "Astra + Laya".to_string();
++    laya.description = "Local Laya selects reasoning effort before generations".to_string();
+     chat.open_model_popup_with_presets(vec![
++        laya,
+         preset("test-visible-model", true),
+         preset("test-hidden-model", false),
+     ]);
+     let popup = render_bottom_popup(&chat, /*width*/ 80);
+     assert_chatwidget_snapshot!("model_picker_filters_hidden_models", popup);
++    assert!(popup.contains("Astra + Laya"));
+     assert!(
+         popup.contains("test-visible-model"),
+         "expected visible model to appear in picker:\n{popup}"
+diff --git a/codex-rs/tui/src/config_update.rs b/codex-rs/tui/src/config_update.rs
+index 9814b6a2be..ea3969dc42 100644
+--- a/codex-rs/tui/src/config_update.rs
++++ b/codex-rs/tui/src/config_update.rs
+@@ -73,6 +73,13 @@ pub(crate) fn build_model_selection_edits(
+     model: &str,
+     effort: Option<impl ToString>,
+ ) -> Vec<ConfigEdit> {
++    // The alias is local to this native client. Persist the provider model so
++    // choosing it here cannot leave stock Codex with an unknown model default.
++    let model = if model == "laya-astra" {
++        "gpt-6-astra"
++    } else {
++        model
++    };
+     let effort_edit = effort.map_or_else(
+         || clear_config_value("model_reasoning_effort"),
+         |effort| {
+diff --git a/codex-rs/tui/src/config_update_tests.rs b/codex-rs/tui/src/config_update_tests.rs
+index e7f2aada8a..f2046e6896 100644
+--- a/codex-rs/tui/src/config_update_tests.rs
++++ b/codex-rs/tui/src/config_update_tests.rs
+@@ -9,6 +9,14 @@ use color_eyre::eyre::WrapErr;
+ use pretty_assertions::assert_eq;
+ use std::path::Path;
+ 
++#[test]
++fn laya_model_selection_persists_stock_compatible_defaults() {
++    assert_eq!(
++        build_model_selection_edits("laya-astra", Some("high")),
++        build_model_selection_edits("gpt-6-astra", Some("high")),
++    );
++}
++
+ #[test]
+ fn app_scoped_key_path_quotes_dotted_app_ids() {
+     assert_eq!(
+diff --git a/scripts/codex_package/cargo.py b/scripts/codex_package/cargo.py
+index f759e44762..9513c5f754 100644
+--- a/scripts/codex_package/cargo.py
++++ b/scripts/codex_package/cargo.py
+@@ -55,6 +55,7 @@ def build_source_binaries(
+         cmd = [
+             cargo,
+             "build",
++            "--locked",
+             "--target",
+             spec.target,
+             "--profile",

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "laya-codex-companion"
-version = "0.1.1"
+version = "0.2.0"
 description = "Original Laya / PyTorch decision workflows for Codex"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
@@ -16,6 +16,7 @@ test = ["pytest==9.1.1"]
 
 [project.scripts]
 laya-for-codex = "laya_codex_companion.cli:main"
+laya-codex = "laya_codex_companion.native:main"
 
 [tool.setuptools.packages.find]
 include = ["laya_codex_companion*"]

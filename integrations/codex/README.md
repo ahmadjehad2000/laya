@@ -3,7 +3,7 @@
 A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
 Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
 
-**Preview 0.1.1.** Real inference passed on Windows CPU/CUDA, Linux CPU, and macOS
+**Preview 0.2.0.** Real companion inference passed on Windows CPU/CUDA, Linux CPU, and macOS
 ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified paths.
 
 ## What you can do
@@ -13,7 +13,7 @@ ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified 
 - Score comparable records against your own ordered rubric.
 - Check readiness, inspect actual device/fallback information and release model memory.
 
-The plugin packages four discoverable skills and five MCP tools. Codex collects evidence
+The plugin packages five discoverable skills and seven MCP tools. Codex collects evidence
 and reviews results; Laya supplies small typed decisions. It does not automatically see
 your whole repository or conversation. Model predictions can be confidently wrong.
 
@@ -21,6 +21,14 @@ your whole repository or conversation. Model predictions can be confidently wron
 Raw-code role classification failed 3/4 cases and is excluded from the recommended
 workflow. Sales/billing and explicit refund negation also produced errors. The plugin
 requires source review rather than treating confidence as a correctness guarantee.
+
+## Native Astra + Laya
+
+The separate [native client](native/README.md) adds an effort controller inside a
+pinned Codex generation loop. Launch `laya-codex` or select **Astra + Laya** in that
+client. Actual provider requests still use `gpt-6-astra`. This is an opt-in source
+build, not a modification to the stock desktop app. The plugin remains available in
+stock clients, without a claim of intercepting every model call.
 
 ## Install
 
@@ -90,6 +98,8 @@ python3 bootstrap.py prepare --model all
 | `laya_predict_batch` | Up to 32 independent `{id,state}` records with shared questions |
 | `laya_release` | Unload model and clear memory-only caches |
 | `laya_benchmark` | Explicit synthetic diagnostic; not an accuracy evaluation |
+| `laya_classify_file` | Workspace JSON records to local predictions and a compact report |
+| `laya_compact_file` | Explicit reversible exported-conversation handoff |
 
 See [the quickstart request](examples/quickstart.json) and [the API contract](docs/API.md).
 Batch processing is sequential within one MCP request; it reduces tool round trips, not
@@ -111,6 +121,13 @@ Uninstall disconnects the integration and retains environments, checkpoints, and
 Rollback restores the saved configuration only if it has not changed since registration;
 otherwise it points to the backup for a targeted restore. It does not erase model files.
 Missing weights require explicit `prepare`; inference never downloads them.
+
+`serve` is a stdio MCP process, not a web server. Normally Codex starts it. An idle
+foreground invocation is waiting for protocol input; Ctrl+C exits with code 130
+without a traceback. For `continue --context: expected one argument`, create a
+successful handoff first and verify `$handoff.context` exists. The PowerShell member
+expression is valid; an unset or failed `$handoff` yields no path. See the guarded
+[PowerShell example](../../README.md#g-make-a-local-conversation-handoff-and-retrieve-omitted-output).
 
 ## Development
 

@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Python-3.12%E2%80%933.13-3776AB?logo=python&logoColor=white" alt="Python 3.12–3.13" />
   <img src="https://img.shields.io/badge/runtime-PyTorch-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch runtime" />
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-5e72e4" alt="Apache 2.0 license" /></a>
-  <a href="https://github.com/ahmadjehad2000/laya/releases"><img src="https://img.shields.io/badge/release-0.1.1_preview-38bda9" alt="0.1.1 preview" /></a>
+  <a href="https://github.com/ahmadjehad2000/laya/releases"><img src="https://img.shields.io/badge/package-0.2.0_preview-38bda9" alt="0.2.0 preview" /></a>
 </p>
 
 <p align="center">
@@ -31,6 +31,16 @@
 
 Laya for Codex brings small, typed decisions into your existing Codex session. Send a workspace file path to the local model and get counts, review exceptions and a result artifact. For exported conversations, create a reversible local handoff before continuing in a new Codex thread. The original PyTorch model supplies classification; deterministic code handles conversation extraction.
 
+**New in 0.2.0: opt-in native Astra + Laya.** A separately built `laya-codex` CLI
+places a local reasoning-effort checkpoint inside Codex's generation loop. Laya
+selects a typed effort and a one- or two-generation lease; Codex owns application,
+permissions, tools and the actual Astra request. This is independent Laya/PyTorch
+code, not a Jev dependency or a replacement for the OpenAI model.
+See the [native build, launch, safety and verification guide](integrations/codex/native/README.md).
+The existing plugin still works in stock Codex; it cannot intercept every desktop call.
+The native client is separately verified on Windows; its controller has no measured
+cost-saving or coding-quality claim yet.
+
 **Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA and Debian WSL2 CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
 
 ## Cost control
@@ -49,7 +59,7 @@ The zero-cloud classification measurement excludes Codex orchestration and revie
 
 - **Bulk files:** `laya_classify_file` reads local `{id,state}` JSON records and returns a compact report. Avoid putting the full dataset into Codex first.
 - **Conversation handoffs:** `laya_compact_file` archives older bulky tool output, preserves messages, and makes a new-thread context with exact retrieval.
-- **Native compaction:** the current plugin cannot replace Codex's internal compaction. No global interception or compaction-blocking hook is installed. `laya-for-codex continue` starts a new CLI thread from the local handoff.
+- **Native compaction:** neither the plugin nor the native effort controller replaces encrypted Codex compaction. No global interception or compaction-blocking hook is installed. `laya-for-codex continue` starts a new CLI thread from the local handoff; `--target laya-codex` selects the separate native client.
 
 [How to use it, limits, and reproducible commands](integrations/codex/docs/COST_CONTROL.md) ·
 [Raw Codex usage evidence](integrations/codex/evidence/cost-pilot-windows.json)
@@ -348,7 +358,10 @@ explicitly fictional export: a branch, memory budget, deployment restriction,
 large inventory listing, and unresolved test failure. It is not your current chat.
 
 ```powershell
-$handoff = & $Laya compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2 | ConvertFrom-Json
+$handoffJson = & $Laya compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2
+if ($LASTEXITCODE -ne 0) { throw "compact-file failed; do not continue with an old or empty handoff." }
+$handoff = $handoffJson | ConvertFrom-Json
+if (-not $handoff.context -or -not (Test-Path -LiteralPath $handoff.context)) { throw "No valid handoff context file was created." }
 $handoff | Format-List
 
 # Message index 2 is the old inventory output in this particular fixture.
@@ -363,7 +376,7 @@ short conversations can grow due to reference overhead. Default `--keep-recent` 
 The following command **starts a new Codex CLI thread and consumes Codex usage**:
 
 ```powershell
-& $Laya continue --workspace "$Workspace" --context $handoff.context --prompt "Without tools, list the retained branch, memory budget, deployment restriction, and unresolved status."
+& $Laya continue --workspace "$Workspace" --context ($handoff.context) --prompt "Without tools, list the retained branch, memory budget, deployment restriction, and unresolved status."
 ```
 
 An optional lean run skips user config for that invocation and uses a read-only
@@ -371,7 +384,7 @@ sandbox. It requires an explicit model available to your account; this example
 uses the model from the recorded pilot:
 
 ```powershell
-& $Laya continue --workspace "$Workspace" --context $handoff.context --prompt "Without tools, list the retained restrictions." --lean --model gpt-5.6-sol
+& $Laya continue --workspace "$Workspace" --context ($handoff.context) --prompt "Without tools, list the retained restrictions." --lean --model gpt-5.6-sol
 ```
 
 Lean mode omits user-configured preferences/integrations and is not a universal
@@ -519,13 +532,15 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, memory policy, file offload, local handoffs, setup, and rollback | 71 automated tests passed |
+| Companion validation, memory policy, file offload, local handoffs, controller, setup, and rollback | 87 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA and Debian 13.6 WSL2 CUDA passed |
 | Windows client → Linux GPU MCP transport | Seven-tool discovery, real CUDA prediction, and release passed |
 | Actual plugin use in a fresh Codex session | Status → English/Arabic batch → release passed |
 | Checkpoint loading and routing | All three checkpoints + automatic English/Arabic selection passed |
+| Separate Windows native client | Real Laya decisions, three-generation wire fixture, explicit fallback, live Astra handoff passed |
+| Native controller cost savings / coding quality; Linux/macOS native builds | Not established |
 | Apple MPS / bare-metal Linux CUDA / Intel macOS | Not verified |
 
 [Cross-platform real-inference run](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148) · [Detailed reports and methodology](integrations/codex/docs/VERIFICATION.md)

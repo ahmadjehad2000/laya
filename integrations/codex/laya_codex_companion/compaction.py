@@ -30,7 +30,7 @@ def read_messages(raw):
             messages.append({"role": "tool", "call_id": payload.get("call_id"), "content": payload.get("output")})
         elif kind in ("function_call", "custom_tool_call"):
             messages.append({"role": "assistant", "content": payload})
-        elif kind == "reasoning":
+        elif kind in ("reasoning", "configuration_update"):
             continue  # hidden reasoning is not an exportable conversation message
         else:
             raise ValueError(f"Unsupported transcript item: {kind}; export explicit messages")
@@ -39,7 +39,32 @@ def read_messages(raw):
     return messages
 
 
-def compact_file(workspace, input_path, keep_recent=8, tool_chars=1200):
+def controller_metadata(workspace, input_path, output):
+    """Carry explicit provenance, never an active lease or settings command."""
+    _, _, raw = workspace_file(workspace, input_path, 4 * 1024 * 1024)
+    records = []
+    for line in raw.decode("utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        record = json.loads(line)
+        if not isinstance(record, dict) or not isinstance(record.get("decision"), dict):
+            raise ValueError("Expected native Laya decision log records")
+        decision = record.get("decision", {})
+        if decision.get("status") not in ("decided", "fallback") or type(record.get("applied")) is not bool:
+            raise ValueError("Expected native Laya decision log records")
+        records.append({"generation": decision.get("generation"), "status": decision["status"],
+                        "applied": record["applied"], "actual_effort": record.get("actual_effort"),
+                        "checkpoint": decision.get("checkpoint"),
+                        "evidence_sha256": decision.get("evidence_sha256"),
+                        "coverage": decision.get("coverage")})
+    archive = output / (digest(raw) + ".decisions.jsonl")
+    write_new(archive, raw)
+    return {"archive": str(archive), "sha256": digest(raw), "records": len(records),
+            "recent": records[-8:], "active_lease": None,
+            "continuation_policy": "Reassess current evidence in the new thread; never replay these settings."}
+
+
+def compact_file(workspace, input_path, keep_recent=8, tool_chars=1200, *, controller_log=None):
     if type(keep_recent) is not int or not 0 <= keep_recent <= 1000:
         raise ValueError("keep_recent must be 0–1000")
     if type(tool_chars) is not int or not 256 <= tool_chars <= 100000:
@@ -71,6 +96,8 @@ def compact_file(workspace, input_path, keep_recent=8, tool_chars=1200):
                          "Tool outputs were omitted, not semantically summarized. Retrieve missing evidence before relying on it. "
                          "This export excludes hidden reasoning and is not native Codex compaction.",
                "messages": selected}
+    if controller_log is not None:
+        context["controller_history"] = controller_metadata(root, controller_log, output)
     compacted = encoded(context)
     destination = output / (digest(compacted) + ".json")
     write_new(destination, compacted)

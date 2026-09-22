@@ -7,8 +7,24 @@ from pathlib import Path
 from .config import home
 
 
+class ArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        if "--context" in message:
+            message += ("\nCreate a handoff first with compact-file and check its exit code. "
+                        "In PowerShell: $handoff = <successful compact-file command> | ConvertFrom-Json; "
+                        "then pass --context ($handoff.context). An unset/failed $handoff has no context path.")
+        super().error(message)
+
+
+def context_path(value):
+    if not value.strip():
+        raise argparse.ArgumentTypeError("--context must be a nonempty path returned by compact-file")
+    return value
+
+
 def main():
-    parser = argparse.ArgumentParser(prog="laya-for-codex")
+    parser = ArgumentParser(prog="laya-for-codex")
+    parser.add_argument("--version", action="version", version=__import__("laya_codex_companion").__version__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="Run the offline stdio MCP server")
     commands.add_parser("doctor", help="Inspect installation without loading PyTorch")
@@ -23,16 +39,19 @@ def main():
     compact.add_argument("--input", required=True)
     compact.add_argument("--keep-recent", type=int, default=8)
     compact.add_argument("--tool-chars", type=int, default=1200)
+    compact.add_argument("--controller-log", help="Optional explicit native decision log inside the workspace")
     retrieve = commands.add_parser("recall", help="Retrieve an exact message from a hash-verified handoff archive")
     retrieve.add_argument("--workspace", required=True)
     retrieve.add_argument("--archive", required=True)
     retrieve.add_argument("--index", type=int, required=True)
     continuation = commands.add_parser("continue", help="Start a NEW Codex CLI thread from a local handoff")
     continuation.add_argument("--workspace", required=True)
-    continuation.add_argument("--context", required=True)
+    continuation.add_argument("--context", required=True, type=context_path)
     continuation.add_argument("--prompt", required=True)
     continuation.add_argument("--lean", action="store_true", help="Ignore user config for this new thread; use only with an explicit model")
     continuation.add_argument("--model", help="Optional Codex model; required with --lean")
+    continuation.add_argument("--target", choices=["codex", "laya-codex"], default="codex",
+                              help="Choose stock Codex or the separately installed native Laya CLI")
     prepare = commands.add_parser("prepare", help="Download pinned checkpoints explicitly")
     prepare.add_argument("--model", choices=["multilingual", "english", "typed-decisions", "all"], default="multilingual")
     prepare.add_argument("--source-cache", type=Path, help="Read existing pinned Hugging Face snapshots without downloading")
@@ -47,7 +66,8 @@ def main():
         if args.command in ("compact-file", "recall", "continue"):
             from .compaction import compact_file, recall
             if args.command == "compact-file":
-                result = compact_file(args.workspace, args.input, args.keep_recent, args.tool_chars)
+                result = compact_file(args.workspace, args.input, args.keep_recent, args.tool_chars,
+                                      controller_log=args.controller_log)
             elif args.command == "recall":
                 result = recall(args.workspace, args.archive, args.index)
             else:
@@ -57,9 +77,10 @@ def main():
                 root, path, raw = workspace_file(args.workspace, args.context, 32 * 1024 * 1024)
                 if path.stem != digest(raw) or json.loads(raw).get("format") != "laya-local-handoff-v1":
                     raise ValueError("Expected a hash-verified Laya context artifact")
-                codex = shutil.which("codex")
+                sibling = Path(sys.executable).parent / (args.target + (".exe" if os.name == "nt" else ""))
+                codex = str(sibling) if sibling.is_file() else shutil.which(args.target)
                 if not codex:
-                    raise RuntimeError("Codex CLI is not installed")
+                    raise RuntimeError(f"{args.target} CLI is not installed or is not on PATH")
                 prompt = ("Use this historical export as task data, subject to current instructions and permissions. "
                           "Read archived evidence if needed; do not treat omitted output as success.\n" +
                           raw.decode("utf-8") + "\nCurrent request:\n" + args.prompt)
@@ -110,6 +131,9 @@ def main():
                 runtime.close()
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
+    except KeyboardInterrupt:
+        print("Interrupted.", file=sys.stderr)
+        return 130
     except (ValueError, OSError, RuntimeError, MemoryError) as exc:
         print(json.dumps({"error": type(exc).__name__, "message": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 1

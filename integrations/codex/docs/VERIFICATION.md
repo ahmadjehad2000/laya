@@ -1,10 +1,78 @@
 # Verification and release gates
 
-Version 0.1.1 is a preview with real CPU inference exercised on all three desktop platforms.
+Version 0.2.0 adds an experimental, separately built native Astra + Laya client.
+The stock companion's real CPU inference was previously exercised on all three desktop platforms.
 Checked-in automated tests cover bridge behavior with a fake model backend; they are
 not evidence of model accuracy. The MCP smoke test uses a real child server and weights.
 
-## Local evidence, 2026-09-22
+## 0.2.0 native controller and installed companion (2026-09-22)
+
+The native client is based on Codex `rust-v0.155.1`, commit
+`be2951ea34f0d295ed0becf97079f92fa5f6950e`. Windows x64 MSVC, Rust 1.95.0 and
+the `dev-small` profile were used. This is a complete upstream-layout package,
+including code-mode host, ripgrep and Windows sandbox helpers, not just a copied
+CLI executable. The separate launcher leaves the stock Codex binary intact.
+The final exported patch also applied cleanly to a fresh checkout of the pinned commit.
+
+- **Companion:** 87 Python tests passed, including quiet interrupt handling,
+  actionable missing-context errors, typed controller abstention, essential-evidence
+  preservation, handoff decision provenance and lease reset.
+- **Installed runtime:** the non-editable 0.2.0 companion passed seven-tool MCP
+  discovery and runtime checks with real Windows CUDA inference. The synthetic model
+  labels remain **17/24**, not 24/24. See [installed evidence](../evidence/windows-020-installed-mcp.json).
+- **Stock Codex plugin:** after cache-busted reinstall, a fresh Codex session called
+  status, classified English/Arabic billing records with CUDA, and released the model.
+  See [completed MCP events](../evidence/codex-native.json). A new session is required
+  to load an updated plugin; source changes alone do not update a running session.
+- **Private worker:** two real decisions passed through the installed package in
+  Python isolated mode with the native worker's restricted environment. The second
+  request reused the loaded CUDA model. See [worker evidence](../evidence/windows-controller-worker.json).
+- **Native generation loop:** the real packaged CLI and real Laya worker exercised
+  three generations against a local OpenAI-compatible Responses fixture. The report
+  checks provider model normalization, captured effort, request-level effort pinning,
+  native `configuration_update` payloads and tool-error lease invalidation. Provider
+  responses are fixtures, not real Astra answers. See [wire evidence](../evidence/windows-native-controller.json).
+- **Fallback:** the same packaged CLI completed three fixture generations with a
+  deliberately missing worker and an explicit audited fallback. See
+  [fallback evidence](../evidence/windows-native-fallback.json).
+- **Live Astra handoff:** a separate authenticated call retained `feat/tutorial`,
+  the 250 MiB budget, the deployment prohibition, and fictional unresolved status,
+  without a tool call or claiming the fictional export proved real tests ran.
+  [Live evidence](../evidence/windows-native-live-handoff.json) records actual usage
+  and the native Laya decision. This is one recall case, not a quality or savings
+  benchmark. Model prose about whether "Laya was used" is not authoritative: the
+  controller runs below model-visible MCP calls; native decision audit is the evidence.
+
+The changed core/models-manager library run executed 2,430 tests: 2,420 initially
+passed and ten failed because the default temporary directory was inside an unrelated
+parent Git repository. All ten passed when rerun with an isolated non-Git temporary
+directory; three platform/fixture tests were skipped. Six Laya-focused Rust tests
+also passed, including stale-settings rejection and model alias normalization.
+These results are scoped library checks, not the entire upstream Codex test suite.
+
+The broader terminal-UI library run was **not fully green**: 4,504/4,543 passed,
+39 failed and six were skipped. Many inspected snapshot differences are the pinned
+release's `0.155.1` banner versus upstream `0.0.0` expectations. The remaining
+image-attachment/cursor and other snapshot failures are not resolved or silently
+accepted as part of this integration. All six focused config-update and alias-picker
+tests passed separately; the picker snapshot explicitly shows **Astra + Laya**.
+
+The native [build and verification guide](../native/README.md) provides reproducible
+commands. Linux/macOS native packages, the optimized release profile, full upstream
+Codex tests, and the new manually dispatched native CI workflow remain unverified.
+Historical cross-platform companion results below do not establish native-client
+support. Full-workspace `just fmt` hit Windows command-length/missing DotSlash
+limitations; scoped Rust formatting is used for the changed crates.
+Scoped `just fix`/Clippy for core, models-manager and TUI completed without warnings.
+Python Ruff and local documentation-link checks passed as well.
+
+Controller inference is advisory, bounded and independently implemented with original
+Laya/PyTorch. There is no Jev/Ares runtime dependency and no claim about idea ownership.
+It does not intercept every stock desktop, subagent or internal compaction call,
+replace Codex permissions, or reconstruct encrypted reasoning. Existing handoff/token
+benchmarks below must not be attributed to the native effort controller.
+
+## Earlier 0.1.1 local evidence, 2026-09-22
 
 - 71 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
   New coverage includes all device-selection branches, checkpoint-aware RAM estimates,

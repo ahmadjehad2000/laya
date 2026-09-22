@@ -78,3 +78,21 @@ checkpoint. GPU-to-CPU device fallback is still reported separately in `runtime`
 
 Predictions are advisory. The model's action and confidence fields remain upstream
 outputs; no threshold is used to authorize commands or claim correctness.
+
+## Native controller and CLI changes (0.2.0)
+
+The native controller uses a separate, private JSON-lines child process, not a new
+MCP tool. Protocol 1 carries request identity, generation, provider model, advertised
+efforts and evidence. Responses are `decided` (effort plus lease 1 or 2) or `fallback`
+(reason, no inferred effort). Only the native parent applies settings and records
+an acknowledgement after capturing the actual step. See [the native contract](../native/README.md).
+
+`continue` accepts `--target codex` (default) or `--target laya-codex`. Both create a
+new thread and verify the content-addressed context artifact. Missing/empty context
+arguments include handoff recovery guidance. `--lean` still requires an explicit
+model and retains read-only sandboxing.
+
+`compact-file --controller-log PATH` optionally archives an explicit workspace-local
+native decision log as provenance; no active lease is carried into continuation.
+Known native `configuration_update` rollout items are skipped as execution metadata,
+not converted into user instructions. Already compacted exports remain unsupported.
