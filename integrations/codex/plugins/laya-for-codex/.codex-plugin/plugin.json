@@ -7,6 +7,7 @@
     "url": "https://github.com/ahmadjehad2000"
   },
   "repository": "https://github.com/ahmadjehad2000/laya",
+  "homepage": "https://github.com/ahmadjehad2000/laya",
   "license": "Apache-2.0",
   "interface": {
     "displayName": "Laya for Codex",
@@ -15,6 +16,11 @@
     "developerName": "ahmadjehad2000",
     "category": "Productivity",
     "capabilities": [],
+    "websiteURL": "https://github.com/ahmadjehad2000/laya",
+    "brandColor": "#62E9C2",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png",
     "defaultPrompt": [
       "Triage these issues using Laya and show the supporting evidence.",
       "Classify these Arabic and English tickets.",
