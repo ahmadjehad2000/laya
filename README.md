@@ -16,6 +16,7 @@
 </p>
 
 <p align="center">
+  <a href="#repository-and-installed-locations">Locations</a> ·
   <a href="#quickstart">Quickstart</a> ·
   <a href="#a-z-operating-guide">A–Z guide</a> ·
   <a href="#workflows">Workflows</a> ·
@@ -42,6 +43,32 @@ The native client is separately verified on Windows; its controller has no measu
 cost-saving or coding-quality claim yet.
 
 **Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA and Debian WSL2 CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
+
+## Repository and installed locations
+
+The maintained repository is **[ahmadjehad2000/laya](https://github.com/ahmadjehad2000/laya)**.
+The native integration is part of this repository; it is not maintained in the
+`astra-ares` repository and does not require that project at runtime.
+
+| Item | Location |
+| :--- | :--- |
+| GitHub repository | `https://github.com/ahmadjehad2000/laya` |
+| Checkout on the development machine | `C:\Users\Mr.Device\Documents\laya2codex` |
+| Codex integration source | `integrations/codex` |
+| Native Astra + Laya source and guide | [`integrations/codex/native`](integrations/codex/native/README.md) |
+| Installed Windows launcher | `%USERPROFILE%\.laya-for-codex\venv\Scripts\laya-codex.exe` |
+| Installed native packages and build receipt | `%USERPROFILE%\.laya-for-codex\native` |
+
+Launch the installed native client from PowerShell:
+
+```powershell
+$LayaCodex = "$env:USERPROFILE\.laya-for-codex\venv\Scripts\laya-codex.exe"
+& $LayaCodex -C "C:\Users\Mr.Device\Documents\laya2codex"
+```
+
+Use `laya-codex` for the opt-in native generation-loop controller. Use ordinary
+`codex` for the stock client with the Laya plugin/MCP tools. The native launcher
+does not replace the stock Codex executable.
 
 ## Cost control
 
