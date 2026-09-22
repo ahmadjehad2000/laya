@@ -1,420 +1,189 @@
-> **This fork includes [Laya for Codex](integrations/codex/README.md)**: an independent,
-> local PyTorch-only companion with MCP tools and skills. Preview quality and platform
-> verification limits are documented in the integration. The original Laya README follows.
+<p align="center">
+  <img src="assets/laya-codex-banner.svg" alt="Laya for Codex — local, typed decisions inside your workflow" width="100%" />
+</p>
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NandhaKishorM/laya/main/assets/logo-lockup-dark.png" />
-    <img src="https://raw.githubusercontent.com/NandhaKishorM/laya/main/assets/logo-lockup.png" alt="Laya" width="330" />
-  </picture>
+  <a href="https://github.com/ahmadjehad2000/laya/actions/workflows/codex-companion.yml"><img src="https://github.com/ahmadjehad2000/laya/actions/workflows/codex-companion.yml/badge.svg?branch=main" alt="Cross-platform checks" /></a>
+  <img src="https://img.shields.io/badge/Python-3.12%E2%80%933.13-3776AB?logo=python&logoColor=white" alt="Python 3.12–3.13" />
+  <img src="https://img.shields.io/badge/runtime-PyTorch-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch runtime" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-5e72e4" alt="Apache 2.0 license" /></a>
+  <a href="https://github.com/ahmadjehad2000/laya/releases"><img src="https://img.shields.io/badge/release-0.1.0_preview-38bda9" alt="0.1.0 preview" /></a>
 </p>
-
-**Multilingual, non-autoregressive System 1 decision engine.** Typed decisions over 100+ languages in a single forward pass — 33 ms — trained with reinforcement learning against strictly proper scoring rules (RLCD), with a router that picks the right checkpoint per request.
-
-<div align="center">
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/15d4Yv__KHeHjshVb-6PRTfqVllxih2S3?usp=sharing)
-[![PyPI version](https://img.shields.io/pypi/v/laya.svg)](https://pypi.org/project/laya/)
-[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-convaiinnovations%2Flaya-blue)](https://huggingface.co/convaiinnovations/laya)
-[![Multilingual](https://img.shields.io/badge/%F0%9F%A4%97%20Model-laya--multilingual-blue)](https://huggingface.co/convaiinnovations/laya-multilingual)
-[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Space-laya--demo-orange)](https://huggingface.co/spaces/convaiinnovations/laya-demo)
-[![Dev.to Article](https://img.shields.io/badge/dev.to-Read%20Article-0A0A0A?logo=devdotto&logoColor=white)](https://dev.to/nandakishor_m_6cc0adfde9f/i-built-non-autoregressive-decision-models-a-year-ago-then-a-frontier-lab-called-it-a-18me)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-nandakishorm-FFDD00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/nandakishorm)
-[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
-
-</div>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/NandhaKishorM/laya/main/assets/laya_vs_jev_full.png" alt="Laya versus TypeSafe Jev: accuracy on shared public datasets, every application workflow, all 51 languages, speed, calibration, and the cost of not preloading" width="100%" />
+  <strong>Give Codex a local decision engine for repeated classification, routing, and rubric scoring.</strong><br />
+  Built directly on the original <a href="https://github.com/NandhaKishorM/laya">Laya</a>, with PyTorch, a Codex plugin, and MCP.
 </p>
-
-Laya evaluates typed questions (`choice`, `score`, `noul`) over any state (text, email, ticket or JSON document) in **a single forward pass** — 33 ms for one question, 7.2 ms/question batched, measured on a T4. No text generation, so nothing to parse and nothing to hallucinate.
-
-Three checkpoints, and a `Router` that picks between them per request:
-
-| | encoder | params | context | use it for |
-|---|---|---|---|---|
-| [`laya`](https://huggingface.co/convaiinnovations/laya) | ModernBERT-large | 421M | 512 | English |
-| [`laya-multilingual`](https://huggingface.co/convaiinnovations/laya-multilingual) | mmBERT-base | 322M | 1024 | 100+ languages, 2x faster |
-| [`laya-typed-decisions`](https://huggingface.co/convaiinnovations/laya-typed-decisions) | ModernBERT-large | 421M | 1024 | the typed-decisions workflows |
-
----
-
-## Installation
-
-```bash
-pip install laya
-```
-
----
-
-## Quickstart: Route Mode (Recommended)
-
-Laya ships three checkpoints. The built-in **`Router`** is the recommended entry point: it evaluates any state in any language, automatically detects scripts and languages in sub-milliseconds, and dispatches to the optimal checkpoint in a single forward pass.
-
-```python
-import laya
-from laya import Router
-
-# Preload checkpoints into memory for instant sub-35ms routing
-router = Router(preload=True)
-
-# 1. State in any language or schema
-state = {
-    "from": "user@acme.com",
-    "subject": "Duplicate charge on invoice #4411",
-    "body": "Hi, we were billed twice for March. Please refund the duplicate today or we will cancel our plan."
-}
-
-# 2. Define your typed questions
-questions = {
-    "department": {
-        "type": "choice",
-        "instructions": "Which department should handle this request?",
-        "criteria": {
-            "billing": "invoices, payments, refunds",
-            "technical": "bugs, outages, system errors",
-            "sales": "pricing, new contracts",
-            "other": "everything else"
-        }
-    },
-    "urgency": {
-        "type": "score",
-        "instructions": "How urgent is this request?",
-        "criteria": ["not urgent", "soon", "critical deadline or blocking issue"]
-    },
-    "churn_risk": {
-        "type": "noul",
-        "instructions": "Does the user threaten to cancel or leave?"
-    },
-    "refund_requested": {
-        "type": "noul",
-        "instructions": "Does the user explicitly request a refund?"
-    }
-}
-
-# 3. English state -> automatically routed to laya (ModernBERT-large, 39.5 ms)
-res_en = router.predict(state, questions)
-print("Department :", res_en["answers"]["department"]["choice"])  # -> billing (confidence: 0.94)
-print("Routing    :", res_en["routing"]["model"])                 # -> english
-
-# 4. Hindi state -> automatically routed to laya-multilingual (mmBERT-base, 32.8 ms)
-res_hi = router.predict({"body": "मुझसे दो बार शुल्क लिया गया, कृपया पैसे वापस करें।"}, questions)
-print("Department :", res_hi["answers"]["department"]["choice"])  # -> billing (confidence: 0.86)
-print("Routing    :", res_hi["routing"]["model"])                 # -> multilingual
-
-# 5. Explicit override when you want a specific checkpoint
-res_td = router.predict(state, questions, model="typed-decisions")
-```
-
-Every result carries full routing metadata explaining why the choice was made:
-
-```python
-res_hi["routing"]
-# {
-#   'model': 'multilingual',
-#   'repo': 'convaiinnovations/laya/multilingual',
-#   'reason': 'non-Latin script (devanagari, 100% of letters); the English checkpoint cannot read it'
-# }
-```
-
-Inspect a routing decision without running any forward pass:
-
-```python
-router.route({"body": "Der Kunde wurde zweimal belastet"}, questions).reason
-# "Latin script but language looks like 'de', not English"
-```
-
-### Why Route: The Evidence
-
-On a shared benchmark (17,416 questions, one T4 GPU, identical questions per model):
-
-| Benchmark / Task | English (`laya`) | Multilingual (`laya-multilingual`) | `Router` (Routed) |
-|---|---|---|---|
-| MASSIVE intent, English | **0.783** | 0.657 | **0.783** |
-| MASSIVE intent, 13 other languages | 0.306 | **0.451** | **0.451** |
-| XNLI, English | **0.860** | 0.843 | **0.860** |
-| XNLI, 14 other languages | 0.521 | **0.731** | **0.731** |
-| Languages usable (>3x random) | 23 / 51 | 45 / 51 | **45 / 51** |
-| Latency, 1 question (T4 GPU) | 39.5 ms | **32.8 ms** | **32.8 ms** |
-| Latency, 10 questions batched | 158.6 ms | **72.3 ms** | **72.3 ms** |
-
-The English checkpoint collapses on non-Latin scripts (Khmer scores **0.000 accuracy at 0.952 confidence**). Because the model stays confident while being wrong, confidence gating cannot save you. `Router` detects the script in <0.5 ms pure Python before the forward pass.
-
-### Production Preload & Memory
-
-A cold checkpoint build costs seconds; language detection costs microseconds. At the default `max_loaded=1`, traffic that alternates languages rebuilds a model on *every* request (measured at a 7.4 s median reload on CPU and 10.3 s on T4).
-
-For a server or production app, preload:
-
-```python
-# Every checkpoint resident in memory; language flips cost detection only (<1 ms)
-router = Router(preload=True)
-router = Router(preload=True, device="cuda")
-
-# Or preload only the specific checkpoints you serve:
-router.preload(["english", "multilingual"])
-
-# If your app already built an agent, attach it to avoid duplicate VRAM:
-router.attach("english", existing_agent)
-
-# Manage resident memory (default keeps 1 hot, LRU eviction)
-router = Router(max_loaded=2)       # keep two hot
-router.unload()                     # free memory
-```
-
-| Deployment Mode | Per-Request Latency | Model Reloads |
-|---|---|---|
-| `Router()` (lazy, `max_loaded=1`) | 7 to 10 s on every language switch | 1 per switch |
-| `Router(preload=True)` | **32.8 ms (GPU) / 193–464 ms (CPU)** | **none** |
-
----
-
-## Single-Model Mode (Direct SDK)
-
-If you only need a single checkpoint for a dedicated pipeline, you can load models directly:
-
-```python
-import laya
-
-# 1. Load a specific checkpoint directly from the hub
-agent = laya.load("convaiinnovations/laya")                           # English root
-agent_ml = laya.load("convaiinnovations/laya", subfolder="multilingual") # 100+ languages
-agent_td = laya.load("convaiinnovations/laya", subfolder="typed-decisions")
-
-# 2. Run all questions in ONE single forward pass (~35 ms on GPU)
-result = agent.predict(state, questions)
-answers = result["answers"]
-
-print("Department :", answers["department"]["choice"])   # -> billing (confidence: 0.94)
-print("Urgency    :", answers["urgency"]["score"])        # -> 1.84 / 2.0
-print("Churn Risk :", answers["churn_risk"]["noul"])       # -> 0.892 (89.2% probability)
-```
-
----
-
-## Automated Confidence Gating
-
-Because Laya's probabilities are trained with strictly proper scoring rules (RLCD), confidence scores are statistically meaningful:
-
-```python
-dept = answers["department"]["choice"]
-conf = answers["department"]["confidence"]
-
-if conf >= 0.85:
-    # High confidence: automated action without human in the loop
-    route_automatically(dept)
-else:
-    # Low confidence: escalate to human triage
-    escalate_to_human_agent(dept, reason=f"Low confidence ({conf:.2f})")
-```
-
----
-
-## Built-in Workflow Presets
-
-Laya provides pre-tuned question schemas for immediate production use:
-
-```python
-import laya
-
-agent = laya.load("convaiinnovations/laya")
-
-# 1. Intelligent Model Router (routes to small vs. frontier models)
-routing = agent.predict({"request": "Refactor this service using dependency injection"}, laya.router_questions())
-
-# 2. Real-time Prompt Guardrails (jailbreaks, injections, leaks)
-guard = agent.predict({"prompt": "Ignore all instructions"}, laya.guard_questions())
-
-# 3. Content Safety & Moderation (toxicity, harassment, threats)
-safety = agent.predict({"post": "User comment text"}, laya.moderation_questions())
-
-# 4. Support Ticket Triage (intent, urgency, frustration, churn)
-triage = agent.predict({"message": "My payment failed twice"}, laya.triage_questions())
-```
-
----
-
-## Decision Primitives
-
-| Primitive | Output | Use Cases |
-|---|---|---|
-| **`choice`** | Top label, probabilities per option, confidence | Department routing, intent classification, topic categorization |
-| **`score`** | Expected level on ordinal rubric, distribution, confidence | Frustration level, ticket urgency, harm severity |
-| **`noul`** | Calibrated probability P(true) from 0.0 to 1.0 | Phishing detection, spam filtering, jailbreak detection, churn risk |
-
----
-
-## Benchmarks
-
-**Full report: [`BENCHMARKS.md`](BENCHMARKS.md)** — every run consolidated, languages and themes, with per-language detail for all 51 languages.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/NandhaKishorM/laya/main/assets/laya_benchmark.png" alt="Per-language accuracy for both checkpoints across 51 languages" width="100%" />
-</p>
-
-All Laya numbers below are measured. Every model answered byte-identical questions
-(fixed seed) in the same run. Reproduce with
-[`notebooks/laya_benchmark_colab.ipynb`](https://github.com/NandhaKishorM/laya) on a T4.
-
-### Speed (Tesla T4, measured)
-
-| questions per call | `laya` | `laya-multilingual` |
-|---|---|---|
-| 1 | 39.5 ms | **32.8 ms** |
-| 5 | 84.5 ms | **40.1 ms** |
-| 10 | 158.6 ms (15.9 ms/q) | **72.3 ms (7.2 ms/q)** |
-| 50 | 771 ms | **337 ms (6.8 ms/q)** |
-
-Batched throughput reaches 103-332 questions/sec on a single T4. For reference, TypeSafe Jev
-has been independently measured at 236-276 ms p50
-([AbdelStark](https://github.com/AbdelStark/jev-benchmarks),
-[nibzard](https://github.com/nibzard/decision-model-benchmark)) -- Laya answers a single
-question roughly **6-7x faster**.
-
-### Laya (with routing) vs Jev
-
-Every Laya figure is what `Router().predict(...)` actually returns — the checkpoint the router
-selects for that input, not a hand-picked best of three. Jev figures are **third-party
-published, never measured here** (no TypeSafe API access), so sample sizes and prompts differ.
-
-| | Jev 1.13.0 | Laya (routed) | |
-|---|---|---|---|
-| typed-decisions, 2,000 decisions | 0.727 | **0.766** | +0.039 |
-| AG News, 4 labels | 0.910 | **0.950** | +0.040 |
-| DAIR Emotion, 6 labels | 0.480 | **0.595** | +0.115 |
-| Banking77 (72 vs 77 labels) | **0.870** | 0.425 | Jev leads on >20 options |
-| ECE *(lower better)* | 0.246 | **0.081** | 3× better (post-temperature) |
-| p50 latency, 1 question | 236–276 ms | **32.8 ms** | 7.8× faster |
-| Languages usable | *no published benchmark* | **45 of 51** | — |
-| Weights | closed API | **Apache 2.0** | — |
-| Cost | $0.042 / 1M tokens | **$0 self-hosted** | — |
-
-On DAIR Emotion, Jev assigned **zero probability to the true label on 16% of examples** — a hard
-failure for anything branching on confidence.
-
-#### Where Jev leads
-
-* **High-cardinality label spaces (>20 options at default settings):** On Banking77, Jev scores 0.870 (on 72 labels) while Laya scores 0.425 (on 77 labels at default 256-token head budget). This is an architectural token-budget constraint: options share a fixed `head_max_len` budget (192 tokens on English, 256 on multilingual), so 77 options receive only ~3 to 4 tokens per label, causing text to become indistinguishable. Jev supports up to 255 options out-of-the-box. While `laya-multilingual` supports 1,024 context (and up to 8,192 in the encoder) and you can raise `agent.cfg["head_max_len"] = 512` at runtime, Jev is currently better suited for 50+ options in a single prompt without tuning.
-* **Soft distribution matching:** On typed-decisions, while Laya achieves higher argmax accuracy (0.766 vs 0.727), Jev achieves higher soft accuracy (0.580 vs 0.471) against the teacher's full probability distributions.
-* **Out-of-the-box raw calibration:** Before temperature scaling, the base checkpoint has higher raw ECE (0.213 vs 0.144). Laya achieves its 0.081 ECE after domain temperature fitting.
-
-Full detail, including every workflow and all 51 languages: **[`BENCHMARKS.md`](BENCHMARKS.md)**.
-
-### typed-decisions, measured on all three checkpoints
-
-400 cases, 2,000 decisions, four workflows.
-
-| model | accuracy | soft acc | Brier | ECE | score MAE |
-|---|---|---|---|---|---|
-| **`laya-typed-decisions`** | **0.766** | 0.471 | **0.062** | 0.213 | **0.242** |
-| `laya` | 0.362 | 0.332 | 0.316 | 0.175 | 0.694 |
-| `laya-multilingual` | 0.342 | 0.326 | 0.439 | 0.285 | 0.687 |
-| *Jev 1.13.0 (published)* | *0.727* | *0.580* | *0.148* | *0.144* | *0.391* |
-| *teacher self-agreement ceiling* | *0.735* | | | | |
-| *per-question majority class* | *0.461* | | | | |
-| *random guess* | *0.318* | | | | |
-
-The fine-tuned checkpoint beats Jev by 3.9 points and clears the teacher ceiling, with 2.4x
-better Brier and 1.6x better score MAE. It wins on all four workflows: invoice processing
-0.804, security incidents 0.766, customer service 0.764, agent-trace observability 0.730.
-By primitive: `noul` 0.857, `choice` 0.733, `score` 0.723.
-
-Two places it still trails Jev: **soft accuracy** (0.471 vs 0.580 — its argmax is better but
-its distributions match the teacher less well) and **ECE** (0.213 vs 0.144), which temperature
-fitting addresses.
-
-**The base checkpoints sit below the majority-class baseline** (0.362 and 0.342 against 0.461).
-All of the capability on this benchmark comes from fine-tuning.
-
-### Multilingual (51 languages, MASSIVE intent, 20 options, random = 0.050)
-
-| | `laya` | `laya-multilingual` |
-|---|---|---|
-| English | **0.783** | 0.657 |
-| 13 other languages | 0.306 | **0.451** |
-| XNLI, English | **0.860** | 0.843 |
-| XNLI, 14 other languages | 0.521 | **0.731** |
-
-Across all 51 languages the English checkpoint macro-averages **0.227** with macro ECE
-**0.733**, and only 23 of 51 languages clear 3x random. Khmer scores **0.000 at 95.2%
-confidence**. This is why [`Router`](#model-routing-three-checkpoints-one-call) exists: the
-model's own confidence gives no warning, so the routing decision has to be made before the
-forward pass.
-
-### English tasks
-
-| task | `laya` | `laya-multilingual` | note |
-|---|---|---|---|
-| AG News | **0.947** | 0.937 | in training mix |
-| BoolQ | **0.830** | 0.787 | in training mix |
-| DAIR Emotion | **0.573** | 0.513 | held out |
-| prompt-injections | **0.698** | 0.578 | held out, n=116 |
-| SST-5 (ordinal) | 0.372 | 0.282 | held out |
-
-### Calibration
-
-Both checkpoints are over-confident as shipped. Refitting one temperature per (question type,
-option count) on held-out data moves mean ECE **0.466 -> 0.081** (`laya`) and
-**0.314 -> 0.106** (`laya-multilingual`). `laya-multilingual` ships with no fitted
-temperatures at all, so fit them before relying on its probabilities.
-
-### Honest limits
-
-* **The base checkpoints are near chance on typed-decisions zero-shot** -- 0.362 and 0.352
-  against a 0.318 random baseline and a 0.461 majority-class baseline. The 0.766 figure comes
-  from the checkpoint fine-tuned on that benchmark's own training split. Laya is a fast base to
-  specialise, not a zero-shot decision engine.
-* **High-cardinality choice questions and token budgets:** Sequences split into an option prompt budget (`head_max_len`) and the remaining document/state budget (`max_len - head_max_len`):
-  * `laya` (English) defaults to 512 context (`head_max_len = 192`, ~320 tokens for state).
-  * `laya-multilingual` and `laya-typed-decisions` default to 1,024 context (`head_max_len = 256`, ~768 tokens for state; mmBERT-base encoder supports up to 8,192 with RoPE).
-  At default settings, a 77-option question like Banking77 allocates only `(256 - 16) // 77` ≈ 3–4 tokens per label, which causes accuracy to fall off sharply (0.425 vs Jev's 0.870). If evaluating 50+ options in a single question:
-  1. Raise `agent.cfg["head_max_len"] = 512` and `agent.cfg["max_len"] = 1024` (or up to 2048 / 4096 / 8192) so every option has enough tokens to remain distinct.
-  2. Or split large option sets into a two-step coarse-to-fine hierarchical choice.
-* Ordinal `score` questions are the weakest primitive (SST-5 0.372).
-* `laya` collapses outside English; `laya-multilingual` is weaker on English. Route, or pick
-  deliberately.
-
----
-
-## Live Demo & Resources
-
-* **Hugging Face Model:** [convaiinnovations/laya](https://huggingface.co/convaiinnovations/laya)
-* **Interactive Web Demo:** [convaiinnovations/laya-demo](https://huggingface.co/spaces/convaiinnovations/laya-demo)
-* **Engineering Writeup:** [Read the full story on Dev.to](https://dev.to/nandakishor_m_6cc0adfde9f/i-built-non-autoregressive-decision-models-a-year-ago-then-a-frontier-lab-called-it-a-18me)
-
----
-
-## Fine-Tuning
-
-Fine-tune Laya on your own domain data. The notebook runs on Kaggle's free 2xT4 GPUs and does
-the whole loop: build the dataset, train with RLCD (proper-scoring-rule rewards, GRPO-style
-policy gradient), fit calibration temperatures, evaluate, and push the result to the Hub.
-
-* **[`notebooks/laya_finetune_typed_decisions_2xT4_kaggle.ipynb`](notebooks/laya_finetune_typed_decisions_2xT4_kaggle.ipynb)**
-
-Fine-tuning is where most of the value is. On the typed-decisions benchmark the base
-checkpoints score near chance zero-shot (0.36 and 0.35 against a 0.318 random baseline),
-while the fine-tuned checkpoint reaches **0.766** on the same 2,000 decisions -- above
-TypeSafe Jev's published 0.727 and above the 0.735 teacher self-agreement ceiling. Treat Laya
-as a fast base to specialise, not as a zero-shot decision engine.
-
-Runtime on 2xT4 is roughly 4-5 hours for 4 epochs over ~30k questions.
-
----
-
-## Support the Project
-
-If Laya helps your research or products, consider supporting independent research:
-
-<p align="left">
-  <a href="https://www.buymeacoffee.com/nandakishorm" target="_blank">
-    <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=nandakishorm&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" alt="Buy Me A Coffee" />
-  </a>
+  <a href="#quickstart">Quickstart</a> ·
+  <a href="#workflows">Workflows</a> ·
+  <a href="integrations/codex/docs/API.md">API</a> ·
+  <a href="integrations/codex/docs/VERIFICATION.md">Test evidence</a> ·
+  <a href="UPSTREAM_README.md">Original Laya docs</a>
 </p>
 
 ---
 
-## License
+Laya for Codex brings small, typed decisions into your existing Codex session. Codex gathers the relevant evidence, sends related questions to a local model, and checks the results against your sources. You get structured labels, rubric scores, and yes/no probabilities without running a separate model service.
 
-Apache 2.0. Developed by Convai Innovations.
+**Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
+
+## Workflows
+
+| Bring to Codex | Ask Laya to help with | Keep Codex responsible for |
+| :--- | :--- | :--- |
+| Natural-language issues and log summaries | Repeated category or team routing | Checking labels against the original issue |
+| English, Arabic, or mixed-language tickets | Topic and intent classification | Resolving ambiguity, negation, and missing evidence |
+| Document excerpts and research records | Consistent tagging across a collection | Preserving evidence and reviewing outliers |
+| Comparable records and an explicit rubric | Ordered rubric scoring | Explaining scores and validating consequential decisions |
+
+Four included skills cover **developer triage**, **record triage**, **rubric scoring**, and **diagnostics**. Laya is optional; ordinary coding and reasoning continue normally. Raw-code role classification performed poorly in testing and is excluded from recommended workflows.
+
+## Quickstart
+
+You need a local Codex client, **64-bit Python 3.12** (3.13 is supported by the package but not the tested CI version), several GB of free disk, and preferably **16 GB+ RAM**. The default cold-load check requires 4.5 GiB of available RAM. Setup downloads packages and weights; prepared inference runs offline.
+
+```sh
+git clone https://github.com/ahmadjehad2000/laya.git
+cd laya/integrations/codex
+```
+
+<details open>
+<summary><strong>Windows · NVIDIA GPU</strong></summary>
+
+```powershell
+py -3.12 bootstrap.py install --torch-index cu128
+```
+
+Uses PyTorch CUDA when available and reports the actual device. A compatible NVIDIA driver is required for CUDA; the runtime can fall back to CPU.
+
+</details>
+
+<details>
+<summary><strong>Windows · CPU</strong></summary>
+
+```powershell
+py -3.12 bootstrap.py install --torch-index cpu --device cpu
+```
+
+</details>
+
+<details>
+<summary><strong>Linux · CPU</strong></summary>
+
+```sh
+python3 bootstrap.py install --torch-index cpu --device cpu
+```
+
+Use a Python 3.12 interpreter. NVIDIA users can choose `--torch-index cu128`; Linux CUDA has not been exercised in this release.
+
+</details>
+
+<details>
+<summary><strong>macOS · CPU</strong></summary>
+
+```sh
+python3 bootstrap.py install --device cpu
+```
+
+Use native ARM64 Python 3.12 on Apple Silicon. ARM64 CPU inference is verified. Apple MPS is selectable with `--device mps`, but remains experimental and unverified.
+
+</details>
+
+The installer creates an isolated environment under `~/.laya-for-codex`, prepares the pinned multilingual checkpoint, runs a real prediction, and installs the Codex plugin with an absolute executable path. No model API key is needed.
+
+Open a **new Codex session**, then try:
+
+> Use Laya to classify these two tickets as billing, technical, or other: “I was charged twice” and “تم خصم المبلغ مرتين”. Show the actual device and verify each label against the text.
+
+If you already have an older managed Laya integration, first install with `--mode none`, then run `python3 bootstrap.py register --mode plugin --migrate-existing` (`py -3.12` on Windows). The installer backs up the configuration and preserves unrelated settings. See [setup, repair, direct MCP, and rollback](integrations/codex/README.md).
+
+The verified plugin path uses Codex CLI 0.155.1's compatibility manifest. Local clients without plugin support can use `--mode direct`. Hosted Codex cannot access this desktop installation. The portable plugin ZIP is an alternate distribution for compatible hosts; it is not the verified installation path and still needs the prepared CLI on PATH.
+
+## How it fits into Codex
+
+```mermaid
+flowchart LR
+    A[Your source evidence] --> B[Codex + workflow skills]
+    B --> C[Local MCP over stdio]
+    C --> D[Original Laya / PyTorch]
+    D --> E[Labels · scores · probabilities]
+    E --> F[Codex checks against sources]
+```
+
+| Tool | Purpose |
+| :--- | :--- |
+| `laya_status` | Inspect readiness, actual device, loaded model, and resource counters |
+| `laya_predict` | Ask related `choice`, `score`, or `noul` questions over one state |
+| `laya_predict_batch` | Apply shared questions to up to 32 independent records |
+| `laya_release` | Unload the model and clear in-memory caches |
+| `laya_benchmark` | Run an explicitly requested synthetic performance diagnostic |
+
+Requests are validated, bounded, and checked for tokenizer truncation. Repeated identical requests can use a bounded memory cache. Batch processing preserves record order and reports individual failures. It reduces tool round trips; model inference remains sequential.
+
+See the [API contract](integrations/codex/docs/API.md) and [example request](integrations/codex/examples/quickstart.json). A `score` result uses the API's fractional scale; it is not automatically a percentage. Probabilities and confidence never authorize actions.
+
+## Original Laya, with explicit model selection
+
+| Selection | Checkpoint behavior |
+| :--- | :--- |
+| `multilingual` | Default; English, Arabic, and mixed-language workflows |
+| `english` | Original English checkpoint |
+| `typed-decisions` | Explicit opt-in to the upstream typed-decisions checkpoint |
+| `auto` | Upstream language routing between prepared English and multilingual models |
+
+Prepare every checkpoint when needed:
+
+```sh
+python3 bootstrap.py prepare --model all
+```
+
+Checkpoint revisions and SHA-256 hashes are [pinned](integrations/codex/laya_codex_companion/models.json). Preparation verifies weights; inference never downloads missing files. Each MCP server keeps at most one model resident, unloads before switching models, and releases idle model memory. Separate Codex processes can each hold a model.
+
+This fork uses the **original Laya Router and Agent with PyTorch**. It contains no Laya-MLX runtime or dependency. The upstream Python API remains available; its documentation is preserved in [UPSTREAM_README.md](UPSTREAM_README.md).
+
+## Verification
+
+| Check | Result |
+| :--- | :--- |
+| Companion validation, cache, batch behavior, setup, and rollback | 29 automated tests passed |
+| Upstream routing / criteria contracts | 106 / 34 checks passed |
+| Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
+| Local GPU inference | Windows CUDA passed |
+| Actual plugin use in a fresh Codex session | Status → English/Arabic batch → release passed |
+| Checkpoint loading and routing | All three checkpoints + automatic English/Arabic selection passed |
+| Apple MPS / Linux CUDA / Intel macOS | Not verified |
+
+[Cross-platform real-inference run](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148) · [Detailed reports and methodology](integrations/codex/docs/VERIFICATION.md)
+
+**Transport correctness and model accuracy are separate.** The version 2 synthetic fixture matched **17/24** expected decisions: software issues 3/4, raw-code roles 1/4, ticket decisions 9/12, and document categories 4/4. Failures included sales-versus-billing ambiguity, explicit refund negation, and insufficient evidence. Raw-code roles remain in the fixture to expose the weakness, not to endorse the use case.
+
+These are small, manually labeled acceptance cases, not broad accuracy, calibrated confidence, or speed claims. Review consequential predictions against source evidence.
+
+## Privacy and control
+
+- Inference runs locally over stdio, with no listening network port.
+- Setup downloads dependencies and public model weights. Prepared inference is offline.
+- The companion does not write raw prompts to disk or upload them. Results returned to Codex enter its conversation and normal data handling.
+- Configuration controls the device, model, request limits, cache, threads, and idle timeout.
+- Uninstall disconnects the integration while retaining weights and backups. Guarded rollback restores the saved configuration when it has not subsequently changed.
+
+## Develop and contribute
+
+```sh
+python -m pip install -r integrations/codex/requirements.lock
+python -m pip install --no-deps -e .
+python -m pip install -e 'integrations/codex[test]'
+python -m pytest integrations/codex/tests -q
+python tests/test_router.py
+python tests/test_criteria.py
+```
+
+The companion lives in [`integrations/codex`](integrations/codex). Real-model checks, native Codex acceptance, plugin packaging, and the labeled evaluation are documented there. Report integration errors separately from prediction disagreements when opening an [issue](https://github.com/ahmadjehad2000/laya/issues).
+
+## Credits and license
+
+An independent integration by [ahmadjehad2000](https://github.com/ahmadjehad2000), built as a direct fork of [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya). Credit for Laya, its models, and upstream research belongs to the original authors. This is not an official OpenAI or Convai Innovations product.
+
+[Apache 2.0](LICENSE) · [Attribution notice](integrations/codex/NOTICE) · [Original project documentation](UPSTREAM_README.md)

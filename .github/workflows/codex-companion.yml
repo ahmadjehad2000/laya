@@ -62,5 +62,5 @@ jobs:
         if: always()
         with:
           name: companion-evidence-${{ matrix.os }}
-          path: integrations/codex/evidence/*.json
+          path: integrations/codex/evidence/${{ matrix.os }}.json
           if-no-files-found: ignore

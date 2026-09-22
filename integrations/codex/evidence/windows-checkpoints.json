@@ -1,0 +1,416 @@
+{
+  "scope": "Real upstream checkpoint loads and routing; not broad accuracy evidence",
+  "runs": [
+    {
+      "requested": "english",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9662,
+              "technical": 0.0179,
+              "sales": 0.0159
+            },
+            "confidence": 0.8443,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.0741,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.2344,
+              "1": 0.4571,
+              "2": 0.3085
+            },
+            "confidence": 0.0345,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.939,
+            "confidence": 0.939,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "english",
+          "repo": "convaiinnovations/laya",
+          "reason": "explicit model='english'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "english",
+          "repo": "convaiinnovations/laya",
+          "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+          "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "cache_hit": false,
+          "load_ms": 7415.71,
+          "inference_ms": 405.62,
+          "elapsed_ms": 9337.83
+        }
+      }
+    },
+    {
+      "requested": "multilingual",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9597,
+              "technical": 0.012,
+              "sales": 0.0283
+            },
+            "confidence": 0.8239,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.9475,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.004,
+              "1": 0.0445,
+              "2": 0.9515
+            },
+            "confidence": 0.8107,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7774,
+            "confidence": 0.7774,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 146,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "context_tokens": {
+          "team": 46,
+          "urgency": 50,
+          "refund": 50
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "cache_hit": false,
+          "load_ms": 6518.82,
+          "inference_ms": 41.93,
+          "elapsed_ms": 6561.63
+        }
+      }
+    },
+    {
+      "requested": "typed-decisions",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.8373,
+              "technical": 0.0878,
+              "sales": 0.0749
+            },
+            "confidence": 0.4936,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.1916,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.1593,
+              "1": 0.4899,
+              "2": 0.3508
+            },
+            "confidence": 0.081,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7321,
+            "confidence": 0.7321,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "typed-decisions",
+          "repo": "convaiinnovations/laya-typed-decisions",
+          "reason": "explicit model='typed-decisions'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "typed-decisions",
+          "repo": "convaiinnovations/laya-typed-decisions",
+          "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+          "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "cache_hit": false,
+          "load_ms": 5023.84,
+          "inference_ms": 48.61,
+          "elapsed_ms": 5073.47
+        }
+      }
+    },
+    {
+      "requested": "auto",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9662,
+              "technical": 0.0179,
+              "sales": 0.0159
+            },
+            "confidence": 0.8443,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.0741,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.2344,
+              "1": 0.4571,
+              "2": 0.3085
+            },
+            "confidence": 0.0345,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.939,
+            "confidence": 0.939,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "english",
+          "repo": "convaiinnovations/laya",
+          "reason": "English Latin text",
+          "detection": {
+            "script": "latin",
+            "script_profile": {
+              "latin": 1.0
+            },
+            "language": "en",
+            "is_english": true,
+            "non_latin_fraction": 0.0
+          },
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "english",
+          "repo": "convaiinnovations/laya",
+          "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+          "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "cache_hit": false,
+          "load_ms": 5028.98,
+          "inference_ms": 53.58,
+          "elapsed_ms": 5083.45
+        }
+      }
+    },
+    {
+      "requested": "auto",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9597,
+              "technical": 0.012,
+              "sales": 0.0283
+            },
+            "confidence": 0.8239,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.9475,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.004,
+              "1": 0.0445,
+              "2": 0.9515
+            },
+            "confidence": 0.8107,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7774,
+            "confidence": 0.7774,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 146,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "reason": "non-Latin script (arabic, 100% of letters); the English checkpoint cannot read it",
+          "detection": {
+            "script": "arabic",
+            "script_profile": {
+              "arabic": 1.0
+            },
+            "language": null,
+            "is_english": false,
+            "non_latin_fraction": 1.0
+          },
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "context_tokens": {
+          "team": 46,
+          "urgency": 50,
+          "refund": 50
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "cache_hit": false,
+          "load_ms": 7066.82,
+          "inference_ms": 35.69,
+          "elapsed_ms": 7106.13
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "release": {
+    "released": true,
+    "cache_cleared": true
+  }
+}

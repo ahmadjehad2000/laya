@@ -3,8 +3,8 @@
 A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
 Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
 
-**Preview 0.1.0.** Windows, Linux and macOS are implementation targets. See
-[verification](docs/VERIFICATION.md) for actual tests and remaining release gates.
+**Preview 0.1.0.** Real inference passed on Windows CPU/CUDA, Linux CPU, and macOS
+ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified paths.
 
 ## What you can do
 
@@ -17,7 +17,7 @@ The plugin packages four discoverable skills and five MCP tools. Codex collects 
 and reviews results; Laya supplies small typed decisions. It does not automatically see
 your whole repository or conversation. Model predictions can be confidently wrong.
 
-**Measured limits:** the first multilingual CUDA fixture got 14/20 decisions correct.
+**Measured limits:** the version 2 multilingual CUDA fixture got 17/24 decisions correct.
 Raw-code role classification failed 3/4 cases and is excluded from the recommended
 workflow. Sales/billing and explicit refund negation also produced errors. The plugin
 requires source review rather than treating confidence as a correctness guarantee.
@@ -40,8 +40,10 @@ For CPU-only Windows/Linux, use `--torch-index cpu --device cpu`.
 On macOS use native Python (ARM64 on Apple Silicon):
 
 ```sh
-python3 bootstrap.py install --device auto
+python3 bootstrap.py install --device cpu
 ```
+
+Apple MPS is selectable but remains experimental and unverified.
 
 The installer creates `~/.laya-for-codex/venv`, prepares pinned multilingual weights,
 tests a real prediction, then installs the plugin through a generated local marketplace.
@@ -121,6 +123,11 @@ python integrations/codex/scripts/smoke_mcp.py
 The checked-in plugin uses `laya-for-codex` on PATH for developer use. The installer
 renders a separate local copy with absolute paths. Run `scripts/build_plugin.py` after
 changing shared plugin metadata. Never commit generated local executable paths.
+
+`scripts/verify_codex.py` exercises the installed plugin in a fresh authenticated Codex
+CLI session. It checks actual completed MCP calls and saves a filtered evidence report.
+It uses your configured model and normal Codex permissions. `scripts/verify_models.py`
+checks all prepared checkpoint selections and automatic English/Arabic routing.
 
 Codex CLI 0.155.1 was tested with the compatibility `.codex-plugin/plugin.json` entrypoint.
 In local testing, a root portable manifest installed successfully but did not expose MCP

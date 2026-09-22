@@ -1,9 +1,16 @@
 {
-  "timestamp": "2026-09-22T10:23:23.081234+00:00",
-  "platform": "Windows-11-10.0.26100-SP0",
+  "timestamp": "2026-09-22T10:45:04.598056+00:00",
+  "platform": "Windows-2025Server-10.0.26100-SP0",
   "python": "3.12.10",
   "integration_failures": [],
   "prediction_failures": [
+    {
+      "id": "issue-unknown",
+      "question": "category",
+      "expected": "unknown",
+      "actual": "bug",
+      "evidence": "The issue contains no actionable description."
+    },
     {
       "id": "dev-test",
       "question": "role",
@@ -49,6 +56,233 @@
   ],
   "groups": [
     {
+      "name": "developer-issues",
+      "correct": 3,
+      "total": 4,
+      "cases": [
+        {
+          "id": "issue-bug",
+          "evidence": "An existing save operation now crashes and loses changes.",
+          "expected": {
+            "category": "bug"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "bug",
+                "probabilities": {
+                  "bug": 0.9976,
+                  "feature": 0.0005,
+                  "documentation": 0.0005,
+                  "unknown": 0.0014
+                },
+                "confidence": 0.986,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 58,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 58
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 163.34,
+              "elapsed_ms": 164.61
+            }
+          }
+        },
+        {
+          "id": "issue-feature",
+          "evidence": "Requests a new export capability.",
+          "expected": {
+            "category": "feature"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "feature",
+                "probabilities": {
+                  "bug": 0.0003,
+                  "feature": 0.9991,
+                  "documentation": 0.0002,
+                  "unknown": 0.0005
+                },
+                "confidence": 0.9941,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 57,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 57
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 164.92,
+              "elapsed_ms": 166.35
+            }
+          }
+        },
+        {
+          "id": "issue-docs",
+          "evidence": "Requests clarification of installation instructions.",
+          "expected": {
+            "category": "documentation"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "documentation",
+                "probabilities": {
+                  "bug": 0.0109,
+                  "feature": 0.0023,
+                  "documentation": 0.7914,
+                  "unknown": 0.1954
+                },
+                "confidence": 0.5907,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 58,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 58
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 162.77,
+              "elapsed_ms": 164.21
+            }
+          }
+        },
+        {
+          "id": "issue-unknown",
+          "evidence": "The issue contains no actionable description.",
+          "expected": {
+            "category": "unknown"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "bug",
+                "probabilities": {
+                  "bug": 0.8867,
+                  "feature": 0.003,
+                  "documentation": 0.0383,
+                  "unknown": 0.0721
+                },
+                "confidence": 0.6838,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 50,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 50
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 144.91,
+              "elapsed_ms": 146.31
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "developer",
       "correct": 1,
       "total": 4,
@@ -66,12 +300,12 @@
                 "type": "choice",
                 "choice": "unknown",
                 "probabilities": {
-                  "test": 0.4137,
+                  "test": 0.4347,
                   "application": 0.0364,
-                  "configuration": 0.003,
-                  "unknown": 0.547
+                  "configuration": 0.0029,
+                  "unknown": 0.5259
                 },
-                "confidence": 0.3992,
+                "confidence": 0.3957,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -99,12 +333,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 101.97,
-              "elapsed_ms": 104.51
+              "inference_ms": 187.06,
+              "elapsed_ms": 188.48
             }
           }
         },
@@ -121,10 +355,10 @@
                 "type": "choice",
                 "choice": "unknown",
                 "probabilities": {
-                  "test": 0.018,
-                  "application": 0.3942,
-                  "configuration": 0.0186,
-                  "unknown": 0.5692
+                  "test": 0.0184,
+                  "application": 0.3922,
+                  "configuration": 0.0184,
+                  "unknown": 0.571
                 },
                 "confidence": 0.3983,
                 "action": {
@@ -154,12 +388,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 81.93,
-              "elapsed_ms": 84.57
+              "inference_ms": 198.45,
+              "elapsed_ms": 200.0
             }
           }
         },
@@ -181,7 +415,7 @@
                   "configuration": 0.0,
                   "unknown": 0.0001
                 },
-                "confidence": 0.9985,
+                "confidence": 0.9986,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -209,12 +443,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 65.35,
-              "elapsed_ms": 68.11
+              "inference_ms": 175.04,
+              "elapsed_ms": 176.45
             }
           }
         },
@@ -231,12 +465,12 @@
                 "type": "choice",
                 "choice": "unknown",
                 "probabilities": {
-                  "test": 0.0024,
-                  "application": 0.0311,
-                  "configuration": 0.0066,
-                  "unknown": 0.9599
+                  "test": 0.0023,
+                  "application": 0.0318,
+                  "configuration": 0.0067,
+                  "unknown": 0.9592
                 },
-                "confidence": 0.8596,
+                "confidence": 0.8577,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -264,12 +498,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 46.25,
-              "elapsed_ms": 47.14
+              "inference_ms": 176.57,
+              "elapsed_ms": 178.14
             }
           }
         }
@@ -306,8 +540,8 @@
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.9702,
-                "confidence": 0.9702,
+                "noul": 0.9697,
+                "confidence": 0.9697,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -336,12 +570,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 53.0,
-              "elapsed_ms": 54.21
+              "inference_ms": 271.71,
+              "elapsed_ms": 273.33
             }
           }
         },
@@ -359,20 +593,20 @@
                 "type": "choice",
                 "choice": "billing",
                 "probabilities": {
-                  "billing": 0.8483,
-                  "technical": 0.0146,
-                  "sales": 0.0328,
-                  "unknown": 0.1043
+                  "billing": 0.8566,
+                  "technical": 0.0138,
+                  "sales": 0.032,
+                  "unknown": 0.0976
                 },
-                "confidence": 0.6039,
+                "confidence": 0.6184,
                 "action": {
                   "act_probability": 1.0
                 }
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.7118,
-                "confidence": 0.7118,
+                "noul": 0.7141,
+                "confidence": 0.7141,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -401,12 +635,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 87.51,
-              "elapsed_ms": 91.17
+              "inference_ms": 299.45,
+              "elapsed_ms": 301.07
             }
           }
         },
@@ -425,19 +659,19 @@
                 "choice": "technical",
                 "probabilities": {
                   "billing": 0.0019,
-                  "technical": 0.9827,
+                  "technical": 0.9828,
                   "sales": 0.0023,
-                  "unknown": 0.0132
+                  "unknown": 0.0131
                 },
-                "confidence": 0.9281,
+                "confidence": 0.9283,
                 "action": {
                   "act_probability": 1.0
                 }
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.0022,
-                "confidence": 0.9978,
+                "noul": 0.0021,
+                "confidence": 0.9979,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -466,12 +700,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 108.45,
-              "elapsed_ms": 110.97
+              "inference_ms": 284.99,
+              "elapsed_ms": 286.65
             }
           }
         },
@@ -501,8 +735,8 @@
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.1147,
-                "confidence": 0.8853,
+                "noul": 0.1103,
+                "confidence": 0.8897,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -531,12 +765,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 99.95,
-              "elapsed_ms": 103.09
+              "inference_ms": 272.15,
+              "elapsed_ms": 273.84
             }
           }
         },
@@ -554,20 +788,20 @@
                 "type": "choice",
                 "choice": "billing",
                 "probabilities": {
-                  "billing": 0.5708,
-                  "technical": 0.3008,
-                  "sales": 0.0322,
-                  "unknown": 0.0961
+                  "billing": 0.5675,
+                  "technical": 0.3015,
+                  "sales": 0.033,
+                  "unknown": 0.098
                 },
-                "confidence": 0.2662,
+                "confidence": 0.262,
                 "action": {
                   "act_probability": 1.0
                 }
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.6128,
-                "confidence": 0.6128,
+                "noul": 0.6118,
+                "confidence": 0.6118,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -596,12 +830,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 92.37,
-              "elapsed_ms": 95.7
+              "inference_ms": 292.75,
+              "elapsed_ms": 294.41
             }
           }
         },
@@ -619,20 +853,20 @@
                 "type": "choice",
                 "choice": "unknown",
                 "probabilities": {
-                  "billing": 0.019,
-                  "technical": 0.1286,
-                  "sales": 0.0395,
-                  "unknown": 0.8129
+                  "billing": 0.0185,
+                  "technical": 0.1287,
+                  "sales": 0.0388,
+                  "unknown": 0.8139
                 },
-                "confidence": 0.5419,
+                "confidence": 0.5445,
                 "action": {
                   "act_probability": 1.0
                 }
               },
               "refund": {
                 "type": "noul",
-                "noul": 0.007,
-                "confidence": 0.993,
+                "noul": 0.0071,
+                "confidence": 0.9929,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -661,12 +895,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 86.34,
-              "elapsed_ms": 88.58
+              "inference_ms": 282.47,
+              "elapsed_ms": 284.04
             }
           }
         }
@@ -723,12 +957,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 96.87,
-              "elapsed_ms": 100.46
+              "inference_ms": 174.78,
+              "elapsed_ms": 176.15
             }
           }
         },
@@ -778,12 +1012,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 89.47,
-              "elapsed_ms": 92.52
+              "inference_ms": 165.4,
+              "elapsed_ms": 166.83
             }
           }
         },
@@ -800,12 +1034,12 @@
                 "type": "choice",
                 "choice": "guide",
                 "probabilities": {
-                  "invoice": 0.0899,
-                  "meeting": 0.027,
-                  "guide": 0.5382,
-                  "unknown": 0.3448
+                  "invoice": 0.0901,
+                  "meeting": 0.0271,
+                  "guide": 0.5361,
+                  "unknown": 0.3466
                 },
-                "confidence": 0.268,
+                "confidence": 0.2669,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -833,12 +1067,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 87.93,
-              "elapsed_ms": 89.62
+              "inference_ms": 170.23,
+              "elapsed_ms": 171.67
             }
           }
         },
@@ -855,12 +1089,12 @@
                 "type": "choice",
                 "choice": "unknown",
                 "probabilities": {
-                  "invoice": 0.1094,
-                  "meeting": 0.0372,
-                  "guide": 0.0384,
-                  "unknown": 0.8149
+                  "invoice": 0.1109,
+                  "meeting": 0.0373,
+                  "guide": 0.038,
+                  "unknown": 0.8138
                 },
-                "confidence": 0.5264,
+                "confidence": 0.525,
                 "action": {
                   "act_probability": 1.0
                 }
@@ -888,12 +1122,12 @@
             },
             "runtime": {
               "backend": "pytorch",
-              "device": "cuda",
+              "device": "cpu",
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 68.33,
-              "elapsed_ms": 71.45
+              "inference_ms": 152.54,
+              "elapsed_ms": 154.01
             }
           }
         }
@@ -913,7 +1147,7 @@
     "busy": false,
     "configuration": {
       "model": "multilingual",
-      "device": "auto",
+      "device": "cpu",
       "max_items": 32,
       "max_questions": 16,
       "question_batch_size": 4,
@@ -921,7 +1155,7 @@
       "cache_entries": 128,
       "cache_ttl_sec": 120,
       "idle_unload_sec": 600,
-      "min_free_ram_gib": 4.5,
+      "min_free_ram_gib": 2.5,
       "min_free_vram_gib": 2.5,
       "threads": 4
     },
@@ -947,8 +1181,8 @@
         "prepared": false
       }
     },
-    "ram_available_gib": 12.87,
-    "process_rss_mib": 67.4,
+    "ram_available_gib": 12.92,
+    "process_rss_mib": 66.6,
     "calls": 0,
     "cache_hits": 0,
     "errors": 0,
@@ -964,35 +1198,35 @@
         "probabilities": {
           "billing": 0.9998,
           "technical": 0.0001,
-          "sales": 0.0002
+          "sales": 0.0001
         },
-        "confidence": 0.998,
+        "confidence": 0.9981,
         "action": {
           "act_probability": 1.0
         }
       },
       "urgency": {
         "type": "score",
-        "score": 1.9295,
+        "score": 1.9283,
         "legend": {
           "0": "routine",
           "1": "needs attention soon",
           "2": "service unavailable now"
         },
         "probabilities": {
-          "0": 0.0043,
-          "1": 0.0618,
-          "2": 0.9338
+          "0": 0.0044,
+          "1": 0.0629,
+          "2": 0.9327
         },
-        "confidence": 0.7637,
+        "confidence": 0.7607,
         "action": {
           "act_probability": 1.0
         }
       },
       "refund": {
         "type": "noul",
-        "noul": 0.9353,
-        "confidence": 0.9353,
+        "noul": 0.936,
+        "confidence": 0.936,
         "action": {
           "act_probability": 1.0
         }
@@ -1022,23 +1256,24 @@
     },
     "runtime": {
       "backend": "pytorch",
-      "device": "cuda",
+      "device": "cpu",
       "fallback_reason": null,
       "cache_hit": false,
-      "load_ms": 18714.34,
-      "inference_ms": 897.03,
-      "elapsed_ms": 20999.51
+      "load_ms": 12662.06,
+      "inference_ms": 323.81,
+      "elapsed_ms": 14456.22
     }
   },
   "cache_verified": true,
   "partial_failure_verified": true,
+  "fixture_version": 2,
   "released_status": {
     "version": "0.1.0",
     "runtime": "upstream-laya-pytorch",
     "busy": false,
     "configuration": {
       "model": "multilingual",
-      "device": "auto",
+      "device": "cpu",
       "max_items": 32,
       "max_questions": 16,
       "question_batch_size": 4,
@@ -1046,7 +1281,7 @@
       "cache_entries": 128,
       "cache_ttl_sec": 120,
       "idle_unload_sec": 600,
-      "min_free_ram_gib": 4.5,
+      "min_free_ram_gib": 2.5,
       "min_free_vram_gib": 2.5,
       "threads": 4
     },
@@ -1072,9 +1307,9 @@
         "prepared": false
       }
     },
-    "ram_available_gib": 10.68,
-    "process_rss_mib": 1906.4,
-    "calls": 19,
+    "ram_available_gib": 12.26,
+    "process_rss_mib": 767.7,
+    "calls": 23,
     "cache_hits": 2,
     "errors": 1,
     "cache_entries": 0,

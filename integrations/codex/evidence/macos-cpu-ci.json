@@ -1,9 +1,16 @@
 {
-  "timestamp": "2026-09-22T10:25:20.264609+00:00",
-  "platform": "Windows-11-10.0.26100-SP0",
+  "timestamp": "2026-09-22T10:43:14.879162+00:00",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
   "python": "3.12.10",
   "integration_failures": [],
   "prediction_failures": [
+    {
+      "id": "issue-unknown",
+      "question": "category",
+      "expected": "unknown",
+      "actual": "bug",
+      "evidence": "The issue contains no actionable description."
+    },
     {
       "id": "dev-test",
       "question": "role",
@@ -48,6 +55,233 @@
     }
   ],
   "groups": [
+    {
+      "name": "developer-issues",
+      "correct": 3,
+      "total": 4,
+      "cases": [
+        {
+          "id": "issue-bug",
+          "evidence": "An existing save operation now crashes and loses changes.",
+          "expected": {
+            "category": "bug"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "bug",
+                "probabilities": {
+                  "bug": 0.9976,
+                  "feature": 0.0005,
+                  "documentation": 0.0005,
+                  "unknown": 0.0014
+                },
+                "confidence": 0.986,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 58,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 58
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 78.11,
+              "elapsed_ms": 80.01
+            }
+          }
+        },
+        {
+          "id": "issue-feature",
+          "evidence": "Requests a new export capability.",
+          "expected": {
+            "category": "feature"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "feature",
+                "probabilities": {
+                  "bug": 0.0003,
+                  "feature": 0.9991,
+                  "documentation": 0.0002,
+                  "unknown": 0.0005
+                },
+                "confidence": 0.9941,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 57,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 57
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 78.72,
+              "elapsed_ms": 79.69
+            }
+          }
+        },
+        {
+          "id": "issue-docs",
+          "evidence": "Requests clarification of installation instructions.",
+          "expected": {
+            "category": "documentation"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "documentation",
+                "probabilities": {
+                  "bug": 0.0109,
+                  "feature": 0.0023,
+                  "documentation": 0.7914,
+                  "unknown": 0.1954
+                },
+                "confidence": 0.5907,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 58,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 58
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 84.48,
+              "elapsed_ms": 86.95
+            }
+          }
+        },
+        {
+          "id": "issue-unknown",
+          "evidence": "The issue contains no actionable description.",
+          "expected": {
+            "category": "unknown"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "bug",
+                "probabilities": {
+                  "bug": 0.8867,
+                  "feature": 0.003,
+                  "documentation": 0.0383,
+                  "unknown": 0.0721
+                },
+                "confidence": 0.6838,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 50,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "reason": "explicit model='multilingual'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "context_tokens": {
+              "category": 50
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cpu",
+              "fallback_reason": null,
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 82.36,
+              "elapsed_ms": 83.41
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "developer",
       "correct": 1,
@@ -103,8 +337,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 424.0,
-              "elapsed_ms": 427.05
+              "inference_ms": 106.52,
+              "elapsed_ms": 113.54
             }
           }
         },
@@ -158,8 +392,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 417.91,
-              "elapsed_ms": 420.02
+              "inference_ms": 114.54,
+              "elapsed_ms": 116.8
             }
           }
         },
@@ -213,8 +447,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 375.42,
-              "elapsed_ms": 378.57
+              "inference_ms": 95.46,
+              "elapsed_ms": 97.24
             }
           }
         },
@@ -268,8 +502,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 382.72,
-              "elapsed_ms": 386.35
+              "inference_ms": 83.28,
+              "elapsed_ms": 84.44
             }
           }
         }
@@ -340,8 +574,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 557.13,
-              "elapsed_ms": 561.0
+              "inference_ms": 113.94,
+              "elapsed_ms": 115.6
             }
           }
         },
@@ -405,8 +639,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 665.93,
-              "elapsed_ms": 669.75
+              "inference_ms": 112.81,
+              "elapsed_ms": 114.03
             }
           }
         },
@@ -470,8 +704,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 610.85,
-              "elapsed_ms": 614.61
+              "inference_ms": 110.74,
+              "elapsed_ms": 111.71
             }
           }
         },
@@ -535,8 +769,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 564.98,
-              "elapsed_ms": 568.93
+              "inference_ms": 120.25,
+              "elapsed_ms": 121.21
             }
           }
         },
@@ -600,8 +834,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 649.06,
-              "elapsed_ms": 653.51
+              "inference_ms": 133.82,
+              "elapsed_ms": 134.68
             }
           }
         },
@@ -665,8 +899,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 582.97,
-              "elapsed_ms": 586.39
+              "inference_ms": 115.62,
+              "elapsed_ms": 116.65
             }
           }
         }
@@ -727,8 +961,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 402.13,
-              "elapsed_ms": 404.9
+              "inference_ms": 77.81,
+              "elapsed_ms": 78.94
             }
           }
         },
@@ -782,8 +1016,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 392.76,
-              "elapsed_ms": 395.92
+              "inference_ms": 81.73,
+              "elapsed_ms": 82.67
             }
           }
         },
@@ -837,8 +1071,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 341.75,
-              "elapsed_ms": 345.17
+              "inference_ms": 81.25,
+              "elapsed_ms": 85.7
             }
           }
         },
@@ -892,8 +1126,8 @@
               "fallback_reason": null,
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 345.04,
-              "elapsed_ms": 348.37
+              "inference_ms": 88.5,
+              "elapsed_ms": 89.34
             }
           }
         }
@@ -921,7 +1155,7 @@
       "cache_entries": 128,
       "cache_ttl_sec": 120,
       "idle_unload_sec": 600,
-      "min_free_ram_gib": 4.5,
+      "min_free_ram_gib": 2.5,
       "min_free_vram_gib": 2.5,
       "threads": 4
     },
@@ -947,8 +1181,8 @@
         "prepared": false
       }
     },
-    "ram_available_gib": 12.15,
-    "process_rss_mib": 67.9,
+    "ram_available_gib": 3.79,
+    "process_rss_mib": 68.1,
     "calls": 0,
     "cache_hits": 0,
     "errors": 0,
@@ -1025,13 +1259,14 @@
       "device": "cpu",
       "fallback_reason": null,
       "cache_hit": false,
-      "load_ms": 14174.2,
-      "inference_ms": 727.16,
-      "elapsed_ms": 16242.82
+      "load_ms": 19857.52,
+      "inference_ms": 165.87,
+      "elapsed_ms": 21339.82
     }
   },
   "cache_verified": true,
   "partial_failure_verified": true,
+  "fixture_version": 2,
   "released_status": {
     "version": "0.1.0",
     "runtime": "upstream-laya-pytorch",
@@ -1046,7 +1281,7 @@
       "cache_entries": 128,
       "cache_ttl_sec": 120,
       "idle_unload_sec": 600,
-      "min_free_ram_gib": 4.5,
+      "min_free_ram_gib": 2.5,
       "min_free_vram_gib": 2.5,
       "threads": 4
     },
@@ -1072,9 +1307,9 @@
         "prepared": false
       }
     },
-    "ram_available_gib": 11.15,
-    "process_rss_mib": 1097.5,
-    "calls": 19,
+    "ram_available_gib": 3.08,
+    "process_rss_mib": 1521.4,
+    "calls": 23,
     "cache_hits": 2,
     "errors": 1,
     "cache_entries": 0,

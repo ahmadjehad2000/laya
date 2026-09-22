@@ -1,6 +1,6 @@
 # Verification and release gates
 
-Version 0.1.0 is a preview until each platform is exercised with real inference.
+Version 0.1.0 is a preview with real CPU inference exercised on all three desktop platforms.
 Checked-in automated tests cover bridge behavior with a fake model backend; they are
 not evidence of model accuracy. The MCP smoke test uses a real child server and weights.
 
@@ -14,17 +14,28 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
 - Both initial model runs matched 14/20 labeled decisions. File-role classification
   matched only 1/4 and is excluded from recommended workflows. Ticket decisions matched
   9/12, including errors on sales/billing and refund negation. Documents matched 4/4.
-- A separate Codex configuration successfully installed the native plugin from the
-  generated local marketplace. Fresh model-driven Codex use is a separate pending check.
-- GitHub Actions bridge tests passed on Windows, Linux and macOS in run 35716547757.
-  A separate real-inference run passed on Linux CPU; Windows exposed an upstream
-  README encoding bug and macOS hit the conservative 4.5 GiB free-RAM check. The
-  source encoding is now explicit, and the constrained CI profile uses a 2.5 GiB
-  floor. Retesting is required before claiming these two CI paths passed.
+- Fixture version 2 adds four natural-language software issues: 3/4 labels matched,
+  making the combined result 17/24. Empty/insufficient inputs also need source review.
+- A fresh Codex CLI session passed native plugin acceptance: status, an English/Arabic
+  batch prediction with source-supported billing labels, and release completed using
+  PyTorch/CUDA. [Completed tool events](../evidence/codex-native.json) are recorded
+  separately from the MCP SDK tests. The installed compatibility manifest is verified.
+- All three original checkpoints loaded and produced valid predictions on Windows CUDA.
+  Automatic English/Arabic selection also passed: [five recorded runs](../evidence/windows-checkpoints.json).
+- GitHub Actions fresh installation and real CPU inference passed on Windows, Linux,
+  and macOS ARM64 in [run 35717300148](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148).
+  This follows fixes for Windows README encoding and a small macOS runner's RAM floor.
+  CI explicitly uses a 2.5 GiB floor; normal installations retain the 4.5 GiB default.
+  CI accepts model disagreements only when runtime/transport checks all pass.
 
 Reports: [Windows CUDA](../evidence/windows-cuda.json),
-[Windows CPU](../evidence/windows-cpu.json). These are synthetic cases, not universal
-accuracy or latency claims. Platform checks below remain open until evidence is recorded.
+[Windows CPU](../evidence/windows-cpu.json),
+[Windows CPU CI](../evidence/windows-cpu-ci.json),
+[Linux CPU CI](../evidence/linux-ci/ubuntu-latest.json),
+[macOS ARM64 CPU CI](../evidence/macos-cpu-ci.json),
+[version 2 fixture](../evidence/windows-cuda-v2.json). These are synthetic cases, not
+universal accuracy or latency claims. Apple MPS, Linux CUDA, and Intel macOS remain
+unverified. Python 3.12 was tested; the package also allows 3.13 without a CI claim.
 
 The release gate requires real CPU inference on Windows, Linux, and macOS and separate
 evidence for each advertised CUDA/MPS path. A failed or unavailable hardware path remains
