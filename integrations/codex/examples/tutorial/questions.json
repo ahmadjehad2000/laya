@@ -1,0 +1,13 @@
+{
+  "topic": {
+    "type": "choice",
+    "instructions": "Classify the record's main topic.",
+    "criteria": {
+      "world": "international affairs, politics and diplomacy",
+      "sports": "sports competitions, teams and athletes",
+      "business": "companies, finance, sales and markets",
+      "science_technology": "science, astronomy, computing and technology",
+      "unknown": "not enough evidence to identify the topic"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "id": "sports-01",
+      "state": "The football team won the national championship after scoring three goals in the final."
+    },
+    {
+      "id": "science-01",
+      "state": "Astronomers discovered a new planet orbiting a distant star using a space telescope."
+    },
+    {
+      "id": "business-01",
+      "state": "أعلنت الشركة ارتفاع أرباحها السنوية وزيادة مبيعاتها، وارتفع سعر سهمها في البورصة."
+    },
+    {
+      "id": "world-01",
+      "state": "The two countries signed a peace treaty after diplomatic negotiations between their governments."
+    }
+  ],
+  "questions": {
+    "topic": {
+      "type": "choice",
+      "instructions": "Classify the record's main topic.",
+      "criteria": {
+        "world": "international affairs, politics and diplomacy",
+        "sports": "sports competitions, teams and athletes",
+        "business": "companies, finance, sales and markets",
+        "science_technology": "science, astronomy, computing and technology",
+        "unknown": "not enough evidence to identify the topic"
+      }
+    }
+  },
+  "use_cache": false
+}

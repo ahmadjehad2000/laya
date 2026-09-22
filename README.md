@@ -17,6 +17,7 @@
 
 <p align="center">
   <a href="#quickstart">Quickstart</a> ·
+  <a href="#a-z-operating-guide">A–Z guide</a> ·
   <a href="#workflows">Workflows</a> ·
   <a href="#cost-control">Cost control</a> ·
   <a href="#benchmarks">Benchmarks</a> ·
@@ -140,6 +141,335 @@ Open a **new Codex session**, then try:
 If you already have an older managed Laya integration, first install with `--mode none`, then run `python3 bootstrap.py register --mode plugin --migrate-existing` (`py -3.12` on Windows). The installer backs up the configuration and preserves unrelated settings. See [setup, repair, direct MCP, and rollback](integrations/codex/README.md).
 
 The verified plugin path uses Codex CLI 0.155.1's compatibility manifest. Local clients without plugin support can use `--mode direct`. Hosted Codex cannot access this desktop installation. The portable plugin ZIP is an alternate distribution for compatible hosts; it is not the verified installation path and still needs the prepared CLI on PATH.
+
+## A-Z operating guide
+
+Follow this walkthrough from setup to daily use. **Commands below run from the
+repository root**, the folder containing this README. The quickstart above instead
+enters `integrations/codex`; return with `cd ../..` before following this section.
+The main examples use Windows PowerShell. Linux equivalents appear in step H.
+
+### A. Install once and locate the commands
+
+For a new checkout:
+
+```powershell
+git clone https://github.com/ahmadjehad2000/laya.git
+cd laya
+py -3.12 integrations/codex/bootstrap.py install --torch-index cu128 --device cuda
+```
+
+If already cloned, enter that existing folder and run only the installer command.
+Use `--torch-index cpu --device cpu` for a CPU-only installation. Use 64-bit Python
+3.12 or 3.13 and install/sign in to Codex separately. The installer needs the Codex
+CLI for plugin registration; `--mode none` installs just the local runtime.
+Installing Laya does not install Codex or replace its cloud model.
+
+Define these variables in each new PowerShell window; no environment activation or
+permanent PATH edit is necessary:
+
+```powershell
+$Laya = "$HOME/.laya-for-codex/venv/Scripts/laya-for-codex.exe"
+$LayaPython = "$HOME/.laya-for-codex/venv/Scripts/python.exe"
+$Workspace = (Get-Location).Path
+& $Laya --help
+```
+
+| Location | What it contains |
+| :--- | :--- |
+| `~/.laya-for-codex/venv` | Installed Python packages and CLI |
+| `~/.laya-for-codex/config.json` | Device, checkpoint, cache, memory and thread settings |
+| `~/.laya-for-codex/checkpoints` | Prepared, pinned model files |
+| `~/.laya-for-codex/marketplace` | Locally registered Codex plugin |
+| `<workspace>/.laya/results` | File-classification reports |
+| `<workspace>/.laya/handoffs` | Conversation contexts and original-content archives |
+
+### B. Verify readiness and actual GPU execution
+
+```powershell
+& $Laya doctor
+& $Laya predict integrations/codex/examples/quickstart.json --require-device cuda
+```
+
+`doctor` reports configuration and checkpoint readiness without loading a model.
+`device: null` before prediction is normal. The second command performs inference
+and rejects CPU fallback: look for `runtime.device: "cuda"` in its result. For a
+CPU installation, use `--require-device cpu`. The sample exercises a category,
+rubric score and yes/no proposition; read scores as zero-based rubric indices.
+
+### C. Use the installed plugin in Codex
+
+Start a **new Codex conversation** after installation or configuration changes.
+Installed skills and tools are picked up at that session boundary; see the
+[official plugin instructions](https://learn.chatgpt.com/docs/plugins).
+The installed server starts when the client connects. Do not manually launch
+`serve` in another terminal for normal plugin use—it waits for an MCP client.
+
+Try this prompt:
+
+> Use Laya to classify these independent records as sports, science, business, or unknown: “The football team won the final”; “Astronomers discovered a new planet”; “أعلنت الشركة ارتفاع أرباحها”. Batch the records, show each ID and label, report the actual device, and validate the labels against the text. Release Laya when finished.
+
+For multiple questions about **one** record:
+
+> Use Laya on “The customer was charged twice and requests a refund.” Ask which team handles it and whether a refund is explicitly requested in the same call. Explain the evidence; do not perform a refund.
+
+Laya is suitable for repeated judgments with explicit criteria. Ordinary coding,
+planning and explanation remain with Codex. A small one-off classification may
+cost more when tool orchestration is included; do not invoke Laya on every turn.
+
+### D. Classify a file without putting every record into chat
+
+The repository includes four short English/Arabic records and shared criteria:
+[records.json](integrations/codex/examples/tutorial/records.json) and
+[questions.json](integrations/codex/examples/tutorial/questions.json).
+Their intended labels are sports, science_technology, business and world, in input
+order. These are tutorial cases, not an accuracy benchmark.
+
+```powershell
+$run = & $Laya classify-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0) { throw 'Laya classification failed' }
+$run | Format-List
+
+# Inspect the complete local result without loading it into Codex.
+$detail = Get-Content -Raw -LiteralPath $run.artifact | ConvertFrom-Json
+$detail.items | ForEach-Object {
+    [pscustomobject]@{
+        ID = $_.id
+        Label = $_.result.answers.topic.choice
+        Review = $_.needs_review
+        Error = $_.error.message
+    }
+} | Format-Table
+```
+
+Look at `succeeded`, `failed`, `needs_review`, `devices` and `artifact` separately.
+A report can contain failed records; CLI exit success alone does not mean every
+record received a prediction. The ID links each result back to its original record.
+Create your own UTF-8 JSON array with the same `{id,state}` format and unique IDs.
+Use a JSON editor that writes UTF-8 without a BOM for these CLI inputs.
+
+To do the same from Codex, without first reading the dataset into its context:
+
+> Use `laya_classify_file` on `integrations/codex/examples/tutorial/records.json` in this workspace. Read only the small questions.json file for the criteria. Return counts and review IDs; inspect original records only where review or evidence validation is needed. Do not paste the full input or full result into chat.
+
+The default review thresholds are probability `0.95` and margin `0.5`. You can
+change them per CLI invocation with `--min-probability 0.98 --min-margin 0.6`.
+Higher thresholds tend to send more records to review; they are not calibrated
+error guarantees. Consequential labels still need source validation. File offload
+accepts choice questions, up to 1,000 records and 16 MiB of source data, subject
+to each record's small model-context limit. It does not read PDF/XLSX/CSV directly.
+Convert those formats into evidence-preserving `{id,state}` records first.
+
+For the ordinary batch API, a matching complete request is also included:
+
+```powershell
+& $Laya predict integrations/codex/examples/tutorial/batch.json --require-device cuda
+```
+
+Each CLI invocation loads and then releases its model. The persistent MCP server
+can reuse a warm model and cache across calls; repeated independent CLI invocations
+cannot. Batch related work instead of launching one CLI process per record.
+
+### E. Choose checkpoints and try a temporary device override
+
+```powershell
+& $Laya prepare --model all
+& $Laya doctor
+```
+
+Preparation downloads missing pinned files; it does not change the selected model.
+Keep `multilingual` for mixed English/Arabic work and the smallest pinned checkpoint.
+`english` is larger. `auto` performs language routing between prepared checkpoints;
+`typed-decisions` requires explicit selection. Preparing everything is optional.
+
+To test CPU for one command without changing the saved CUDA default:
+
+```powershell
+$PreviousDevice = $env:LAYA_COMPANION_DEVICE
+try {
+    $env:LAYA_COMPANION_DEVICE = 'cpu'
+    & $Laya predict integrations/codex/examples/quickstart.json --require-device cpu
+} finally {
+    $env:LAYA_COMPANION_DEVICE = $PreviousDevice
+}
+```
+
+`LAYA_COMPANION_MODEL` works the same way for a temporary checkpoint choice.
+Terminal variables affect child processes launched there, not an already running
+Codex app. Persistent changes belong in the configuration file below.
+
+### F. Tune the configuration, with a backup
+
+The starting recommendation for the tested NVIDIA machine is `device: cuda`,
+`model: multilingual`, and the other defaults. Read the complete
+[setting/range table](#know-the-knobs-before-changing-them) before changing limits.
+
+| Goal | First adjustment | Trade-off |
+| :--- | :--- | :--- |
+| Reduce Codex context | File-reference classification and small returned summaries | Review still requires relevant evidence |
+| Free idle RAM/VRAM sooner | `idle_unload_sec: 120` | More cold starts |
+| Reduce related-question activation pressure | `question_batch_size: 1` | Potentially slower multi-question requests |
+| Retain repeated exact answers longer | `cache_ttl_sec: 600`, `cache_entries: 256` | More local cache retention; no reuse across processes |
+| Investigate CPU performance | Compare `threads: 2` and `threads: 4` | More threads need not be faster |
+| Fit smaller cold loads | Keep multilingual; close unused model sessions | English is not a smaller-memory fallback |
+
+These alternative values are tuning candidates, not measured faster presets.
+Change one factor at a time. This optional example changes only the idle timeout,
+preserving your other fields, and saves a dated backup:
+
+```powershell
+$ConfigPath = Join-Path $HOME '.laya-for-codex/config.json'
+$ConfigBackup = "$ConfigPath.$(Get-Date -Format yyyyMMdd-HHmmss-fff).bak"
+Copy-Item -LiteralPath $ConfigPath -Destination $ConfigBackup
+$Settings = Get-Content -Raw -LiteralPath $ConfigPath | ConvertFrom-Json
+$Settings | Add-Member -NotePropertyName idle_unload_sec -NotePropertyValue 120 -Force
+[System.IO.File]::WriteAllText($ConfigPath, ($Settings | ConvertTo-Json -Depth 10))
+& $Laya doctor
+```
+
+Open a new Codex session after editing. To undo that example in the same terminal:
+
+```powershell
+Copy-Item -LiteralPath $ConfigBackup -Destination $ConfigPath -Force
+& $Laya doctor
+```
+
+Do not lower RAM reserves to force a load. The adaptive cold estimate is about
+2.55 GiB for multilingual and 3.10 GiB for the larger checkpoints; CUDA also needs
+free VRAM. An explicit old `min_free_ram_gib: 4.5` still raises the admission floor.
+See [memory policy and fallback behavior](#know-the-knobs-before-changing-them).
+Increasing `max_request_bytes` or `max_items` does not enlarge the model's token window
+or turn sequential records into parallel GPU inference.
+
+### G. Make a local conversation handoff and retrieve omitted output
+
+[conversation.json](integrations/codex/examples/tutorial/conversation.json) is an
+explicitly fictional export: a branch, memory budget, deployment restriction,
+large inventory listing, and unresolved test failure. It is not your current chat.
+
+```powershell
+$handoff = & $Laya compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2 | ConvertFrom-Json
+$handoff | Format-List
+
+# Message index 2 is the old inventory output in this particular fixture.
+& $Laya recall --workspace "$Workspace" --archive $handoff.archive --index 2
+```
+
+Inspect `original_context_bytes`, `handoff_bytes`, and `archived_indices`. This
+fixture archives one old tool output. Byte reduction is not measured token savings;
+short conversations can grow due to reference overhead. Default `--keep-recent` is
+8; the demo uses 2 to demonstrate omission in its six-message export.
+
+The following command **starts a new Codex CLI thread and consumes Codex usage**:
+
+```powershell
+& $Laya continue --workspace "$Workspace" --context $handoff.context --prompt "Without tools, list the retained branch, memory budget, deployment restriction, and unresolved status."
+```
+
+An optional lean run skips user config for that invocation and uses a read-only
+sandbox. It requires an explicit model available to your account; this example
+uses the model from the recorded pilot:
+
+```powershell
+& $Laya continue --workspace "$Workspace" --context $handoff.context --prompt "Without tools, list the retained restrictions." --lean --model gpt-5.6-sol
+```
+
+Lean mode omits user-configured preferences/integrations and is not a universal
+replacement for your coding profile. It does not change saved Codex settings.
+For real work, supply your own explicit `{role,content}` JSON message array or a
+supported uncompacted Codex JSONL export inside the chosen workspace. This tool
+does not fetch the active chat, decode hidden reasoning, or reroute native `/compact`.
+Keep the `.source` archive available so omitted evidence can be recovered. Treat
+`.laya/` as private; add it to `.gitignore` in other projects too.
+
+### H. Run the same workflows in Debian WSL2 or Linux
+
+On Windows, `wsl -d Debian` opens the Debian shell. Inside Linux, enter the repository
+root and use Linux paths. Your Windows checkout is available under `/mnt/c/...`.
+
+```bash
+python3 integrations/codex/bootstrap.py install --torch-index cu128 --device cuda --mode none
+LAYA="$HOME/.laya-for-codex/venv/bin/laya-for-codex"
+"$LAYA" doctor
+"$LAYA" predict integrations/codex/examples/quickstart.json --require-device cuda
+"$LAYA" classify-file --workspace "$PWD" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json
+```
+
+Use Python 3.12–3.13. Omit `--mode none` only when registering with a Codex CLI installed
+inside Linux. A Windows Codex installation can instead launch the WSL MCP server;
+follow the tested [Windows → Debian setup](integrations/codex/docs/LINUX_CUDA.md).
+Windows and WSL have separate runtime/config files and share the physical GPU.
+Select one regular server to avoid redundant model residency. WSL uses the mapped
+Windows NVIDIA driver; do not install a Linux display driver inside WSL.
+CPU and macOS setup commands remain in the [quickstart](#quickstart).
+
+### I. Diagnose failures and measure changes
+
+| Symptom | Next step |
+| :--- | :--- |
+| `laya-for-codex` is not recognized | Use the absolute `$Laya` path from step A |
+| Plugin visible, tools missing | Re-register as below; start a new conversation; inspect `codex plugin list` |
+| `device` is null in status | Run a prediction and check its actual device |
+| CUDA requested, CPU returned | Inspect `fallback_reason`, free VRAM and the installed PyTorch build; use `--require-device cuda` when validating |
+| `memory_pressure` | Inspect required/available RAM; release unused sessions; keep multilingual; do not fabricate missing labels |
+| Record exceeds token/byte limits | Split or faithfully shorten the evidence; preserve negation and qualifiers |
+| File call has `failed > 0` | Inspect each failed ID in its result artifact and correct that source record |
+| First call is slow | Model cold load; keep the MCP process warm across a batch of work |
+| Confident but incorrect label | Validate source evidence; confidence is advisory, not proof |
+| `continue` cannot find Codex | Install/sign in to the Codex CLI and make `codex` available in that terminal |
+
+For a real installed MCP/device check (not a benchmark):
+
+```powershell
+& $LayaPython integrations/codex/scripts/smoke_mcp.py --installed --device cuda --require-device cuda --output dist/my-smoke.json
+```
+
+Exit 0 means all fixture labels matched; exit 2 means model disagreements with the
+integration checks passing; exit 1 means an integration failure. The known small
+fixture has disagreements—do not erase those to get a green accuracy claim.
+
+When deliberately tuning performance, use the [reproducible benchmark commands](#benchmarks).
+The `cost_pilot.py` comparison runs cloud Codex turns and consumes usage; ordinary
+local benchmarking and tutorial classification do not. Avoid running benchmarks
+during everyday work.
+
+### J. Update, repair, disconnect, or roll back
+
+From a clean checkout tracking this fork's `main`, get updates with `git pull --ff-only`.
+If working on a development branch, review its changes before updating; do not reset
+or overwrite local work. Then refresh the Windows CUDA runtime and plugin:
+
+```powershell
+py -3.12 integrations/codex/bootstrap.py install --torch-index cu128 --device cuda
+```
+
+To repair registration without reinstalling dependencies:
+
+```powershell
+py -3.12 integrations/codex/bootstrap.py register --mode plugin
+```
+
+Restart the Codex session afterward. Registration validates the configured device
+through a real prediction. It does not use the `register --device` flag to rewrite
+saved settings; edit `config.json` first when changing your preference.
+
+When you intentionally want to disconnect or restore registration:
+
+```powershell
+py -3.12 integrations/codex/bootstrap.py uninstall
+```
+
+Alternatively, restore prior registration configuration if it has not changed since registration:
+
+```powershell
+py -3.12 integrations/codex/bootstrap.py rollback
+```
+
+Choose one operation as appropriate, not both as a routine sequence. Uninstall
+retains the environment, checkpoints and backups. Rollback restores registration
+configuration only, not Python packages or model files, and refuses to overwrite
+later configuration edits. After disconnecting, finish old Codex sessions so their
+already-running servers can close. No repeated installation is needed for daily use.
 
 ## How it fits into Codex
 
@@ -466,7 +796,7 @@ separate using [the labeled fixture and recorded disagreements](integrations/cod
 
 - Inference runs locally over stdio, with no listening network port.
 - Setup downloads dependencies and public model weights. Prepared inference is offline.
-- The companion does not write raw prompts to disk or upload them. Results returned to Codex enter its conversation and normal data handling.
+- Prediction calls do not persist raw prompts or upload them. File classification explicitly writes local result artifacts, and conversation handoffs preserve the supplied original content in local archives. Keep `.laya/` private and outside version control. Results or handoff context sent to Codex enter its normal data handling.
 - Configuration controls the device, model, request limits, cache, threads, and idle timeout.
 - Uninstall disconnects the integration while retaining weights and backups. Guarded rollback restores the saved configuration when it has not subsequently changed.
 
