@@ -34,7 +34,9 @@ try:
             selected = result["checkpoint"]["variant"]
             expected = ("english" if state == request["state"] else "multilingual") if model == "auto" else model
             if selected != expected:
-                raise AssertionError(f"Expected {expected}, got {selected}")
+                fallback = result["routing"].get("memory_fallback")
+                if not (model == "auto" and selected == "multilingual" and fallback and fallback["from"] == expected):
+                    raise AssertionError(f"Expected {expected}, got {selected}")
             if args.require_device and result["runtime"]["device"] != args.require_device:
                 raise AssertionError(f"Expected actual device {args.require_device}, got {result['runtime']['device']}")
             report["runs"].append({"requested": model, "result": result})

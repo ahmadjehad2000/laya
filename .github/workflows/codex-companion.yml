@@ -48,6 +48,7 @@ jobs:
       - name: Test bridge and upstream contracts
         run: |
           python -m pytest integrations/codex/tests -q
+          python integrations/codex/benchmarks/run.py --help
           python tests/test_router.py
           python tests/test_criteria.py
       - name: Real CPU acceptance

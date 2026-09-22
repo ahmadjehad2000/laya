@@ -7,7 +7,7 @@ from laya_codex_companion.backend import Backend
 from laya_codex_companion.config import Config
 
 
-def make_backend(tmp_path, monkeypatch, device, available, memory=10):
+def make_backend(tmp_path, monkeypatch, device, available, memory=10, mps_available=False):
     events = []
 
     class Router:
@@ -27,7 +27,8 @@ def make_backend(tmp_path, monkeypatch, device, available, memory=10):
 
     torch = SimpleNamespace(set_num_threads=lambda n: None,
                             cuda=SimpleNamespace(is_available=lambda: available, mem_get_info=lambda: (memory * 2**30, 12 * 2**30), empty_cache=lambda: None),
-                            backends=SimpleNamespace(mps=SimpleNamespace(is_available=lambda: False)))
+                            backends=SimpleNamespace(mps=SimpleNamespace(is_available=lambda: mps_available)),
+                            mps=SimpleNamespace(empty_cache=lambda: None))
     monkeypatch.setitem(sys.modules, "torch", torch)
     monkeypatch.setitem(sys.modules, "laya", SimpleNamespace(Router=Router))
     monkeypatch.setattr("laya_codex_companion.backend.ready", lambda *args: True)
@@ -54,3 +55,14 @@ def test_missing_weights_never_call_loader(tmp_path, monkeypatch):
     with pytest.raises(FileNotFoundError, match="prepare"):
         backend.load("english")
     assert events == []
+
+
+@pytest.mark.parametrize("requested,cuda,mps,expected", [
+    ("cpu", True, False, "cpu"), ("cuda", True, False, "cuda"),
+    ("cuda", False, False, "cpu"), ("mps", False, True, "mps"),
+    ("mps", False, False, "cpu"), ("auto", True, True, "cuda"),
+    ("auto", False, True, "mps"), ("auto", False, False, "cpu"),
+])
+def test_explicit_and_automatic_device_resolution(tmp_path, monkeypatch, requested, cuda, mps, expected):
+    backend, _ = make_backend(tmp_path, monkeypatch, requested, cuda, mps_available=mps)
+    assert backend.load("multilingual").device == expected

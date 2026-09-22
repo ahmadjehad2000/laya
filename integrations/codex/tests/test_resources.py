@@ -89,3 +89,23 @@ def test_load_failure_releases_partial_backend(tmp_path):
         assert instance.backend.router.loaded == []
     finally:
         instance.close()
+
+
+def test_auto_uses_smaller_prepared_model_but_explicit_choice_never_changes(tmp_path, monkeypatch):
+    checkpoint(tmp_path, "english", elements=300_000_000)
+    checkpoint(tmp_path, "multilingual", elements=100_000_000)
+    monkeypatch.setattr("laya_codex_companion.runtime.psutil.virtual_memory", lambda: SimpleNamespace(available=1.5 * 2**30))
+    monkeypatch.setattr("laya_codex_companion.runtime.ready", lambda *args: True)
+    class EnglishRouter(FakeBackend):
+        def route(self, state, questions, model):
+            return {"model": "english" if model == "auto" else model, "reason": "English text"}
+    instance = Runtime(tmp_path, Config(), EnglishRouter)
+    try:
+        result = instance.predict("evidence", QUESTIONS, model="auto")
+        assert result["checkpoint"]["variant"] == "multilingual"
+        assert result["routing"]["memory_fallback"]["from"] == "english"
+        assert instance.predict("evidence", QUESTIONS, model="multilingual")["runtime"]["cache_hit"]
+        with pytest.raises(MemoryError):
+            instance.predict("evidence", QUESTIONS, model="english")
+    finally:
+        instance.close()

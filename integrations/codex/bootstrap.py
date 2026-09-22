@@ -191,7 +191,11 @@ def main():
         run([python, "-m", "laya_codex_companion", "prepare", "--model", args.model], env=environment)
     if args.command in ("install", "register"):
         # Real inference is required even for a registration-only migration.
-        run([python, "-m", "laya_codex_companion", "predict", HERE / "examples" / "quickstart.json"], env=environment)
+        settings_path = root / "config.json"
+        current = json.loads(settings_path.read_text(encoding="utf-8")) if settings_path.exists() else {}
+        required_device = environment.get("LAYA_COMPANION_DEVICE", current.get("device", "auto"))
+        verify_args = ["--require-device", required_device] if required_device in ("cpu", "cuda", "mps") else []
+        run([python, "-m", "laya_codex_companion", "predict", HERE / "examples" / "quickstart.json", *verify_args], env=environment)
         if args.mode != "none":
             register(root, codex_home, args.mode, args.migrate_existing)
         print("Setup verified. Open a new local Codex session after registration.")

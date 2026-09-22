@@ -1,0 +1,471 @@
+{
+  "scope": "Real upstream checkpoint loads and routing; not broad accuracy evidence",
+  "runs": [
+    {
+      "requested": "english",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9667,
+              "technical": 0.0177,
+              "sales": 0.0155
+            },
+            "confidence": 0.8463,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.0624,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.2419,
+              "1": 0.4539,
+              "2": 0.3043
+            },
+            "confidence": 0.0316,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.9392,
+            "confidence": 0.9392,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "english",
+          "repo": "convaiinnovations/laya",
+          "reason": "explicit model='english'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "english",
+          "repo": "convaiinnovations/laya",
+          "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+          "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cpu",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "english",
+            "cold": true,
+            "weight_file_gib": 0.7847409788519144,
+            "fp32_parameters_gib": 1.5694418177008629,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 3.1041827965527773,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 4.237190246582031
+          },
+          "cache_hit": false,
+          "load_ms": 13734.12,
+          "inference_ms": 627.98,
+          "elapsed_ms": 16259.38
+        }
+      }
+    },
+    {
+      "requested": "multilingual",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9606,
+              "technical": 0.0117,
+              "sales": 0.0277
+            },
+            "confidence": 0.8272,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.9476,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.004,
+              "1": 0.0444,
+              "2": 0.9516
+            },
+            "confidence": 0.811,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7789,
+            "confidence": 0.7789,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 146,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "context_tokens": {
+          "team": 46,
+          "urgency": 50,
+          "refund": 50
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cpu",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": true,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 2.5488230157643557,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 3.555835723876953
+          },
+          "cache_hit": false,
+          "load_ms": 7143.53,
+          "inference_ms": 245.78,
+          "elapsed_ms": 7508.9
+        }
+      }
+    },
+    {
+      "requested": "typed-decisions",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.8365,
+              "technical": 0.0882,
+              "sales": 0.0753
+            },
+            "confidence": 0.4919,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.1951,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.159,
+              "1": 0.4869,
+              "2": 0.3541
+            },
+            "confidence": 0.0803,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7319,
+            "confidence": 0.7319,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "typed-decisions",
+          "repo": "convaiinnovations/laya-typed-decisions",
+          "reason": "explicit model='typed-decisions'",
+          "detection": null,
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "typed-decisions",
+          "repo": "convaiinnovations/laya-typed-decisions",
+          "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+          "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cpu",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "typed-decisions",
+            "cold": true,
+            "weight_file_gib": 0.7847409881651402,
+            "fp32_parameters_gib": 1.5694418177008629,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 3.104182805866003,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 3.4154815673828125
+          },
+          "cache_hit": false,
+          "load_ms": 5623.84,
+          "inference_ms": 420.1,
+          "elapsed_ms": 6250.76
+        }
+      }
+    },
+    {
+      "requested": "auto",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9667,
+              "technical": 0.0177,
+              "sales": 0.0155
+            },
+            "confidence": 0.8463,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.0624,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.2419,
+              "1": 0.4539,
+              "2": 0.3043
+            },
+            "confidence": 0.0316,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.9392,
+            "confidence": 0.9392,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 123,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "english",
+          "repo": "convaiinnovations/laya",
+          "reason": "English Latin text",
+          "detection": {
+            "script": "latin",
+            "script_profile": {
+              "latin": 1.0
+            },
+            "language": "en",
+            "is_english": true,
+            "non_latin_fraction": 0.0
+          },
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "english",
+          "repo": "convaiinnovations/laya",
+          "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+          "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c"
+        },
+        "context_tokens": {
+          "team": 40,
+          "urgency": 40,
+          "refund": 43
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cpu",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "english",
+            "cold": true,
+            "weight_file_gib": 0.7847409788519144,
+            "fp32_parameters_gib": 1.5694418177008629,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 3.1041827965527773,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 3.3286972045898438
+          },
+          "cache_hit": false,
+          "load_ms": 5558.28,
+          "inference_ms": 349.45,
+          "elapsed_ms": 6021.09
+        }
+      }
+    },
+    {
+      "requested": "auto",
+      "result": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "team": {
+            "type": "choice",
+            "choice": "billing",
+            "probabilities": {
+              "billing": 0.9606,
+              "technical": 0.0117,
+              "sales": 0.0277
+            },
+            "confidence": 0.8272,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "urgency": {
+            "type": "score",
+            "score": 1.9476,
+            "legend": {
+              "0": "routine",
+              "1": "needs attention soon",
+              "2": "service unavailable now"
+            },
+            "probabilities": {
+              "0": 0.004,
+              "1": 0.0444,
+              "2": 0.9516
+            },
+            "confidence": 0.811,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "refund": {
+            "type": "noul",
+            "noul": 0.7789,
+            "confidence": 0.7789,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 146,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "reason": "non-Latin script (arabic, 100% of letters); the English checkpoint cannot read it",
+          "detection": {
+            "script": "arabic",
+            "script_profile": {
+              "arabic": 1.0
+            },
+            "language": null,
+            "is_english": false,
+            "non_latin_fraction": 1.0
+          },
+          "workflow": null
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "context_tokens": {
+          "team": 46,
+          "urgency": 50,
+          "refund": 50
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cpu",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": true,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 2.5488230157643557,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 3.4008407592773438
+          },
+          "cache_hit": false,
+          "load_ms": 6797.06,
+          "inference_ms": 197.63,
+          "elapsed_ms": 7093.9
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "release": {
+    "released": true,
+    "cache_cleared": true
+  }
+}

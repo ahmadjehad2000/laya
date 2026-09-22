@@ -1,13 +1,15 @@
 """Generate portable and compatibility manifests from one source of metadata."""
 import json
 from pathlib import Path
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "laya-for-codex"
 
 
 def build():
-    identity = {"name": "laya-for-codex", "version": "0.1.0",
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    identity = {"name": "laya-for-codex", "version": version,
                 "description": "Local Laya decisions for developer triage, multilingual records, and explicit rubrics.",
                 "author": {"name": "ahmadjehad2000", "url": "https://github.com/ahmadjehad2000"},
                 "repository": "https://github.com/ahmadjehad2000/laya",

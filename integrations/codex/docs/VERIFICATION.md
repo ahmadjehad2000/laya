@@ -1,12 +1,15 @@
 # Verification and release gates
 
-Version 0.1.0 is a preview with real CPU inference exercised on all three desktop platforms.
+Version 0.1.1 is a preview with real CPU inference exercised on all three desktop platforms.
 Checked-in automated tests cover bridge behavior with a fake model backend; they are
 not evidence of model accuracy. The MCP smoke test uses a real child server and weights.
 
 ## Local evidence, 2026-09-22
 
-- 29 companion tests passed; upstream routing 106/106 and criteria 34/34 passed.
+- 63 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
+  New coverage includes all device-selection branches, checkpoint-aware RAM estimates,
+  retryable resource errors, automatic smaller-model fallback, strict device validation,
+  and benchmark metrics. Simulated MPS branches do not establish real MPS hardware support.
 - Portable/compatibility plugin and all four skill files passed their validators.
 - Original multilingual checkpoint ran on Windows PyTorch CUDA and CPU through actual
   MCP stdio sessions. Both had zero integration failures: five-tool discovery,
@@ -28,7 +31,8 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
 - GitHub Actions fresh installation and real CPU inference passed on Windows, Linux,
   and macOS ARM64 in [run 35717300148](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148).
   This follows fixes for Windows README encoding and a small macOS runner's RAM floor.
-  CI explicitly uses a 2.5 GiB floor; normal installations retain the 4.5 GiB default.
+  That historical CI run used a 2.5 GiB floor. The current workflow now exercises the
+  normal checkpoint-aware estimate rather than overriding a blanket 4.5 GiB floor.
   CI accepts model disagreements only when runtime/transport checks all pass.
 
 Reports: [Windows CUDA](../evidence/windows-cuda.json),
@@ -38,7 +42,26 @@ Reports: [Windows CUDA](../evidence/windows-cuda.json),
 [macOS ARM64 CPU CI](../evidence/macos-cpu-ci.json),
 [version 2 fixture](../evidence/windows-cuda-v2.json). These are synthetic cases, not
 universal accuracy or latency claims. Apple MPS, Linux CUDA, and Intel macOS remain
-unverified. Python 3.12 was tested; the package also allows 3.13 without a CI claim.
+unverified. Python 3.12 is covered on all three desktop platforms; the companion bridge
+also passed Ubuntu Python 3.13 in [run 35721329713](https://github.com/ahmadjehad2000/laya/actions/runs/35721329713).
+
+## Benchmark and resource-policy evidence
+
+The fixed 200-record AG News subset matched 191 labels on both Windows CPU and CUDA.
+The synthetic fixture stayed at 17/24; the new 12-case rubric matched 4 rounded scores.
+Read [the benchmark protocol](../benchmarks/README.md) for selection, exact denominators,
+timing boundaries, limitations, and reproducible commands. These are separate claims.
+
+Recorded CUDA cold loads began with 3.67–3.96 GiB available host RAM and used a 2.55 GiB
+estimate. CPU cold loads also succeeded below the former 4.5 GiB threshold. All estimates
+include checkpoint bytes, FP32 parameter construction, and reserve. A genuine shortage
+still rejects admission and produces no answer; retained pressure reports demonstrate
+that behavior rather than hiding unsuccessful attempts.
+
+The earlier feature-branch CI failure in run 35719734058 was a timing-sensitive idle
+release test on macOS. The test now checks the deadline deterministically, avoiding a
+three-second thread-scheduling assumption. The workflow also covers Python 3.13 on Linux,
+compiles/lints the companion, and prevents overlapping stale jobs on the same branch/event.
 
 The release gate requires real CPU inference on Windows, Linux, and macOS and separate
 evidence for each advertised CUDA/MPS path. A failed or unavailable hardware path remains

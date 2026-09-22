@@ -41,5 +41,26 @@ their corresponding configuration fields without editing settings. Overrides are
 checked without importing PyTorch. `laya_release` clears weights/cache. Benchmark is
 explicit and bounded to 3–10 synthetic requests with answer caching disabled.
 
+Status includes a per-checkpoint `memory_estimate`, computed from the safetensors header
+without loading weights. Cold required RAM is the greater of `min_free_ram_gib` (default
+1.0) and checkpoint file bytes + FP32 parameter bytes + `memory_reserve_gib` (default
+0.75). All modes construct FP32 parameters on the host. Warm required RAM is at least
+0.5 GiB or the configured reserve, whichever is larger. CUDA separately checks the
+greater of `min_free_vram_gib` (default 2.5) and FP32 parameter bytes + reserve.
+These are conservative estimates, not maximum-memory predictions or allocations.
+Existing explicit RAM floors are respected. Model switching releases the previous
+resident model before preflight. Results include `runtime.memory_preflight` with actual
+available RAM and the estimate used. Batch admission failures include
+`error.code: "memory_pressure"`, `retryable: true`, and `details`; they have no answer.
+Retry only after resource conditions change. The smaller pinned model is multilingual,
+not English. MPS inference remains a separate hardware verification target.
+
+When automatic language routing selects English but its host estimate exceeds available
+RAM, a prepared multilingual checkpoint may be used if its estimate fits. The selected
+checkpoint/revision and cache key use the actual model. `routing.memory_fallback` records
+the original model and preflight, and the routing reason explains the change. Explicit
+`english`, `multilingual`, or `typed-decisions` requests never substitute a different
+checkpoint. GPU-to-CPU device fallback is still reported separately in `runtime`.
+
 Predictions are advisory. The model's action and confidence fields remain upstream
 outputs; no threshold is used to authorize commands or claim correctness.

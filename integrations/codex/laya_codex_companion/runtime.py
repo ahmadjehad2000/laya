@@ -118,6 +118,18 @@ class Runtime:
             self._release()
         preflight = memory_plan(self.root, name, self.config, cold)
         preflight["available_ram_gib"] = psutil.virtual_memory().available / 2**30
+        if (preflight["available_ram_gib"] < preflight["required_ram_gib"] and
+                selected == "auto" and name != "multilingual" and ready(self.root, "multilingual")):
+            # Only automatic model selection permits a different checkpoint. Explicit
+            # English/typed requests must retain their identity even under pressure.
+            candidate = memory_plan(self.root, "multilingual", self.config, True)
+            candidate["available_ram_gib"] = psutil.virtual_memory().available / 2**30
+            if candidate["required_ram_gib"] <= candidate["available_ram_gib"]:
+                route = {**route, "model": "multilingual", "repo": MODELS["multilingual"]["repo"],
+                         "reason": route.get("reason", "") + "; memory-aware fallback to smaller multilingual checkpoint",
+                         "memory_fallback": {"from": name, "to": "multilingual", "original_preflight": preflight}}
+                name, preflight, cold = "multilingual", candidate, True
+                key = hashlib.sha256((raw + name + MODELS[name]["revision"]).encode()).hexdigest()
         if preflight["available_ram_gib"] < preflight["required_ram_gib"]:
             self._release()
             raise ResourcePressureError(preflight)

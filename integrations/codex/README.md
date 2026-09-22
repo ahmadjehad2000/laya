@@ -3,7 +3,7 @@
 A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
 Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
 
-**Preview 0.1.0.** Real inference passed on Windows CPU/CUDA, Linux CPU, and macOS
+**Preview 0.1.1.** Real inference passed on Windows CPU/CUDA, Linux CPU, and macOS
 ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified paths.
 
 ## What you can do
@@ -25,7 +25,9 @@ requires source review rather than treating confidence as a correctness guarante
 ## Install
 
 Use a local Codex client, Python 3.12 (64 bit), several GB free disk, and preferably
-16 GB+ RAM. Cold loading requires 4.5 GiB available RAM by default. Model preparation
+16 GB+ RAM. Cold loading uses a checkpoint-aware estimate: about 2.55 GiB available
+RAM for multilingual and 3.10 GiB for English/typed-decisions with default reserves.
+These estimates apply to all device modes and do not guarantee peak usage. Model preparation
 needs internet; inference is offline afterward. No model API key is required.
 
 Clone the **complete fork**, then run:

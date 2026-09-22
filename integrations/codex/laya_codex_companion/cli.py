@@ -17,6 +17,8 @@ def main():
     prepare.add_argument("--source-cache", type=Path, help="Read existing pinned Hugging Face snapshots without downloading")
     predict = commands.add_parser("predict", help="Evaluate a JSON request (single or batch)")
     predict.add_argument("file", type=Path)
+    predict.add_argument("--require-device", choices=["cpu", "cuda", "mps"],
+                         help="Fail validation if inference falls back to a different device")
     benchmark = commands.add_parser("benchmark", help="Explicit synthetic diagnostic")
     benchmark.add_argument("--iterations", type=int, default=3)
     args = parser.parse_args()
@@ -40,6 +42,14 @@ def main():
                 else:
                     request = json.loads(args.file.read_text(encoding="utf-8"))
                     result = (runtime.predict_batch if "items" in request else runtime.predict)(**request)
+                    if args.require_device:
+                        predictions = [item.get("result") for item in result["items"]] if "items" in result else [result]
+                        for prediction in predictions:
+                            if prediction is None:
+                                raise RuntimeError("Device verification requires a successful result for every item")
+                            actual = prediction["runtime"].get("device") or prediction.get("original_runtime", {}).get("device")
+                            if actual != args.require_device:
+                                raise RuntimeError(f"Required {args.require_device}, actual device {actual}; requested device was not verified")
             finally:
                 runtime.close()
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))

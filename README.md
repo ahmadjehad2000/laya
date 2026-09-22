@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Python-3.12%E2%80%933.13-3776AB?logo=python&logoColor=white" alt="Python 3.12–3.13" />
   <img src="https://img.shields.io/badge/runtime-PyTorch-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch runtime" />
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-5e72e4" alt="Apache 2.0 license" /></a>
-  <a href="https://github.com/ahmadjehad2000/laya/releases"><img src="https://img.shields.io/badge/release-0.1.0_preview-38bda9" alt="0.1.0 preview" /></a>
+  <a href="https://github.com/ahmadjehad2000/laya/releases"><img src="https://img.shields.io/badge/release-0.1.1_preview-38bda9" alt="0.1.1 preview" /></a>
 </p>
 
 <p align="center">
@@ -18,6 +18,7 @@
 <p align="center">
   <a href="#quickstart">Quickstart</a> ·
   <a href="#workflows">Workflows</a> ·
+  <a href="#benchmarks">Benchmarks</a> ·
   <a href="#tuning-and-practical-recipes">Tuning recipes</a> ·
   <a href="integrations/codex/docs/API.md">API</a> ·
   <a href="integrations/codex/docs/VERIFICATION.md">Test evidence</a> ·
@@ -43,7 +44,7 @@ Four included skills cover **developer triage**, **record triage**, **rubric sco
 
 ## Quickstart
 
-You need a local Codex client, **64-bit Python 3.12** (3.13 is supported by the package but not the tested CI version), several GB of free disk, and preferably **16 GB+ RAM**. The default cold-load check requires 4.5 GiB of available RAM. Setup downloads packages and weights; prepared inference runs offline.
+You need a local Codex client, **64-bit Python 3.12 or 3.13**, several GB of free disk, and preferably **16 GB+ RAM**. The checkpoint-aware cold-load estimate is about **2.55 GiB available RAM for multilingual** or **3.10 GiB for English/typed-decisions** with default reserves. These are preflight estimates, not peak-memory guarantees. Setup downloads packages and weights; prepared inference runs offline.
 
 ```sh
 git clone https://github.com/ahmadjehad2000/laya.git
@@ -57,7 +58,8 @@ cd laya/integrations/codex
 py -3.12 bootstrap.py install --torch-index cu128 --device cuda
 ```
 
-Uses PyTorch CUDA when available and reports the actual device. A compatible NVIDIA driver is required for CUDA; the runtime can fall back to CPU.
+Requires a compatible NVIDIA driver and a real CUDA prediction before setup succeeds.
+Later inference can report CPU fallback if GPU availability or memory changes.
 
 </details>
 
@@ -77,7 +79,22 @@ py -3.12 bootstrap.py install --torch-index cpu --device cpu
 python3 bootstrap.py install --torch-index cpu --device cpu
 ```
 
-Use a Python 3.12 interpreter. NVIDIA users can choose `--torch-index cu128`; Linux CUDA has not been exercised in this release.
+Use a Python 3.12 or 3.13 interpreter. For NVIDIA acceleration, use the CUDA setup below.
+
+</details>
+
+<details>
+<summary><strong>Linux · NVIDIA CUDA, including Debian WSL2</strong></summary>
+
+```sh
+python3 bootstrap.py install --torch-index cu128 --device cuda
+```
+
+Use `--mode none` for a Linux inference environment without a local Codex CLI.
+Inside WSL2, use the GPU driver supplied by Windows; do not install a Linux display
+driver over its mapping. Follow the [Linux CUDA / WSL2 guide](integrations/codex/docs/LINUX_CUDA.md)
+for driver checks, strict GPU acceptance, and Windows Codex → Debian MCP configuration.
+See the verification table for tested versus unverified hardware paths.
 
 </details>
 
@@ -132,7 +149,7 @@ See the [API contract](integrations/codex/docs/API.md) and [example request](int
 | `multilingual` | Default; English, Arabic, and mixed-language workflows |
 | `english` | Original English checkpoint |
 | `typed-decisions` | Explicit opt-in to the upstream typed-decisions checkpoint |
-| `auto` | Upstream language routing between prepared English and multilingual models |
+| `auto` | Upstream language routing; reported fallback to prepared multilingual if English exceeds the RAM estimate |
 
 Prepare every checkpoint when needed:
 
@@ -148,7 +165,7 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, cache, batch behavior, setup, and rollback | 29 automated tests passed |
+| Companion validation, memory policy, device selection, benchmark metrics, setup, and rollback | 63 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA passed |
@@ -161,6 +178,69 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 **Transport correctness and model accuracy are separate.** The version 2 synthetic fixture matched **17/24** expected decisions: software issues 3/4, raw-code roles 1/4, ticket decisions 9/12, and document categories 4/4. Failures included sales-versus-billing ambiguity, explicit refund negation, and insufficient evidence. Raw-code roles remain in the fixture to expose the weakness, not to endorse the use case.
 
 These are small, manually labeled acceptance cases, not broad accuracy, calibrated confidence, or speed claims. Review consequential predictions against source evidence.
+
+## Benchmarks
+
+A portable benchmark suite measures public classification, the three Laya primitives,
+real MCP latency, cold starts, caching, and batching. The protocol is reproducible across
+supported hardware; the measurements below belong to the named machine and workload.
+They are not universal speed or accuracy guarantees.
+
+Measured on an **Intel Core i7-13620H / RTX 4060 Laptop GPU (8 GB VRAM)**, using the pinned
+multilingual checkpoint, four CPU threads, and PyTorch `2.11.0+cu128`. These were sequential
+profiles on an interactive workstation, with background activity rather than laboratory
+isolation. The fixed short/medium/long inputs used **49 / 147 / 371 context tokens**.
+
+<!-- BENCHMARK_TABLE_START -->
+
+| Measurement | Windows CPU | Windows CUDA |
+| :--- | ---: | ---: |
+| AG News subset accuracy | 191/200 (95.5%) | 191/200 (95.5%) |
+| AG News macro-F1 | 0.9547 | 0.9547 |
+| Synthetic workflow decisions | 17/24 | 17/24 |
+| Synthetic rubric rounded accuracy | 4/12 | 4/12 |
+| Rubric MAE (0–3 index; lower is better) | 0.821 | 0.820 |
+| Fresh server init + first request, median (3 runs) | 11.97 s | 13.30 s |
+| Warm short MCP request, p50 / p95 | 114.4 / 156.3 ms | 27.3 / 39.3 ms |
+| Warm medium MCP request, p50 / p95 | 230.4 / 267.5 ms | 28.1 / 37.5 ms |
+| Warm long MCP request, p50 / p95 | 568.7 / 657.6 ms | 28.3 / 38.7 ms |
+| Exact cache hit, p50 | 2.20 ms | 1.70 ms |
+| 8-record batch throughput | 8.6 records/s | 39.0 records/s |
+| Three related questions, p50 | 208.1 ms | 27.4 ms |
+| Resident server RSS snapshot (not peak) | 1.92 GiB | 1.91 GiB |
+
+<!-- BENCHMARK_TABLE_END -->
+
+Each warm latency row uses **30 uncached requests after 3 warm-ups**. Cold startup uses
+3 fresh server processes without flushing the OS file cache. Batch throughput uses
+5 eight-record calls; records run sequentially. The cache row measures result reuse,
+not fresh model inference. MCP timing excludes Codex's reasoning and tool-selection time.
+
+**Quality is task-specific.** AG News uses a fixed balanced 200-record sample of the public
+7,600-record test set, selected with seed 1729. The 95.5% result is for that subset,
+not the full benchmark or a general reliability score. The same model still matched only
+17/24 synthetic workflow decisions and 4/12 rounded severity scores. The rubric MAE uses
+a 0–3 index; lower is better. No broad confidence-calibration or autonomous-action claim
+follows from these results.
+
+[Protocol, dataset provenance, and metric definitions](integrations/codex/benchmarks/README.md) ·
+[Windows CPU report](integrations/codex/evidence/benchmark-windows-cpu.json) ·
+[Windows CUDA report](integrations/codex/evidence/benchmark-windows-cuda.json)
+
+To reproduce from the repository root with the prepared companion environment activated:
+
+```sh
+python integrations/codex/benchmarks/ag_news.py
+python integrations/codex/benchmarks/run.py --device cuda --output dist/benchmark-cuda.json
+python integrations/codex/benchmarks/run.py --device cpu --output dist/benchmark-cpu.json
+python integrations/codex/benchmarks/summarize.py dist/benchmark-cpu.json dist/benchmark-cuda.json
+```
+
+The dataset is explicitly downloaded and checksum-verified. Inference remains offline.
+Use `--model english` or `--model typed-decisions` for a separate model profile, or
+`--per-class 1900` to evaluate the full test set. Requested GPU runs fail if inference
+actually falls back to CPU. Raw reports retain timings, row IDs, errors, source hashes,
+model revision, hardware, and package versions; missing results are never silently dropped.
 
 ## Tuning and practical recipes
 
@@ -220,8 +300,9 @@ server/session. Values outside the supported ranges are rejected.
 | `cache_entries` | `128` | 0–1024; zero disables storing answers |
 | `cache_ttl_sec` | `120` | 0–3600 seconds; zero disables storing answers |
 | `idle_unload_sec` | `600` | 1–86400 seconds; shorter frees memory sooner, longer keeps the model warm |
-| `min_free_ram_gib` | `4.5` | 0.5–128 GiB; cold-load RAM preflight, not a RAM allocation |
+| `min_free_ram_gib` | `1.0` | 0.5–128 GiB; explicit lower bound on the checkpoint-aware cold-load estimate |
 | `min_free_vram_gib` | `2.5` | 0.5–128 GiB; CUDA preflight, not a model-size guarantee |
+| `memory_reserve_gib` | `0.75` | 0.5–128 GiB; extra headroom added to cold-load estimates and checked for warm requests |
 | `threads` | `4` | 1–32 PyTorch CPU threads; more threads are not always faster |
 
 For a GPU desktop, start with `device: cuda`, the multilingual model, and the other
@@ -230,10 +311,30 @@ defaults. For shared or constrained hardware, try `question_batch_size: 1` and
 values have not been benchmarked as a faster preset. Raising `max_items` increases work
 per tool call, not GPU parallelism.
 
-Do not lower memory floors just to bypass a failure. CI used an explicit 2.5 GiB RAM
-floor on constrained runners and passed its small CPU workload; the normal default
-remains 4.5 GiB. Even with CUDA, checkpoint loading needs system RAM. Closing unused
-model sessions or calling `laya_release` is often the first useful step.
+The old fixed 4.5 GiB gate has been replaced. All modes—CPU, CUDA, MPS, and auto—now
+estimate cold host memory from **checkpoint bytes + FP32 parameter bytes + reserve**,
+then honor any higher explicit `min_free_ram_gib`. Laya constructs FP32 parameters on
+the host even for GPU inference. CUDA also checks its own free VRAM estimate; MPS
+shares system memory. Warm requests check the reserve, not the full cold-load budget.
+Checkpoint switches release the old model before measuring available RAM.
+
+`laya_status` exposes each checkpoint's estimate. With these pinned weights,
+**multilingual is smaller than English**, so switching to English is not a reliable
+memory fix. Windows CPU and CUDA cold loads have now succeeded below the previous
+4.5 GiB threshold. If a config explicitly contains `min_free_ram_gib: 4.5`, that
+user-specified floor is preserved; remove that override or choose a justified lower
+bound after updating the runtime to use the adaptive estimate.
+
+With `model: auto`, a routed English checkpoint that exceeds available RAM can fall
+back to the smaller **prepared** multilingual checkpoint when it fits. The result
+records `routing.memory_fallback`, including the original estimate. Explicit model
+requests never switch checkpoints this way; no path silently downloads a smaller model.
+
+An actual shortage returns a retryable `memory_pressure` batch error with the available
+and required RAM, and **no fabricated prediction**. Release unused model sessions or
+apps before retrying. The estimates cannot guarantee against every native allocation
+failure; load/inference memory failures still clean up resident model state. Do not
+reduce reserves to hide real resource pressure.
 
 ### Spend fewer tool calls and avoid unnecessary loads
 

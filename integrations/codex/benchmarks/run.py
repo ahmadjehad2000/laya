@@ -57,6 +57,7 @@ def host_info():
     except (OSError, subprocess.TimeoutExpired):
         pass
     return {"platform": platform.platform(), "python": platform.python_version(), "cpu": cpu,
+            "linux_distribution": platform.freedesktop_os_release() if sys.platform.startswith("linux") else None,
             "physical_cores": psutil.cpu_count(logical=False), "logical_cores": psutil.cpu_count(),
             "ram_total_gib": psutil.virtual_memory().total / 2**30,
             "ram_available_start_gib": psutil.virtual_memory().available / 2**30,
