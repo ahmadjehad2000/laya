@@ -1,0 +1,91 @@
+{
+  "timestamp": "2026-09-22T18:13:49.797263+00:00",
+  "real_openai_generations": true,
+  "binary_sha256": "3620bd930f676447cec30c9ad9199444093b3bc6006cfaf98d75009e74b8ccd9",
+  "source_commit": "be2951ea34f0d295ed0becf97079f92fa5f6950e",
+  "patch_sha256": "ddd4a90df9be493097b0a1caa99cae49eaaacda708a32c91f770878ceecbbc00",
+  "fixture": "automatic-explicit-fictional-tutorial-handoff",
+  "checks": {
+    "exit_success": true,
+    "turn_completed": true,
+    "no_tools": true,
+    "branch_retained": true,
+    "budget_retained": true,
+    "deployment_mentioned": true,
+    "unresolved_retained": true,
+    "native_capture_audited": true
+  },
+  "answer": "- Branch: `feat/tutorial`\n- Memory budget: under 250 MiB\n- Deployment: do not deploy\n- Unresolved: fictional demonstration cache invalidation check failed.\n- Real tests: the export does **not** prove any ran; it explicitly states none had run.\n\nLaya was not used, as requested.",
+  "usage": [
+    {
+      "input_tokens": 13590,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 70,
+      "reasoning_output_tokens": 0
+    }
+  ],
+  "decisions": [
+    {
+      "decision": {
+        "protocol": 1,
+        "id": "01a0ca52-a33c-71e2-8eb2-34d3cf1bf494:1",
+        "generation": 1,
+        "status": "decided",
+        "effort": "medium",
+        "lease": 2,
+        "evidence_sha256": "4f3dcee87e50079110de5ce820f035015a944a61e79a23050f0aa33820dcef60",
+        "coverage": {
+          "requests": 1,
+          "recent_items": 0,
+          "omitted_items": 0
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": true,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 2.5488230157643557,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 14.10915756225586
+          },
+          "cache_hit": false,
+          "load_ms": 9399.06,
+          "inference_ms": 401.63,
+          "elapsed_ms": 11464.93
+        },
+        "original_runtime": null,
+        "context_tokens": {
+          "effort": 880,
+          "duration": 860
+        },
+        "probabilities": {
+          "low": 0.1075,
+          "medium": 0.482,
+          "high": 0.1917,
+          "xhigh": 0.1493,
+          "max": 0.0694
+        },
+        "elapsed_ms": 11465.12
+      },
+      "expected_effort": "medium",
+      "applied": true,
+      "actual_effort": "medium",
+      "turn_id": "01a0ca52-a33c-71e2-8eb2-34d3cf1bf494"
+    }
+  ],
+  "tool_types": [],
+  "scope": "One recall acceptance case, not a coding-quality or cost-savings benchmark"
+}

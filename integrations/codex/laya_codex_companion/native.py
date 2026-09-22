@@ -19,7 +19,28 @@ def has_model_option(args):
     return False
 
 
-def main():
+def integration_options():
+    """Invocation-only MCP defaults; user CLI overrides are appended afterward."""
+    settings = {
+        "command": sys.executable,
+        "args": ["-I", "-m", "laya_codex_companion", "serve"],
+        "enabled": True,
+        "startup_timeout_sec": 30,
+        "tool_timeout_sec": 300,
+        "env": {"LAYA_COMPANION_HOME": str(home()), "HF_HUB_OFFLINE": "1",
+                "TRANSFORMERS_OFFLINE": "1", "USE_TF": "0"},
+    }
+    options = []
+    for key, value in settings.items():
+        if isinstance(value, dict):
+            for env_key, env_value in value.items():
+                options += ["-c", f'mcp_servers.laya-for-codex.env.{env_key}={json.dumps(env_value)}']
+        else:
+            options += ["-c", f'mcp_servers.laya-for-codex.{key}={json.dumps(value)}']
+    return options
+
+
+def main(argv=None):
     root = home() / "native"
     package = root
     try:
@@ -37,8 +58,9 @@ def main():
     env = {**os.environ, "LAYA_CONTROLLER_PYTHON": sys.executable,
            "LAYA_CONTROLLER_LOG_DIR": str(root / "logs")}
     # Use normal Codex authentication and permissions. CLI flags are invocation-only.
-    args = sys.argv[1:]
+    args = list(sys.argv[1:] if argv is None else argv)
     options = ["--enable", "step_model_switching", "--enable", "reasoning_effort_override"]
+    options += integration_options()
     if not has_model_option(args):
         options += ["-m", "laya-astra"]
     try:

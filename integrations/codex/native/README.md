@@ -1,11 +1,24 @@
 # Native Astra + Laya (experimental)
 
-`laya-codex` is a separate Codex CLI with a local Laya/PyTorch reasoning-effort
-controller. The model picker calls it **Astra + Laya** (`laya-astra`); network requests
+`laya-for-codex` opens the native Codex CLI by default with a local Laya/PyTorch
+reasoning-effort controller and eight MCP tools. `laya-codex` remains a compatible
+launcher. The model picker calls it **Astra + Laya** (`laya-astra`); network requests
 use the real `gpt-6-astra` model. Your existing stock Codex CLI/desktop installation
 and its normal Laya plugin are not replaced.
 
 ## Install and launch
+
+Version 0.2.1 passes native flags, prompts, exec and resume through the unified CLI.
+`laya-for-codex chat --help` shows native options. Local `serve`, `doctor`, `predict`
+and other utility subcommands remain available. MCP defaults are invocation-only,
+use isolated Python, and work with `--ignore-user-config`; user CLI overrides follow
+these defaults. Same-name config registration wins over plugin registration in the
+pinned native client. No global config rewrite or additional activation is required.
+
+`laya_context_file` adds local relevance selection over explicit workspace evidence
+records. Server instructions encourage this and other suitable workflows proactively;
+tool choice is model-dependent. Neither context selection nor effort steering changes
+permissions or creates a larger cloud context window.
 
 First [install the companion](../README.md#install) and prepare its multilingual
 checkpoint. You still need normal Codex authentication/access to Astra for real

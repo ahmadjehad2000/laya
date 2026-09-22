@@ -26,7 +26,7 @@ async def run(args):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 report["tools"] = [tool.name for tool in (await session.list_tools()).tools]
-                assert len(report["tools"]) == 7
+                assert len(report["tools"]) == 8
                 report["status"] = unpack(await session.call_tool("laya_status", {}))
                 report["prediction"] = unpack(await session.call_tool("laya_predict", {
                     "state": "The football team won the championship.", "use_cache": False,

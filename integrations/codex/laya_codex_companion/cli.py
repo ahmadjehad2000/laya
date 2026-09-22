@@ -22,8 +22,21 @@ def context_path(value):
     return value
 
 
-def main():
-    parser = ArgumentParser(prog="laya-for-codex")
+LOCAL_COMMANDS = frozenset({"serve", "doctor", "classify-file", "compact-file", "recall",
+                            "continue", "prepare", "predict", "benchmark"})
+
+
+def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    # Utility commands are explicit; everything else follows the native CLI's own
+    # parser, including prompts, exec/resume, flags, stdin and end-of-options.
+    if not argv or argv[0] not in LOCAL_COMMANDS | {"-h", "--help", "--version"}:
+        from .native import main as launch
+        return launch(argv[1:] if argv and argv[0] == "chat" else argv)
+    parser = ArgumentParser(prog="laya-for-codex",
+        description="Astra + Laya native CLI by default, with local decision and handoff utilities.",
+        epilog="Run laya-for-codex with no arguments to chat; use exec/resume or native flags directly. "
+               "Use laya-for-codex chat --help for native options. laya-codex remains a compatibility alias.")
     parser.add_argument("--version", action="version", version=__import__("laya_codex_companion").__version__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="Run the offline stdio MCP server")
@@ -51,10 +64,10 @@ def main():
     source.add_argument("--input", help="Automatically create a reversible handoff from this explicit export before continuing")
     continuation.add_argument("--keep-recent", type=int, default=8)
     continuation.add_argument("--prompt", required=True)
-    continuation.add_argument("--lean", action="store_true", help="Ignore user config for this new thread; use only with an explicit model")
-    continuation.add_argument("--model", help="Optional Codex model; required with --lean")
-    continuation.add_argument("--target", choices=["codex", "laya-codex"], default="codex",
-                              help="Choose stock Codex or the separately installed native Laya CLI")
+    continuation.add_argument("--lean", action="store_true", help="Ignore user config for this new thread; native targets default to Astra + Laya")
+    continuation.add_argument("--model", help="Optional model override; required with --lean --target codex")
+    continuation.add_argument("--target", choices=["codex", "laya-codex", "laya-for-codex"], default="laya-for-codex",
+                              help="Default: unified native Laya CLI; select codex explicitly for the stock client")
     prepare = commands.add_parser("prepare", help="Download pinned checkpoints explicitly")
     prepare.add_argument("--model", choices=["multilingual", "english", "typed-decisions", "all"], default="multilingual")
     prepare.add_argument("--source-cache", type=Path, help="Read existing pinned Hugging Face snapshots without downloading")
@@ -64,7 +77,7 @@ def main():
                          help="Fail validation if inference falls back to a different device")
     benchmark = commands.add_parser("benchmark", help="Explicit synthetic diagnostic")
     benchmark.add_argument("--iterations", type=int, default=3)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
         if args.command in ("compact-file", "recall", "continue"):
             from .compaction import compact_file, recall
@@ -93,8 +106,8 @@ def main():
                           raw.decode("utf-8") + "\nCurrent request:\n" + args.prompt)
                 command = [codex, "exec", "--json", "-C", str(root)]
                 if args.lean:
-                    if not args.model:
-                        raise ValueError("--lean requires an explicit --model; user config is not loaded")
+                    if not args.model and args.target == "codex":
+                        raise ValueError("--lean --target codex requires an explicit --model; user config is not loaded")
                     command += ["--ignore-user-config", "-s", "read-only"]
                 if args.model:
                     command += ["-m", args.model]

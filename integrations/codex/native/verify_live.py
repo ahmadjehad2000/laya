@@ -23,7 +23,7 @@ def main():
         binary_sha256 = hashlib.file_digest(stream, "sha256").hexdigest()
     command = [sys.executable, "-I", "-m", "laya_codex_companion", "continue", "--workspace", str(ROOT),
                "--input", "integrations/codex/examples/tutorial/conversation.json", "--keep-recent", "2",
-               "--target", "laya-codex", "--lean", "--model", "laya-astra",
+               "--lean",
                "--prompt", "Without tools, list the retained demonstration branch, memory budget, deployment restriction, "
                "and unresolved status. State whether the export proves that any real tests ran. Be concise."]
     completed = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=240)

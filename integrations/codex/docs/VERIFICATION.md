@@ -1,5 +1,24 @@
 # Verification and release gates
 
+## 0.2.1 unified CLI acceptance
+
+- **120 automated tests passed locally on Windows.** The actual default-model,
+  three-generation [unified wire test](../evidence/unified-wire.json) passed all
+  checks, including tool-error invalidation and provider settings capture.
+
+- Managed Windows runtime upgraded to 0.2.1; native binary reused at its pinned receipt.
+- [Installed eight-tool MCP check](../evidence/unified-mcp.json): zero integration
+  failures; context selection returned the relevant sports record within its budget.
+  Classification disagreements remain seven out of 24 decisions (smoke exit 2).
+- [Default-use live test](../evidence/unified-default-tools.json): user config ignored,
+  no user mention of Laya, default model selection, successful `laya_context_file`,
+  local report, preserved incident facts, and applied native controller decision.
+  This establishes one actual use, not deterministic tool selection for every task.
+- [Default native handoff](../evidence/unified-handoff.json): no explicit target/model,
+  successful real Astra continuation with constraints and unresolved status retained.
+- Cost measurements in older reports predate default MCP injection and context selection.
+  No new savings percentage is inferred from this release.
+
 ## September 22 native refresh
 
 - Local Windows companion suite: **101 passed**; upstream contracts: **106 routing

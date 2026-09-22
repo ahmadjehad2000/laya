@@ -3,7 +3,7 @@
 A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
 Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
 
-**Preview 0.2.0.** Real companion inference passed on Windows CPU/CUDA, Linux CPU, and macOS
+**Preview 0.2.1.** Real companion inference passed on Windows CPU/CUDA, Linux CPU, and macOS
 ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified paths.
 
 ## What you can do
@@ -13,7 +13,7 @@ ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified 
 - Score comparable records against your own ordered rubric.
 - Check readiness, inspect actual device/fallback information and release model memory.
 
-The plugin packages five discoverable skills and seven MCP tools. Codex collects evidence
+The plugin packages five discoverable skills; the runtime exposes eight MCP tools. Codex collects evidence
 and reviews results; Laya supplies small typed decisions. It does not automatically see
 your whole repository or conversation. Model predictions can be confidently wrong.
 
@@ -24,11 +24,12 @@ requires source review rather than treating confidence as a correctness guarante
 
 ## Native Astra + Laya
 
-The separate [native client](native/README.md) adds an effort controller inside a
-pinned Codex generation loop. Launch `laya-codex` or select **Astra + Laya** in that
-client. Actual provider requests still use `gpt-6-astra`. This is an opt-in source
-build, not a modification to the stock desktop app. The plugin remains available in
-stock clients, without a claim of intercepting every model call.
+The [native client](native/README.md) is the default launch path for `laya-for-codex`.
+It starts the Astra effort controller and configures all eight local MCP tools for
+that invocation without plugin registration. `laya-codex` remains compatible.
+Actual provider requests use `gpt-6-astra`. Native code still requires the documented
+source build; stock Codex is not replaced. Local utility subcommands retain their
+behavior. `continue` now defaults to the unified CLI; choose `--target codex` for stock.
 
 ## Install
 

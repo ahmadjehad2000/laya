@@ -101,7 +101,7 @@ def test_continue_lean_uses_new_readonly_thread_and_explicit_model(tmp_path, mon
     (tmp_path / "chat.json").write_text('[{"role":"user","content":"Do not deploy"}]')
     result = compact_file(str(tmp_path), "chat.json")
     argv = ["laya-for-codex", "continue", "--workspace", str(tmp_path), "--context", result["context"],
-            "--prompt", "Review tests", "--lean"]
+            "--prompt", "Review tests", "--lean", "--target", "codex"]
     monkeypatch.setattr(shutil, "which", lambda name: "codex")
     monkeypatch.setattr(sys, "argv", argv)
     assert main() == 1

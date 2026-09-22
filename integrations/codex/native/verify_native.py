@@ -26,7 +26,17 @@ def main():
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--missing-worker", action="store_true")
+    parser.add_argument("--unified", action="store_true", help="Exercise installed laya-for-codex dispatch and its default model")
     args = parser.parse_args()
+    if args.unified and args.missing_worker:
+        parser.error("Use the direct binary for missing-worker injection")
+    if args.unified:
+        from laya_codex_companion.config import home
+        native_root = home() / "native"
+        receipt = json.loads((native_root / "build.json").read_text(encoding="utf-8"))
+        installed = native_root / receipt["package"] / "bin" / ("codex.exe" if os.name == "nt" else "codex")
+        if installed.resolve() != args.binary.resolve():
+            parser.error("--binary must match the unified launcher's installed receipt")
     requests = []
 
     class Handler(BaseHTTPRequestHandler):
@@ -75,6 +85,10 @@ def main():
                    "-c", 'model_providers.fixture.wire_api="responses"',
                    "-c", 'model_providers.fixture.supports_websockets=false',
                    "Inspect a failing test; do not deploy. Report unresolved failures."]
+        if args.unified:
+            command[:1] = [sys.executable, "-I", "-m", "laya_codex_companion"]
+            model_index = command.index("-m", 4)
+            del command[model_index:model_index + 2]
         start = time.perf_counter()
         try:
             completed = subprocess.run(command, env=env, input="", capture_output=True, text=True, encoding="utf-8", timeout=240)
@@ -83,7 +97,12 @@ def main():
             server.server_close()
             thread.join(timeout=5)
         records = []
-        for log in (root / "decisions").glob("*.jsonl"):
+        logs = list((root / "decisions").glob("*.jsonl"))
+        if args.unified:
+            events = [json.loads(line) for line in completed.stdout.splitlines() if line.startswith("{")]
+            thread_id = next((e["thread_id"] for e in events if e.get("type") == "thread.started"), None)
+            logs = [native_root / "logs" / (thread_id + ".jsonl")] if thread_id else []
+        for log in logs:
             records += [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()]
         checks = {"exit_success": completed.returncode == 0, "three_generations": len(requests) == 3,
                   "alias_not_sent_to_provider": bool(requests) and all(r["model"] == "gpt-6-astra" for r in requests),
@@ -116,6 +135,7 @@ def main():
         report = {"timestamp": datetime.now(timezone.utc).isoformat(), "fixture": "local-responses-three-generations",
                   "binary_sha256": binary_sha256,
                   "real_openai_generations": False, "real_laya_inference": not args.missing_worker,
+                  "unified_cli": args.unified,
                   "elapsed_seconds": round(time.perf_counter() - start, 3), "checks": checks,
                   "decisions": records, "request_count": len(requests),
                   "wire": [{"model": r.get("model"), "reasoning": r.get("reasoning"),

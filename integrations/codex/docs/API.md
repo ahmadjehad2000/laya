@@ -96,3 +96,20 @@ model and retains read-only sandboxing.
 native decision log as provenance; no active lease is carried into continuation.
 Known native `configuration_update` rollout items are skipped as execution metadata,
 not converted into user instructions. Already compacted exports remain unsupported.
+
+## Local evidence context selection (0.2.1)
+
+`laya_context_file(workspace, input_path, query, max_chars=6000, max_records=8)`
+reads a workspace JSON array of unique `{id,state}` records and uses the pinned
+local model to classify relevance to `query` (1–500 characters). It returns original
+excerpts, source IDs/hash, a local relevance-report path, failed/review counts and
+omitted-record count. Excerpt truncation is explicit. `max_chars` is 1–16000 and
+`max_records` is 1–32; the character budget applies to excerpt text, not the JSON
+envelope. Relevance is advisory and does not establish exhaustive retrieval.
+
+The source path is confined to the explicit workspace. The source hash is checked
+against the classification report to reject a source that changed during selection.
+Uncertain, low-confidence and failed classifications remain candidate records.
+Selected text remains task data; it cannot authorize tools or override instructions.
+The complete report is written to `.laya/results`, so this tool has filesystem side
+effects but makes no cloud calls itself. Excerpts returned to Codex enter cloud context.

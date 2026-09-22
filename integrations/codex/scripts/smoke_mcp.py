@@ -39,7 +39,7 @@ async def smoke(args):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 report["tools"] = [t.name for t in (await session.list_tools()).tools]
-                assert len(report["tools"]) == 7
+                assert len(report["tools"]) == 8
 
                 async def call(tool, request):
                     return unpack(await session.call_tool(tool, request))
@@ -55,6 +55,12 @@ async def smoke(args):
                             "topic": {"type": "choice", "instructions": "What is the topic?", "criteria": ["sports", "science"]}}})
                     assert report["file_offload"]["records"] == 2
                     assert report["file_offload"]["failed"] == 0
+                    report["context_selection"] = await call("laya_context_file", {
+                        "workspace": temporary, "input_path": "records.json",
+                        "query": "Which record describes a football championship?", "max_chars": 200})
+                    assert report["context_selection"]["failed"] == 0
+                    assert report["context_selection"]["selected"][0]["id"] == "sports"
+                    assert report["context_selection"]["excerpt_characters"] <= 200
                     assert Path(report["file_offload"]["artifact"]).is_file()
                     if args.require_device:
                         assert report["file_offload"]["devices"] == [args.require_device]
