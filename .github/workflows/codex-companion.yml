@@ -55,7 +55,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.real_inference && matrix.python == '3.12'
         shell: bash
         run: |
-          python integrations/codex/bootstrap.py install --device cpu --mode none
+          TORCH_INDEX=cpu
+          if [[ "$RUNNER_OS" == "macOS" ]]; then TORCH_INDEX=default; fi
+          python integrations/codex/bootstrap.py install --torch-index "$TORCH_INDEX" --device cpu --mode none
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             RUNTIME="$USERPROFILE/.laya-for-codex/venv/Scripts/python.exe"
           else
