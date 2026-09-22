@@ -1,0 +1,62 @@
+{
+  "verified_at": "2026-09-22T11:05:57.706332+00:00",
+  "scope": "Actual fresh Codex CLI session using the installed plugin and default configuration",
+  "hardware": "NVIDIA GeForce RTX 4060 Laptop GPU (8 GB VRAM)",
+  "pytorch": "2.11.0+cu128",
+  "configured_device": "cuda",
+  "configured_model": "multilingual",
+  "state": "I was charged twice and need a refund.",
+  "expected_category": "billing",
+  "source_evidence": "Charged twice and refund request directly support billing.",
+  "prediction": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "category": {
+        "type": "choice",
+        "choice": "billing",
+        "probabilities": {
+          "billing": 0.9983,
+          "technical": 0.0005,
+          "other": 0.0012
+        },
+        "confidence": 0.9875,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 62,
+      "output_tokens": 0
+    },
+    "routing": {
+      "model": "multilingual",
+      "repo": "convaiinnovations/laya-multilingual",
+      "reason": "explicit model='multilingual'",
+      "detection": null,
+      "workflow": null
+    },
+    "checkpoint": {
+      "variant": "multilingual",
+      "repo": "convaiinnovations/laya-multilingual",
+      "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+      "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+    },
+    "context_tokens": {
+      "category": 62
+    },
+    "runtime": {
+      "backend": "pytorch",
+      "device": "cuda",
+      "fallback_reason": null,
+      "cache_hit": false,
+      "load_ms": 11109.08,
+      "inference_ms": 487.42,
+      "elapsed_ms": 13098.95
+    }
+  },
+  "release": {
+    "released": true,
+    "cache_cleared": true
+  }
+}

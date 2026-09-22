@@ -33,7 +33,7 @@ Clone the **complete fork**, then run:
 ```powershell
 git clone https://github.com/ahmadjehad2000/laya.git
 cd laya/integrations/codex
-py -3.12 bootstrap.py install --torch-index cu128
+py -3.12 bootstrap.py install --torch-index cu128 --device cuda
 ```
 
 For CPU-only Windows/Linux, use `--torch-index cpu --device cpu`.
@@ -67,6 +67,10 @@ The plugin uses host timeout defaults. Hosted Codex cannot read your desktop's l
 configuration. Installing this package does not provide remote inference.
 
 ## Models and tools
+
+For GPU defaults, every configuration knob, batching/cache recipes, offline model
+reuse, and the integration fixes found during development, see the root README's
+[tuning and practical recipes](../../README.md#tuning-and-practical-recipes).
 
 The default checkpoint is `multilingual`. Explicit alternatives are `english`,
 `typed-decisions`, and `auto` (upstream language routing). Auto needs both English and

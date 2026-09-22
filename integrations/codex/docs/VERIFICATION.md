@@ -22,6 +22,9 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
   separately from the MCP SDK tests. The installed compatibility manifest is verified.
 - All three original checkpoints loaded and produced valid predictions on Windows CUDA.
   Automatic English/Arabic selection also passed: [five recorded runs](../evidence/windows-checkpoints.json).
+- Explicit GPU-default configuration was verified in another fresh Codex session on
+  an RTX 4060 Laptop GPU: configured `cuda`, actual `cuda`, no fallback, source-supported
+  billing classification, and successful release. See [GPU-default evidence](../evidence/windows-cuda-default.json).
 - GitHub Actions fresh installation and real CPU inference passed on Windows, Linux,
   and macOS ARM64 in [run 35717300148](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148).
   This follows fixes for Windows README encoding and a small macOS runner's RAM floor.
