@@ -1,5 +1,57 @@
 # Cost control: local work before cloud context
 
+## Native cost audit and automatic handoffs (2026-09-22)
+
+The [six-turn live pilot](../evidence/native-cost-refresh.json) uses one installed
+native binary, two synthetic tasks, fresh ephemeral threads, ignored user config,
+the same response schema and no tools. Order rotates across tasks. This is one
+sample per arm/task, not a statistically reliable coding benchmark.
+
+| Arm | Correct | Input tokens | Cached input | Output tokens (includes reasoning) | API-equivalent estimate | Total elapsed |
+|---|---:|---:|---:|---:|---:|---:|
+| Fixed low | 2/2 | 28,082 | 0 | 59 | $0.283770 | 12.739 s |
+| Fixed medium | 2/2 | 28,082 | 0 | 61 | $0.283870 | 11.334 s |
+| Adaptive | 2/2 | 24,878 | 0 | 70 | $0.252280 | 38.473 s |
+
+Rates verified against the [official Astra model page](https://developers.openai.com/api/docs/models/gpt-6-astra)
+on September 22: $10 input, $1 cache read, $12.50 cache write and $50 output per
+million tokens for Standard requests at or below 272k input. Estimates subtract
+cached/write tokens from ordinary input, and never count reasoning output twice.
+They exclude local power/hardware and do not predict subscription quota or billing.
+
+**Confounder:** the alias used 1,602 fewer input tokens per task. The pilot compares
+the complete alias path, not an isolated reasoning policy. Arithmetic used medium;
+Python alias tracing used xhigh, with 30 reasoning tokens versus 19 on fixed-low.
+The apparent 11.1% reduction is driven by input differences and does not prove
+Laya reduces reasoning cost. Two correct trivial answers do not establish quality
+on repository work. Cold local loading dominates these short turns.
+
+Reproduce (six cloud turns consume usage):
+
+```powershell
+& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" integrations/codex/benchmarks/native_cost.py --output dist/native-cost.json
+```
+
+Exact evidence and question definitions now use the runtime's existing bounded TTL
+cache in the controller. Changed evidence, criterion ordering or checkpoint use
+different keys; native identity and lease validation still run. Cache hits expose
+the source device/timings in `original_runtime`. No model weights or probabilities
+were changed. The observed 42.62 ms to 0.12 ms improvement applies only to an exact
+repeat within one warm worker; the worker still exits at the end of a turn.
+
+`continue --input conversation.json` now automatically creates a local handoff
+before starting a new CLI thread; `--context` still accepts an existing handoff.
+Use `--keep-recent` to set retention (default 8). The input must be an explicit
+workspace export. Invalid exports fail before cloud launch, archives retain exact
+source bytes, and a JSON preparation report goes to stderr. Short exports can
+grow; byte reduction is not a token/cost guarantee. The feature does not monitor
+private live sessions, reconstruct hidden reasoning, or take over native compaction.
+
+Next useful experiments are representative coding tasks with equal instruction
+prefixes, multiple repetitions, quality checks and total usage including retries.
+Model quantization, cross-turn workers and learned effort policies remain unimplemented
+until their quality, isolation and memory behavior can be validated.
+
 The useful boundary is **before bulk data reaches Codex**. A plugin that asks Codex to
 read every record, repeat it in MCP arguments, and consume verbose results can cost
 more than answering directly. Laya now supports file-reference classification and

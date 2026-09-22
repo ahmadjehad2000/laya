@@ -7,7 +7,6 @@ from pathlib import Path
 import subprocess
 import sys
 
-from laya_codex_companion.compaction import compact_file
 from laya_codex_companion.config import home
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -22,9 +21,9 @@ def main():
     binary = native_root / build["package"] / "bin" / ("codex.exe" if sys.platform == "win32" else "codex")
     with binary.open("rb") as stream:
         binary_sha256 = hashlib.file_digest(stream, "sha256").hexdigest()
-    handoff = compact_file(ROOT, "integrations/codex/examples/tutorial/conversation.json", keep_recent=2)
     command = [sys.executable, "-I", "-m", "laya_codex_companion", "continue", "--workspace", str(ROOT),
-               "--context", handoff["context"], "--target", "laya-codex", "--lean", "--model", "laya-astra",
+               "--input", "integrations/codex/examples/tutorial/conversation.json", "--keep-recent", "2",
+               "--target", "laya-codex", "--lean", "--model", "laya-astra",
                "--prompt", "Without tools, list the retained demonstration branch, memory budget, deployment restriction, "
                "and unresolved status. State whether the export proves that any real tests ran. Be concise."]
     completed = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=240)
@@ -49,7 +48,7 @@ def main():
     report = {"timestamp": datetime.now(timezone.utc).isoformat(), "real_openai_generations": True,
               "binary_sha256": binary_sha256, "source_commit": build["commit"],
               "patch_sha256": build["patch_sha256"],
-              "fixture": "explicit-fictional-tutorial-handoff", "checks": checks, "answer": answer,
+              "fixture": "automatic-explicit-fictional-tutorial-handoff", "checks": checks, "answer": answer,
               "usage": [event.get("usage") for event in events if event["type"] == "turn.completed"],
               "decisions": audit, "tool_types": used_tools,
               "scope": "One recall acceptance case, not a coding-quality or cost-savings benchmark"}

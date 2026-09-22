@@ -87,6 +87,37 @@ laya-for-codex predict integrations/codex/examples/quickstart.json --require-dev
 
 ## Cost control
 
+**September 22 update: native cost and performance audit.** A live six-turn pilot
+compared fixed-low, fixed-medium and adaptive Astra on the same two small tasks.
+All arms answered 2/2 correctly. Adaptive estimated $0.25228 versus $0.28377 low
+and $0.28387 medium at Standard API-equivalent rates, but took **38.47 seconds**
+versus 12.74 and 11.33 seconds. These are estimates, not your subscription bill.
+The adaptive alias sent 1,602 fewer input tokens per task, so the roughly 11% lower
+estimate **does not establish savings from effort selection**. It selected medium
+for arithmetic and xhigh for Python tracing, and generated more reasoning tokens
+on the latter. Do not assume automatic effort is cheaper than fixed-low.
+[Raw live results](integrations/codex/evidence/native-cost-refresh.json) ·
+[Protocol and limitations](integrations/codex/docs/COST_CONTROL.md#native-cost-audit-and-automatic-handoffs-2026-09-22).
+
+**Implemented:** exact-evidence controller caching reuses the existing bounded TTL
+cache without reusing request identities or overriding native lease invalidation.
+A repeated installed-worker request measured **0.12 ms**, versus **42.62 ms** with
+a warm forward pass. This single repeated-input measurement excludes worker startup
+and does not accelerate novel evidence; cold decisions still took about 11 seconds.
+[Before](integrations/codex/evidence/native-worker-refresh.json) ·
+[After](integrations/codex/evidence/native-worker-cached.json).
+
+**Automatic local handoff from an explicit export:**
+
+```powershell
+laya-for-codex continue --workspace "$PWD" --input conversation.json --keep-recent 8 --target laya-codex --model laya-astra --prompt "Continue the work; check unresolved failures."
+```
+
+This creates a reversible local archive and starts a new thread in one command.
+Preparation uses deterministic extraction, not a small-model rewrite of constraints.
+It does not intercept the running chat or replace encrypted native compaction.
+The resulting context is sent to Codex and consumes usage; original archives stay local.
+
 **Measured feasibility: 79.8% fewer Codex input tokens on one long-history recall test.**
 
 | Controlled pilot | Baseline | Local-first path | Observed quality |
@@ -577,7 +608,7 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, memory policy, file offload, local handoffs, controller, setup, and rollback | 89 automated tests passed |
+| Companion validation, memory policy, file offload, local handoffs, controller, setup, and rollback | 101 automated tests passed locally on Windows after this update |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA and Debian 13.6 WSL2 CUDA passed |

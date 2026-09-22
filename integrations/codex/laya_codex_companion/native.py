@@ -7,6 +7,18 @@ import sys
 from .config import home
 
 
+def has_model_option(args):
+    """Respect argparse/clap short values and the end-of-options delimiter."""
+    for arg in args:
+        if arg == "--":
+            break
+        if arg in ("-m", "--model") or arg.startswith("--model="):
+            return True
+        if arg.startswith("-m") and not arg.startswith("--"):
+            return True
+    return False
+
+
 def main():
     root = home() / "native"
     package = root
@@ -27,7 +39,7 @@ def main():
     # Use normal Codex authentication and permissions. CLI flags are invocation-only.
     args = sys.argv[1:]
     options = ["--enable", "step_model_switching", "--enable", "reasoning_effort_override"]
-    if not any(arg in ("-m", "--model") or arg.startswith("--model=") for arg in args):
+    if not has_model_option(args):
         options += ["-m", "laya-astra"]
     try:
         return subprocess.run([str(binary), *options, *args], env=env).returncode

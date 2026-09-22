@@ -1,0 +1,249 @@
+{
+  "timestamp": "2026-09-22T17:42:40.672459+00:00",
+  "fixture": "local-responses-three-generations",
+  "binary_sha256": "3620bd930f676447cec30c9ad9199444093b3bc6006cfaf98d75009e74b8ccd9",
+  "real_openai_generations": false,
+  "real_laya_inference": true,
+  "elapsed_seconds": 12.644,
+  "checks": {
+    "exit_success": true,
+    "three_generations": true,
+    "alias_not_sent_to_provider": true,
+    "audited_capture": true,
+    "real_local_decisions": true,
+    "tool_errors_invalidate_lease": true,
+    "request_effort_stays_pinned": true,
+    "native_configuration_update_used": true,
+    "wire_matches_capture": true
+  },
+  "decisions": [
+    {
+      "decision": {
+        "protocol": 1,
+        "id": "01a0ca36-412a-7fc0-b73a-eecf9e233315:1",
+        "generation": 1,
+        "status": "decided",
+        "effort": "low",
+        "lease": 2,
+        "evidence_sha256": "c0d625a278a9d8b574d2ff200c84cedb2b48329eabe0312f881363185a1da7d1",
+        "coverage": {
+          "requests": 1,
+          "recent_items": 0,
+          "omitted_items": 0
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": true,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 2.5488230157643557,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 15.290111541748047
+          },
+          "cache_hit": false,
+          "load_ms": 9035.02,
+          "inference_ms": 366.75,
+          "elapsed_ms": 10999.35
+        },
+        "context_tokens": {
+          "effort": 93,
+          "duration": 73
+        },
+        "probabilities": {
+          "low": 0.4074,
+          "medium": 0.28,
+          "high": 0.0802,
+          "xhigh": 0.1571,
+          "max": 0.0754
+        },
+        "elapsed_ms": 10999.52
+      },
+      "expected_effort": "low",
+      "applied": true,
+      "actual_effort": "low",
+      "turn_id": "01a0ca36-412a-7fc0-b73a-eecf9e233315"
+    },
+    {
+      "decision": {
+        "protocol": 1,
+        "id": "01a0ca36-412a-7fc0-b73a-eecf9e233315:2",
+        "generation": 2,
+        "status": "decided",
+        "effort": "low",
+        "lease": 1,
+        "evidence_sha256": "f9ea41712cde8337e1d3c7ce15e78d6134de8f55e15e993aa81527a28c03e9a8",
+        "coverage": {
+          "requests": 1,
+          "recent_items": 1,
+          "omitted_items": 0
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": false,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 0.75,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 14.135395050048828
+          },
+          "cache_hit": false,
+          "load_ms": 0,
+          "inference_ms": 28.26,
+          "elapsed_ms": 29.7
+        },
+        "context_tokens": {
+          "effort": 252,
+          "duration": 232
+        },
+        "probabilities": {
+          "low": 0.3699,
+          "medium": 0.2426,
+          "high": 0.1077,
+          "xhigh": 0.1616,
+          "max": 0.1182
+        },
+        "elapsed_ms": 29.89
+      },
+      "expected_effort": "low",
+      "applied": true,
+      "actual_effort": "low",
+      "turn_id": "01a0ca36-412a-7fc0-b73a-eecf9e233315"
+    },
+    {
+      "decision": {
+        "protocol": 1,
+        "id": "01a0ca36-412a-7fc0-b73a-eecf9e233315:3",
+        "generation": 3,
+        "status": "decided",
+        "effort": "medium",
+        "lease": 2,
+        "evidence_sha256": "eb456f583a0c349b26a2e13a9fd811bfdd3bed016a66a13bef6d9894355af128",
+        "coverage": {
+          "requests": 1,
+          "recent_items": 2,
+          "omitted_items": 0
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": false,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 0.75,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 14.145694732666016
+          },
+          "cache_hit": false,
+          "load_ms": 0,
+          "inference_ms": 28.69,
+          "elapsed_ms": 30.18
+        },
+        "context_tokens": {
+          "effort": 412,
+          "duration": 392
+        },
+        "probabilities": {
+          "low": 0.0714,
+          "medium": 0.5706,
+          "high": 0.1398,
+          "xhigh": 0.1293,
+          "max": 0.0889
+        },
+        "elapsed_ms": 30.32
+      },
+      "expected_effort": "medium",
+      "applied": true,
+      "actual_effort": "medium",
+      "turn_id": "01a0ca36-412a-7fc0-b73a-eecf9e233315"
+    }
+  ],
+  "request_count": 3,
+  "wire": [
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "low"
+          }
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "low"
+          }
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "low"
+          }
+        },
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "medium"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -46,7 +46,10 @@ def main():
     retrieve.add_argument("--index", type=int, required=True)
     continuation = commands.add_parser("continue", help="Start a NEW Codex CLI thread from a local handoff")
     continuation.add_argument("--workspace", required=True)
-    continuation.add_argument("--context", required=True, type=context_path)
+    source = continuation.add_mutually_exclusive_group(required=True)
+    source.add_argument("--context", type=context_path)
+    source.add_argument("--input", help="Automatically create a reversible handoff from this explicit export before continuing")
+    continuation.add_argument("--keep-recent", type=int, default=8)
     continuation.add_argument("--prompt", required=True)
     continuation.add_argument("--lean", action="store_true", help="Ignore user config for this new thread; use only with an explicit model")
     continuation.add_argument("--model", help="Optional Codex model; required with --lean")
@@ -74,6 +77,10 @@ def main():
                 import shutil
                 import subprocess
                 from .local_files import digest, workspace_file
+                if args.input:
+                    handoff = compact_file(args.workspace, args.input, keep_recent=args.keep_recent)
+                    args.context = handoff["context"]
+                    print(json.dumps({"automatic_handoff": handoff}), file=sys.stderr)
                 root, path, raw = workspace_file(args.workspace, args.context, 32 * 1024 * 1024)
                 if path.stem != digest(raw) or json.loads(raw).get("format") != "laya-local-handoff-v1":
                     raise ValueError("Expected a hash-verified Laya context artifact")

@@ -1,5 +1,30 @@
 # Verification and release gates
 
+## September 22 native refresh
+
+- Local Windows companion suite: **101 passed**; upstream contracts: **106 routing
+  and 34 criteria checks passed**. Python compilation and whitespace checks passed.
+- Reinstalled the companion wheel into the managed runtime and tested a fresh
+  isolated worker: [cached-worker report](../evidence/native-worker-cached.json).
+- Actual native binary, real Laya CUDA inference and local provider fixture:
+  [wire test after caching](../evidence/native-wire-cached.json),
+  [missing-worker fallback](../evidence/native-fallback-refresh.json).
+- Installed MCP: [report](../evidence/native-companion-refresh.json), zero integration
+  failures, **17/24** correct decisions. Smoke exits 2 for these seven recorded
+  prediction disagreements; this is not a clean accuracy pass.
+- Installed automatic export handoff and real Astra generation:
+  [live acceptance](../evidence/native-auto-handoff.json). Constraints and unresolved
+  status retained; no real-test success fabricated by the answer.
+- [Six real cloud turns](../evidence/native-cost-refresh.json) compare fixed-low,
+  fixed-medium and adaptive. The alias has a smaller input prefix; do not attribute
+  the lower estimate to effort selection. See [cost analysis](COST_CONTROL.md).
+
+Known visibility mismatch: the live answer says "Laya was not used" while its
+native audit records an applied Laya decision. The model's tool-call view does not
+establish whether the internal controller ran. Use the native audit for that fact.
+No new model weights, cross-platform native verification or general cost-savings
+claim is included in this refresh.
+
 Version 0.2.0 adds an experimental, separately built native Astra + Laya client.
 The stock companion's real CPU inference was previously exercised on all three desktop platforms.
 Checked-in automated tests cover bridge behavior with a fake model backend; they are

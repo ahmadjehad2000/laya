@@ -1,0 +1,291 @@
+{
+  "timestamp": "2026-09-22T17:45:08.485568+00:00",
+  "binary_sha256": "3620bd930f676447cec30c9ad9199444093b3bc6006cfaf98d75009e74b8ccd9",
+  "scope": "Two synthetic single-turn tasks; one sample per arm. Not general coding quality or subscription savings.",
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+  "pricing_date": "2026-09-22",
+  "rates_per_million": {
+    "input": 10,
+    "cached": 1,
+    "write": 12.5,
+    "output": 50
+  },
+  "runs": [
+    {
+      "case": "arithmetic",
+      "arm": "low",
+      "expected": "391",
+      "prompt": "Compute 17 * 23. Return the decimal integer as result.",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 14011,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 15,
+        "reasoning_output_tokens": 0
+      },
+      "answer": {
+        "result": "391"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [],
+      "api_equivalent_usd": 0.14086,
+      "valid": true,
+      "elapsed_seconds": 6.242
+    },
+    {
+      "case": "arithmetic",
+      "arm": "medium",
+      "expected": "391",
+      "prompt": "Compute 17 * 23. Return the decimal integer as result.",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 14011,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 15,
+        "reasoning_output_tokens": 0
+      },
+      "answer": {
+        "result": "391"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [],
+      "api_equivalent_usd": 0.14086,
+      "valid": true,
+      "elapsed_seconds": 5.396
+    },
+    {
+      "case": "arithmetic",
+      "arm": "adaptive",
+      "expected": "391",
+      "prompt": "Compute 17 * 23. Return the decimal integer as result.",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 12409,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 15,
+        "reasoning_output_tokens": 0
+      },
+      "answer": {
+        "result": "391"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [
+        {
+          "decision": {
+            "protocol": 1,
+            "id": "01a0ca38-ea67-7221-bdf9-51a6ccff56da:1",
+            "generation": 1,
+            "status": "decided",
+            "effort": "medium",
+            "lease": 1,
+            "evidence_sha256": "79cc8e828758c6c323a2369c8cb506b7c36a8d51d1d17fabb97e384581257cc8",
+            "coverage": {
+              "requests": 1,
+              "recent_items": 0,
+              "omitted_items": 0
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "multilingual",
+                "cold": true,
+                "weight_file_gib": 0.59961854852736,
+                "fp32_parameters_gib": 1.1992044672369957,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 2.5488230157643557,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 14.108661651611328
+              },
+              "cache_hit": false,
+              "load_ms": 9078.45,
+              "inference_ms": 395.76,
+              "elapsed_ms": 11044.74
+            },
+            "context_tokens": {
+              "effort": 101,
+              "duration": 81
+            },
+            "probabilities": {
+              "low": 0.1067,
+              "medium": 0.4219,
+              "high": 0.0589,
+              "xhigh": 0.3666,
+              "max": 0.0459
+            },
+            "elapsed_ms": 11044.88
+          },
+          "expected_effort": "medium",
+          "applied": true,
+          "actual_effort": "medium",
+          "turn_id": "01a0ca38-ea67-7221-bdf9-51a6ccff56da"
+        }
+      ],
+      "api_equivalent_usd": 0.12484,
+      "valid": true,
+      "elapsed_seconds": 18.462
+    },
+    {
+      "case": "python-aliasing",
+      "arm": "medium",
+      "expected": "1,2|9|1,2",
+      "prompt": "Trace this Python without executing it: def f(x, acc=[]): acc.append(x); return acc. Then a=f(1); b=f(9, []); c=f(2). What are a,b,c now? Return result as three comma-separated digit strings joined by |, with no spaces (e.g. 3,4|5|6).",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 14071,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 21
+      },
+      "answer": {
+        "result": "1,2|9|1,2"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [],
+      "api_equivalent_usd": 0.14301,
+      "valid": true,
+      "elapsed_seconds": 5.938
+    },
+    {
+      "case": "python-aliasing",
+      "arm": "adaptive",
+      "expected": "1,2|9|1,2",
+      "prompt": "Trace this Python without executing it: def f(x, acc=[]): acc.append(x); return acc. Then a=f(1); b=f(9, []); c=f(2). What are a,b,c now? Return result as three comma-separated digit strings joined by |, with no spaces (e.g. 3,4|5|6).",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 12469,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 55,
+        "reasoning_output_tokens": 30
+      },
+      "answer": {
+        "result": "1,2|9|1,2"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [
+        {
+          "decision": {
+            "protocol": 1,
+            "id": "01a0ca39-4022-7fe2-9f32-e0c59b2edcc5:1",
+            "generation": 1,
+            "status": "decided",
+            "effort": "xhigh",
+            "lease": 1,
+            "evidence_sha256": "a0954a90f405799779e3b7224ba65ed770b55c496289c7e776d6a3c46fae683b",
+            "coverage": {
+              "requests": 1,
+              "recent_items": 0,
+              "omitted_items": 0
+            },
+            "checkpoint": {
+              "variant": "multilingual",
+              "repo": "convaiinnovations/laya-multilingual",
+              "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+              "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "multilingual",
+                "cold": true,
+                "weight_file_gib": 0.59961854852736,
+                "fp32_parameters_gib": 1.1992044672369957,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 2.5488230157643557,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 15.280345916748047
+              },
+              "cache_hit": false,
+              "load_ms": 9129.51,
+              "inference_ms": 387.92,
+              "elapsed_ms": 11001.35
+            },
+            "context_tokens": {
+              "effort": 169,
+              "duration": 149
+            },
+            "probabilities": {
+              "low": 0.0518,
+              "medium": 0.2339,
+              "high": 0.0697,
+              "xhigh": 0.6186,
+              "max": 0.026
+            },
+            "elapsed_ms": 11001.48
+          },
+          "expected_effort": "xhigh",
+          "applied": true,
+          "actual_effort": "xhigh",
+          "turn_id": "01a0ca39-4022-7fe2-9f32-e0c59b2edcc5"
+        }
+      ],
+      "api_equivalent_usd": 0.12744,
+      "valid": true,
+      "elapsed_seconds": 20.011
+    },
+    {
+      "case": "python-aliasing",
+      "arm": "low",
+      "expected": "1,2|9|1,2",
+      "prompt": "Trace this Python without executing it: def f(x, acc=[]): acc.append(x); return acc. Then a=f(1); b=f(9, []); c=f(2). What are a,b,c now? Return result as three comma-separated digit strings joined by |, with no spaces (e.g. 3,4|5|6).",
+      "returncode": 0,
+      "usage": {
+        "input_tokens": 14071,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 44,
+        "reasoning_output_tokens": 19
+      },
+      "answer": {
+        "result": "1,2|9|1,2"
+      },
+      "correct": true,
+      "tools_used": [],
+      "decisions": [],
+      "api_equivalent_usd": 0.14291,
+      "valid": true,
+      "elapsed_seconds": 6.497
+    }
+  ],
+  "summary": {
+    "low": {
+      "correct": 2,
+      "valid": true,
+      "api_equivalent_usd": 0.28377,
+      "elapsed_seconds": 12.739
+    },
+    "medium": {
+      "correct": 2,
+      "valid": true,
+      "api_equivalent_usd": 0.28387,
+      "elapsed_seconds": 11.334
+    },
+    "adaptive": {
+      "correct": 2,
+      "valid": true,
+      "api_equivalent_usd": 0.25228,
+      "elapsed_seconds": 38.473
+    }
+  }
+}

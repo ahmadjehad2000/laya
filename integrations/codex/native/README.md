@@ -123,6 +123,21 @@ or creation failed; `$handoff.context` itself is valid PowerShell syntax.
 
 ## Verification
 
+September 22 refresh: installed CUDA worker and three-generation wire checks pass,
+including missing-worker fallback. Companion tests now pass 101 cases locally.
+The installed MCP fixture still has zero integration failures and seven prediction
+disagreements (17/24 correct). These model limitations are not fixed by caching.
+
+Exact-evidence controller reuse is now enabled through the bounded runtime TTL
+cache. Request identities remain fresh and native lease checks remain authoritative.
+Cache hits retain original device provenance in `original_runtime`.
+Explicit attached model arguments such as `-mgpt-6-astra` are now respected by the
+launcher, and text after `--` is treated as positional input.
+
+See the [live cost audit](../docs/COST_CONTROL.md#native-cost-audit-and-automatic-handoffs-2026-09-22):
+the adaptive alias was slower on two small tasks; its lower input count confounds
+the apparent savings. The existing classifier benchmarks do not establish effort-policy quality.
+
 See [verification evidence](../docs/VERIFICATION.md) for what actually ran. Reproduce
 the no-cloud, three-generation native wire test with the installed package's `bin/codex.exe`:
 

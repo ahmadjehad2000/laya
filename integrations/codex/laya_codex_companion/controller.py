@@ -64,7 +64,7 @@ def decide(runtime, request):
         rubric = questions(efforts)
         while True:
             try:
-                result = runtime.predict(state, rubric, use_cache=False, model="multilingual")
+                result = runtime.predict(state, rubric, use_cache=True, model="multilingual")
                 break
             except ValueError as exc:
                 if "checkpoint limit" not in str(exc) or not state["recent"]:
@@ -80,6 +80,7 @@ def decide(runtime, request):
                 "coverage": {"requests": len(state["requests"]), "recent_items": len(state["recent"]),
                              "omitted_items": state["omitted_items"]},
                 "checkpoint": result["checkpoint"], "runtime": result["runtime"],
+                "original_runtime": result.get("original_runtime"),
                 "context_tokens": result["context_tokens"],
                 "probabilities": result["answers"]["effort"].get("probabilities"),
                 "elapsed_ms": round((time.perf_counter() - start) * 1000, 2)}

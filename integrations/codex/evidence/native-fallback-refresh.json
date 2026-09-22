@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-09-22T17:42:42.447512+00:00",
+  "fixture": "local-responses-three-generations",
+  "binary_sha256": "3620bd930f676447cec30c9ad9199444093b3bc6006cfaf98d75009e74b8ccd9",
+  "real_openai_generations": false,
+  "real_laya_inference": false,
+  "elapsed_seconds": 1.642,
+  "checks": {
+    "exit_success": true,
+    "three_generations": true,
+    "alias_not_sent_to_provider": true,
+    "audited_capture": true,
+    "explicit_fallback": true
+  },
+  "decisions": [
+    {
+      "decision": {
+        "id": "01a0ca36-730e-7b42-8b73-73ff9e5e1093:1",
+        "generation": 1,
+        "status": "fallback",
+        "reason": "The system cannot find the file specified. (os error 2)"
+      },
+      "expected_effort": "medium",
+      "applied": true,
+      "actual_effort": "medium",
+      "turn_id": "01a0ca36-730e-7b42-8b73-73ff9e5e1093"
+    }
+  ],
+  "request_count": 3,
+  "wire": [
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "medium",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "medium",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "medium",
+        "context": "all_turns"
+      },
+      "updates": [
+        {
+          "type": "configuration_update",
+          "reasoning": {
+            "effort": "medium"
+          }
+        }
+      ]
+    }
+  ]
+}

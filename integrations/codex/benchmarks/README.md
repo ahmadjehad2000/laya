@@ -7,6 +7,13 @@ Hardware paths are verified only where a report records real inference on that d
 
 ## Run it
 
+For the separately installed native Astra controller, `native_cost.py --output
+dist/native-cost.json` runs six real cloud turns (two small tasks, fixed-low,
+fixed-medium and adaptive). Use the installed Python interpreter. It records
+answers, correctness, usage, audit decisions and wall time. This is a small pilot;
+alias prompt differences prevent attributing savings to reasoning effort alone.
+See [the cost audit](../docs/COST_CONTROL.md#native-cost-audit-and-automatic-handoffs-2026-09-22).
+
 From the repository root, with the companion environment active:
 
 ```sh

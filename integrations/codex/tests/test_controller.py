@@ -15,11 +15,58 @@ def request(**changes):
             "evidence": {"requests": ["Fix the failing test. Do not deploy."], "recent": []}, **changes}
 
 
+@pytest.mark.parametrize("args, expected", [
+    (["exec", "-mgpt-5.6-sol", "hello"], True),
+    (["exec", "--model=gpt-6-astra", "hello"], True),
+    (["exec", "-m", "gpt-6-astra", "hello"], True),
+    (["exec", "--", "--model=quoted-prompt"], False),
+    (["exec", "hello"], False),
+])
+def test_native_model_option_forms(args, expected):
+    from laya_codex_companion.native import has_model_option
+    assert has_model_option(args) is expected
+
+
+def test_continue_automatically_archives_explicit_export(monkeypatch, tmp_path, capsys):
+    import subprocess
+    import shutil
+    from pathlib import Path
+    messages = [{"role": "user", "content": "Never deploy; budget 250 MiB"},
+                {"role": "tool", "content": "inventory " * 5000},
+                {"role": "user", "content": "Tests remain unresolved"}]
+    (tmp_path / "chat.json").write_text(json.dumps(messages), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["laya-for-codex", "continue", "--workspace", str(tmp_path),
+                                     "--input", "chat.json", "--keep-recent", "1", "--prompt", "Report status"])
+    monkeypatch.setattr(shutil, "which", lambda name: "codex")
+    calls = []
+    monkeypatch.setattr(subprocess, "run", lambda args, **kw: calls.append((args, kw)) or SimpleNamespace(returncode=0))
+    assert cli.main() == 0
+    prompt = calls[0][1]["input"]
+    assert "Never deploy; budget 250 MiB" in prompt and "Tests remain unresolved" in prompt
+    assert len(prompt) < 5000
+    report = json.loads(capsys.readouterr().err)["automatic_handoff"]
+    from laya_codex_companion.compaction import recall
+    assert recall(tmp_path, report["archive"], 1) == messages[1]
+    assert Path(report["context"]).is_file()
+
+
+def test_auto_handoff_invalid_export_never_launches_cloud(monkeypatch, tmp_path):
+    import subprocess
+    (tmp_path / "bad.json").write_text("not json", encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["laya-for-codex", "continue", "--workspace", str(tmp_path),
+                                     "--input", "bad.json", "--prompt", "Report status"])
+    def fail(*args, **kwargs):
+        pytest.fail("Invalid export must not launch Codex")
+    monkeypatch.setattr(subprocess, "run", fail)
+    assert cli.main() == 1
+
+
 class Runtime:
     def __init__(self):
         self.states = []
 
     def predict(self, state, questions, **options):
+        assert options["use_cache"] is True
         self.states.append(json.loads(json.dumps(state)))
         if state["recent"]:
             raise ValueError("needs 1200 tokens, checkpoint limit 1024")
