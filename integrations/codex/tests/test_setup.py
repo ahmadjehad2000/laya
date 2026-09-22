@@ -40,6 +40,32 @@ def test_uninstall_preserves_unrelated_text(tmp_path):
     assert "mcp_servers" not in result
 
 
+def test_managed_windows_commands_are_direct_and_collision_safe(tmp_path):
+    root = tmp_path / "runtime"
+    scripts = root / "venv" / "Scripts"
+    scripts.mkdir(parents=True)
+    for name in ("laya-codex", "laya-for-codex"):
+        (scripts / f"{name}.exe").write_bytes(b"stub")
+    destination = tmp_path / "commands"
+    launchers = bootstrap.install_commands(root, destination, windows=True)
+    assert [path.name for path in launchers] == ["laya-codex.cmd", "laya-for-codex.cmd"]
+    assert str(scripts / "laya-codex.exe") in launchers[0].read_text()
+    assert bootstrap.COMMAND_MARKER in launchers[0].read_text()
+    launchers[0].write_text("unmanaged", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="unmanaged command"):
+        bootstrap.install_commands(root, destination, windows=True)
+
+
+def test_remove_commands_preserves_unmanaged_files(tmp_path):
+    managed = tmp_path / "laya-codex.cmd"
+    unmanaged = tmp_path / "laya-for-codex.cmd"
+    managed.write_text(bootstrap.COMMAND_MARKER, encoding="utf-8")
+    unmanaged.write_text("user command", encoding="utf-8")
+    bootstrap.remove_commands(tmp_path, windows=True)
+    assert not managed.exists()
+    assert unmanaged.read_text() == "user command"
+
+
 def test_unmanaged_registration_not_overwritten(tmp_path):
     (tmp_path / "config.toml").write_text('[mcp_servers.laya-for-codex]\ncommand = "custom"\n')
     with pytest.raises(RuntimeError, match="unmanaged"):
@@ -76,6 +102,10 @@ def test_cuda_setup_uses_disk_temp_and_requires_actual_gpu(tmp_path, monkeypatch
     monkeypatch.setenv("TMPDIR", "/tmp")
     monkeypatch.delenv("LAYA_COMPANION_DEVICE", raising=False)
     monkeypatch.setattr(bootstrap, "run", lambda args, **kwargs: calls.append((args, kwargs)))
+    command_installs = []
+    fake_launcher = tmp_path / "commands" / "laya-codex.cmd"
+    monkeypatch.setattr(bootstrap, "install_commands",
+                        lambda path: command_installs.append(path) or [fake_launcher])
     monkeypatch.setattr(sys, "argv", ["bootstrap", "install", "--home", str(root), "--mode", "none",
                                       "--torch-index", "cu128", "--device", "cuda"])
     bootstrap.main()
@@ -85,4 +115,5 @@ def test_cuda_setup_uses_disk_temp_and_requires_actual_gpu(tmp_path, monkeypatch
         assert kwargs["env"]["TMPDIR"] == str(root / "tmp")
         assert kwargs["env"]["TEMP"] == str(root / "tmp")
     assert calls[-1][0][-2:] == ["--require-device", "cuda"]
+    assert command_installs == [root]
     assert bootstrap.os.environ["TMPDIR"] == "/tmp"

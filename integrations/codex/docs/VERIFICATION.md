@@ -14,9 +14,10 @@ including code-mode host, ripgrep and Windows sandbox helpers, not just a copied
 CLI executable. The separate launcher leaves the stock Codex binary intact.
 The final exported patch also applied cleanly to a fresh checkout of the pinned commit.
 
-- **Companion:** 87 Python tests passed, including quiet interrupt handling,
+- **Companion:** 89 Python tests passed, including quiet interrupt handling,
   actionable missing-context errors, typed controller abstention, essential-evidence
-  preservation, handoff decision provenance and lease reset.
+  preservation, handoff decision provenance, lease reset, and collision-safe managed
+  direct commands.
 - **Installed runtime:** the non-editable 0.2.0 companion passed seven-tool MCP
   discovery and runtime checks with real Windows CUDA inference. The synthetic model
   labels remain **17/24**, not 24/24. See [installed evidence](../evidence/windows-020-installed-mcp.json).

@@ -58,7 +58,17 @@ Apple MPS is selectable but remains experimental and unverified.
 The installer creates `~/.laya-for-codex/venv`, prepares pinned multilingual weights,
 tests a real prediction, then installs the plugin through a generated local marketplace.
 It materializes absolute executable paths so Codex does not depend on an activated shell.
+It also installs managed `laya-for-codex` and `laya-codex` user commands in
+`~/.local/bin`. No per-shell launcher variable or virtual-environment activation is needed.
 `Install.ps1` and `install.sh` are convenience wrappers.
+
+For an existing installation, add or repair only the direct commands:
+
+```powershell
+py -3.12 bootstrap.py command
+laya-for-codex doctor
+laya-codex -C "$PWD"
+```
 
 If an older managed Laya server is installed, first use `--mode none` to test separately.
 Then migrate deliberately:

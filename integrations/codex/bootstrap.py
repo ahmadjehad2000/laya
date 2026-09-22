@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,7 @@ REPO = HERE.parents[1]
 NAME = "laya-for-codex"
 BEGIN, END = "# BEGIN LAYA-FOR-CODEX", "# END LAYA-FOR-CODEX"
 OLD_BEGIN, OLD_END = "# BEGIN LAYA-CODEX MANAGED MCP", "# END LAYA-CODEX MANAGED MCP"
+COMMAND_MARKER = "LAYA-FOR-CODEX MANAGED COMMAND"
 
 
 def run(args, **kwargs):
@@ -25,6 +27,56 @@ def run(args, **kwargs):
 
 def python_at(root):
     return root / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+
+
+def command_directory():
+    """Use the conventional per-user command directory without touching system files."""
+    return Path.home() / ".local" / "bin"
+
+
+def install_commands(root, destination=None, *, windows=None):
+    """Install managed direct commands that delegate to the isolated runtime."""
+    windows = os.name == "nt" if windows is None else windows
+    destination = (destination or command_directory()).expanduser().resolve()
+    scripts = root / "venv" / ("Scripts" if windows else "bin")
+    targets = {name: scripts / (name + ".exe" if windows else name)
+               for name in ("laya-codex", "laya-for-codex")}
+    missing = [str(path) for path in targets.values() if not path.is_file()]
+    if missing:
+        raise RuntimeError("Install the companion before its commands: " + ", ".join(missing))
+    destination.mkdir(parents=True, exist_ok=True)
+    installed = []
+    for name, target in targets.items():
+        launcher = destination / (name + ".cmd" if windows else name)
+        if windows:
+            escaped_target = str(target).replace("%", "%%")
+            content = f"@echo off\r\nrem {COMMAND_MARKER}\r\n\"{escaped_target}\" %*\r\n"
+        else:
+            content = f"#!/bin/sh\n# {COMMAND_MARKER}\nexec {shlex.quote(str(target))} \"$@\"\n"
+        if launcher.exists() and COMMAND_MARKER not in launcher.read_text(encoding="utf-8"):
+            raise RuntimeError(f"Refusing to replace unmanaged command: {launcher}")
+        launcher.write_text(content, encoding="utf-8", newline="")
+        if not windows:
+            launcher.chmod(0o755)
+        installed.append(launcher)
+    return installed
+
+
+def remove_commands(destination=None, *, windows=None):
+    windows = os.name == "nt" if windows is None else windows
+    destination = (destination or command_directory()).expanduser().resolve()
+    for name in ("laya-codex", "laya-for-codex"):
+        launcher = destination / (name + ".cmd" if windows else name)
+        if launcher.is_file() and COMMAND_MARKER in launcher.read_text(encoding="utf-8"):
+            launcher.unlink()
+
+
+def report_commands(launchers):
+    print("Commands installed: " + ", ".join(str(path) for path in launchers))
+    command_root = launchers[0].parent.resolve()
+    path_entries = [Path(entry).expanduser().resolve() for entry in os.environ.get("PATH", "").split(os.pathsep) if entry]
+    if os.path.normcase(command_root) not in [os.path.normcase(entry) for entry in path_entries]:
+        print(f"Add {command_root} to PATH, then open a new terminal.")
 
 
 def digest(data):
@@ -154,7 +206,7 @@ def register(root, codex_home, mode, migrate):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["install", "prepare", "doctor", "register", "uninstall", "rollback"], nargs="?", default="install")
+    parser.add_argument("command", choices=["install", "prepare", "doctor", "register", "command", "uninstall", "rollback"], nargs="?", default="install")
     parser.add_argument("--home", type=Path, default=Path.home() / ".laya-for-codex")
     parser.add_argument("--codex-home", type=Path, default=Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")))
     parser.add_argument("--device", choices=["auto", "cpu", "cuda", "mps"], default="auto")
@@ -202,7 +254,12 @@ def main():
         run([python, "-m", "laya_codex_companion", "predict", HERE / "examples" / "quickstart.json", *verify_args], env=environment)
         if args.mode != "none":
             register(root, codex_home, args.mode, args.migrate_existing)
+        launchers = install_commands(root)
+        report_commands(launchers)
         print("Setup verified. Open a new local Codex session after registration.")
+    elif args.command == "command":
+        launchers = install_commands(root)
+        report_commands(launchers)
     elif args.command == "doctor":
         run([python, "-m", "laya_codex_companion", "doctor"], env=environment)
     elif args.command == "rollback":
@@ -217,6 +274,7 @@ def main():
         if codex and (root / "marketplace").exists():
             run([codex, "plugin", "remove", f"{NAME}@laya-companion"], env={**os.environ, "CODEX_HOME": str(codex_home)})
         config_change(codex_home / "config.toml", root, lambda s: replace_block(s, BEGIN, END))
+        remove_commands()
         print("Integration disconnected. Models, environment and backups retained.")
 
 

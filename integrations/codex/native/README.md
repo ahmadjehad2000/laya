@@ -17,8 +17,8 @@ From the repository root, Windows PowerShell:
 # Prerequisites: Git, Rust/rustup, Python 3.12+, PowerShell 7,
 # Visual Studio 2022 C++ Build Tools including a Windows SDK.
 py -3.12 integrations/codex/native/build.py --toolchain 1.95.0-x86_64-pc-windows-msvc
-$LayaCodex = "$env:USERPROFILE\.laya-for-codex\venv\Scripts\laya-codex.exe"
-& $LayaCodex -C "$PWD"
+py -3.12 integrations/codex/bootstrap.py command
+laya-codex -C "$PWD"
 ```
 
 The upstream toolchain pin is Rust 1.95.0. Windows requires MSVC; GNU Rust can check
@@ -45,9 +45,9 @@ shared default so stock Codex never receives an unknown `laya-astra` model name.
 
 ```powershell
 # Automatic mode is the default in this separate launcher.
-& $LayaCodex exec -C "$PWD" "Inspect the failing tests. Do not deploy."
+laya-codex exec -C "$PWD" "Inspect the failing tests. Do not deploy."
 # Explicitly selecting another model leaves the controller inactive.
-& $LayaCodex -m gpt-5.6-sol
+laya-codex -m gpt-5.6-sol
 ```
 
 ## What happens before each generation
@@ -104,13 +104,12 @@ branch constraints, memory budgets, deployment restrictions and unresolved statu
 they are present in the exported messages; they do not invent missing facts.
 
 ```powershell
-$Laya = "$env:USERPROFILE\.laya-for-codex\venv\Scripts\laya-for-codex.exe"
 $Workspace = "$PWD"
-$json = & $Laya compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2
+$json = laya-for-codex compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2
 if ($LASTEXITCODE -ne 0) { throw "Handoff creation failed" }
 $handoff = $json | ConvertFrom-Json
 if (-not $handoff.context -or -not (Test-Path -LiteralPath $handoff.context)) { throw "Missing context artifact" }
-& $Laya continue --workspace "$Workspace" --context ($handoff.context) --target laya-codex --lean --model laya-astra --prompt "Without tools, list the retained restrictions and unresolved status."
+laya-for-codex continue --workspace "$Workspace" --context ($handoff.context) --target laya-codex --lean --model laya-astra --prompt "Without tools, list the retained restrictions and unresolved status."
 ```
 
 Optional `--controller-log decisions.jsonl` on `compact-file` accepts only a log you

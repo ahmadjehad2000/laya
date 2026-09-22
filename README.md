@@ -57,18 +57,33 @@ The native integration is part of this repository; it is not maintained in the
 | Codex integration source | `integrations/codex` |
 | Native Astra + Laya source and guide | [`integrations/codex/native`](integrations/codex/native/README.md) |
 | Installed Windows launcher | `%USERPROFILE%\.laya-for-codex\venv\Scripts\laya-codex.exe` |
+| Direct user commands | `%USERPROFILE%\.local\bin\laya-codex.cmd` and `laya-for-codex.cmd` |
 | Installed native packages and build receipt | `%USERPROFILE%\.laya-for-codex\native` |
 
-Launch the installed native client from PowerShell:
+Launch the installed native client directly from PowerShell—no per-shell launcher variable and
+no virtual-environment activation:
 
 ```powershell
-$LayaCodex = "$env:USERPROFILE\.laya-for-codex\venv\Scripts\laya-codex.exe"
-& $LayaCodex -C "C:\Users\Mr.Device\Documents\laya2codex"
+laya-codex -C "C:\Users\Mr.Device\Documents\laya2codex"
 ```
 
 Use `laya-codex` for the opt-in native generation-loop controller. Use ordinary
 `codex` for the stock client with the Laya plugin/MCP tools. The native launcher
 does not replace the stock Codex executable.
+
+Common commands:
+
+```powershell
+# Open the interactive native client in the current project.
+laya-codex -C "$PWD"
+
+# Run one non-interactive native task.
+laya-codex exec -C "$PWD" "Inspect the failing tests. Do not deploy."
+
+# Check the local Laya runtime or make an explicit offline prediction.
+laya-for-codex doctor
+laya-for-codex predict integrations/codex/examples/quickstart.json --require-device cuda
+```
 
 ## Cost control
 
@@ -186,7 +201,7 @@ repository root**, the folder containing this README. The quickstart above inste
 enters `integrations/codex`; return with `cd ../..` before following this section.
 The main examples use Windows PowerShell. Linux equivalents appear in step H.
 
-### A. Install once and locate the commands
+### A. Install once and use the direct commands
 
 For a new checkout:
 
@@ -202,15 +217,18 @@ Use `--torch-index cpu --device cpu` for a CPU-only installation. Use 64-bit Pyt
 CLI for plugin registration; `--mode none` installs just the local runtime.
 Installing Laya does not install Codex or replace its cloud model.
 
-Define these variables in each new PowerShell window; no environment activation or
-permanent PATH edit is necessary:
+The installer creates managed user commands in `~/.local/bin`. On an existing 0.2.0
+installation, install only the commands without redownloading models:
 
 ```powershell
-$Laya = "$HOME/.laya-for-codex/venv/Scripts/laya-for-codex.exe"
-$LayaPython = "$HOME/.laya-for-codex/venv/Scripts/python.exe"
-$Workspace = (Get-Location).Path
-& $Laya --help
+py -3.12 integrations/codex/bootstrap.py command
+laya-for-codex --help
+laya-codex --version
 ```
+
+Open a new terminal if the commands were just installed. No PowerShell alias,
+launcher variable, or environment activation is required. `laya-for-codex` is the
+local utility/MCP CLI; `laya-codex` opens the separately built native Codex client.
 
 | Location | What it contains |
 | :--- | :--- |
@@ -224,8 +242,8 @@ $Workspace = (Get-Location).Path
 ### B. Verify readiness and actual GPU execution
 
 ```powershell
-& $Laya doctor
-& $Laya predict integrations/codex/examples/quickstart.json --require-device cuda
+laya-for-codex doctor
+laya-for-codex predict integrations/codex/examples/quickstart.json --require-device cuda
 ```
 
 `doctor` reports configuration and checkpoint readiness without loading a model.
@@ -263,7 +281,8 @@ Their intended labels are sports, science_technology, business and world, in inp
 order. These are tutorial cases, not an accuracy benchmark.
 
 ```powershell
-$run = & $Laya classify-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json | ConvertFrom-Json
+$Workspace = (Get-Location).Path
+$run = laya-for-codex classify-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json | ConvertFrom-Json
 if ($LASTEXITCODE -ne 0) { throw 'Laya classification failed' }
 $run | Format-List
 
@@ -300,7 +319,7 @@ Convert those formats into evidence-preserving `{id,state}` records first.
 For the ordinary batch API, a matching complete request is also included:
 
 ```powershell
-& $Laya predict integrations/codex/examples/tutorial/batch.json --require-device cuda
+laya-for-codex predict integrations/codex/examples/tutorial/batch.json --require-device cuda
 ```
 
 Each CLI invocation loads and then releases its model. The persistent MCP server
@@ -310,8 +329,8 @@ cannot. Batch related work instead of launching one CLI process per record.
 ### E. Choose checkpoints and try a temporary device override
 
 ```powershell
-& $Laya prepare --model all
-& $Laya doctor
+laya-for-codex prepare --model all
+laya-for-codex doctor
 ```
 
 Preparation downloads missing pinned files; it does not change the selected model.
@@ -325,7 +344,7 @@ To test CPU for one command without changing the saved CUDA default:
 $PreviousDevice = $env:LAYA_COMPANION_DEVICE
 try {
     $env:LAYA_COMPANION_DEVICE = 'cpu'
-    & $Laya predict integrations/codex/examples/quickstart.json --require-device cpu
+    laya-for-codex predict integrations/codex/examples/quickstart.json --require-device cpu
 } finally {
     $env:LAYA_COMPANION_DEVICE = $PreviousDevice
 }
@@ -361,14 +380,14 @@ Copy-Item -LiteralPath $ConfigPath -Destination $ConfigBackup
 $Settings = Get-Content -Raw -LiteralPath $ConfigPath | ConvertFrom-Json
 $Settings | Add-Member -NotePropertyName idle_unload_sec -NotePropertyValue 120 -Force
 [System.IO.File]::WriteAllText($ConfigPath, ($Settings | ConvertTo-Json -Depth 10))
-& $Laya doctor
+laya-for-codex doctor
 ```
 
 Open a new Codex session after editing. To undo that example in the same terminal:
 
 ```powershell
 Copy-Item -LiteralPath $ConfigBackup -Destination $ConfigPath -Force
-& $Laya doctor
+laya-for-codex doctor
 ```
 
 Do not lower RAM reserves to force a load. The adaptive cold estimate is about
@@ -385,14 +404,14 @@ explicitly fictional export: a branch, memory budget, deployment restriction,
 large inventory listing, and unresolved test failure. It is not your current chat.
 
 ```powershell
-$handoffJson = & $Laya compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2
+$handoffJson = laya-for-codex compact-file --workspace "$Workspace" --input integrations/codex/examples/tutorial/conversation.json --keep-recent 2
 if ($LASTEXITCODE -ne 0) { throw "compact-file failed; do not continue with an old or empty handoff." }
 $handoff = $handoffJson | ConvertFrom-Json
 if (-not $handoff.context -or -not (Test-Path -LiteralPath $handoff.context)) { throw "No valid handoff context file was created." }
 $handoff | Format-List
 
 # Message index 2 is the old inventory output in this particular fixture.
-& $Laya recall --workspace "$Workspace" --archive $handoff.archive --index 2
+laya-for-codex recall --workspace "$Workspace" --archive $handoff.archive --index 2
 ```
 
 Inspect `original_context_bytes`, `handoff_bytes`, and `archived_indices`. This
@@ -403,7 +422,7 @@ short conversations can grow due to reference overhead. Default `--keep-recent` 
 The following command **starts a new Codex CLI thread and consumes Codex usage**:
 
 ```powershell
-& $Laya continue --workspace "$Workspace" --context ($handoff.context) --prompt "Without tools, list the retained branch, memory budget, deployment restriction, and unresolved status."
+laya-for-codex continue --workspace "$Workspace" --context ($handoff.context) --target laya-codex --prompt "Without tools, list the retained branch, memory budget, deployment restriction, and unresolved status."
 ```
 
 An optional lean run skips user config for that invocation and uses a read-only
@@ -411,7 +430,7 @@ sandbox. It requires an explicit model available to your account; this example
 uses the model from the recorded pilot:
 
 ```powershell
-& $Laya continue --workspace "$Workspace" --context ($handoff.context) --prompt "Without tools, list the retained restrictions." --lean --model gpt-5.6-sol
+laya-for-codex continue --workspace "$Workspace" --context ($handoff.context) --target laya-codex --prompt "Without tools, list the retained restrictions." --lean --model laya-astra
 ```
 
 Lean mode omits user-configured preferences/integrations and is not a universal
@@ -429,10 +448,9 @@ root and use Linux paths. Your Windows checkout is available under `/mnt/c/...`.
 
 ```bash
 python3 integrations/codex/bootstrap.py install --torch-index cu128 --device cuda --mode none
-LAYA="$HOME/.laya-for-codex/venv/bin/laya-for-codex"
-"$LAYA" doctor
-"$LAYA" predict integrations/codex/examples/quickstart.json --require-device cuda
-"$LAYA" classify-file --workspace "$PWD" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json
+laya-for-codex doctor
+laya-for-codex predict integrations/codex/examples/quickstart.json --require-device cuda
+laya-for-codex classify-file --workspace "$PWD" --input integrations/codex/examples/tutorial/records.json --questions integrations/codex/examples/tutorial/questions.json
 ```
 
 Use Python 3.12–3.13. Omit `--mode none` only when registering with a Codex CLI installed
@@ -447,7 +465,7 @@ CPU and macOS setup commands remain in the [quickstart](#quickstart).
 
 | Symptom | Next step |
 | :--- | :--- |
-| `laya-for-codex` is not recognized | Use the absolute `$Laya` path from step A |
+| `laya-for-codex` is not recognized | Run `py -3.12 integrations/codex/bootstrap.py command`, ensure `~/.local/bin` is on PATH, then open a new terminal |
 | Plugin visible, tools missing | Re-register as below; start a new conversation; inspect `codex plugin list` |
 | `device` is null in status | Run a prediction and check its actual device |
 | CUDA requested, CPU returned | Inspect `fallback_reason`, free VRAM and the installed PyTorch build; use `--require-device cuda` when validating |
@@ -461,7 +479,7 @@ CPU and macOS setup commands remain in the [quickstart](#quickstart).
 For a real installed MCP/device check (not a benchmark):
 
 ```powershell
-& $LayaPython integrations/codex/scripts/smoke_mcp.py --installed --device cuda --require-device cuda --output dist/my-smoke.json
+& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" integrations/codex/scripts/smoke_mcp.py --installed --device cuda --require-device cuda --output dist/my-smoke.json
 ```
 
 Exit 0 means all fixture labels matched; exit 2 means model disagreements with the
@@ -559,7 +577,7 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, memory policy, file offload, local handoffs, controller, setup, and rollback | 87 automated tests passed |
+| Companion validation, memory policy, file offload, local handoffs, controller, setup, and rollback | 89 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA and Debian 13.6 WSL2 CUDA passed |
