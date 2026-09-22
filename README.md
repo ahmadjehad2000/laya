@@ -30,7 +30,7 @@
 
 Laya for Codex brings small, typed decisions into your existing Codex session. Send a workspace file path to the local model and get counts, review exceptions and a result artifact. For exported conversations, create a reversible local handoff before continuing in a new Codex thread. The original PyTorch model supplies classification; deterministic code handles conversation extraction.
 
-**Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
+**Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA and Debian WSL2 CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
 
 ## Cost control
 
@@ -62,7 +62,7 @@ The zero-cloud classification measurement excludes Codex orchestration and revie
 | Document excerpts and research records | Consistent tagging across a collection | Preserving evidence and reviewing outliers |
 | Comparable records and an explicit rubric | Ordered rubric scoring | Explaining scores and validating consequential decisions |
 
-Four included skills cover **developer triage**, **record triage**, **rubric scoring**, and **diagnostics**. Laya is optional; ordinary coding and reasoning continue normally. Raw-code role classification performed poorly in testing and is excluded from recommended workflows.
+Five included skills cover **developer triage**, **record triage**, **rubric scoring**, **diagnostics**, and **cost control**. Laya is optional; ordinary coding and reasoning continue normally. Raw-code role classification performed poorly in testing and is excluded from recommended workflows.
 
 ## Quickstart
 
@@ -192,10 +192,11 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 | Companion validation, memory policy, file offload, local handoffs, setup, and rollback | 71 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
-| Local GPU inference | Windows CUDA passed |
+| Local GPU inference | Windows CUDA and Debian 13.6 WSL2 CUDA passed |
+| Windows client → Linux GPU MCP transport | Seven-tool discovery, real CUDA prediction, and release passed |
 | Actual plugin use in a fresh Codex session | Status → English/Arabic batch → release passed |
 | Checkpoint loading and routing | All three checkpoints + automatic English/Arabic selection passed |
-| Apple MPS / Linux CUDA / Intel macOS | Not verified |
+| Apple MPS / bare-metal Linux CUDA / Intel macOS | Not verified |
 
 [Cross-platform real-inference run](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148) · [Detailed reports and methodology](integrations/codex/docs/VERIFICATION.md)
 
@@ -213,25 +214,27 @@ They are not universal speed or accuracy guarantees.
 Measured on an **Intel Core i7-13620H / RTX 4060 Laptop GPU (8 GB VRAM)**, using the pinned
 multilingual checkpoint, four CPU threads, and PyTorch `2.11.0+cu128`. These were sequential
 profiles on an interactive workstation, with background activity rather than laboratory
-isolation. The fixed short/medium/long inputs used **49 / 147 / 371 context tokens**.
+isolation. Debian WSL2 used Python 3.13.5, four virtual CPUs and 7.69 GiB VM RAM;
+Windows used Python 3.12.10 and 31.71 GiB host RAM. WSL2 shares the same physical GPU
+and is not a bare-metal Linux measurement. The fixed short/medium/long inputs used **49 / 147 / 371 context tokens**.
 
 <!-- BENCHMARK_TABLE_START -->
 
-| Measurement | Windows CPU | Windows CUDA |
-| :--- | ---: | ---: |
-| AG News subset accuracy | 191/200 (95.5%) | 191/200 (95.5%) |
-| AG News macro-F1 | 0.9547 | 0.9547 |
-| Synthetic workflow decisions | 17/24 | 17/24 |
-| Synthetic rubric rounded accuracy | 4/12 | 4/12 |
-| Rubric MAE (0–3 index; lower is better) | 0.821 | 0.820 |
-| Fresh server init + first request, median (3 runs) | 11.97 s | 13.30 s |
-| Warm short MCP request, p50 / p95 | 114.4 / 156.3 ms | 27.3 / 39.3 ms |
-| Warm medium MCP request, p50 / p95 | 230.4 / 267.5 ms | 28.1 / 37.5 ms |
-| Warm long MCP request, p50 / p95 | 568.7 / 657.6 ms | 28.3 / 38.7 ms |
-| Exact cache hit, p50 | 2.20 ms | 1.70 ms |
-| 8-record batch throughput | 8.6 records/s | 39.0 records/s |
-| Three related questions, p50 | 208.1 ms | 27.4 ms |
-| Resident server RSS snapshot (not peak) | 1.92 GiB | 1.91 GiB |
+| Measurement | Windows CPU | Windows CUDA | Debian WSL2 CUDA |
+| :--- | ---: | ---: | ---: |
+| AG News subset accuracy | 191/200 (95.5%) | 191/200 (95.5%) | 191/200 (95.5%) |
+| AG News macro-F1 | 0.9547 | 0.9547 | 0.9547 |
+| Synthetic workflow decisions | 17/24 | 17/24 | 17/24 |
+| Synthetic rubric rounded accuracy | 4/12 | 4/12 | 4/12 |
+| Rubric MAE (0–3 index; lower is better) | 0.821 | 0.820 | 0.821 |
+| Fresh server init + first request, median (3 runs) | 11.97 s | 13.30 s | 12.20 s |
+| Warm short MCP request, p50 / p95 | 114.4 / 156.3 ms | 27.3 / 39.3 ms | 21.9 / 37.1 ms |
+| Warm medium MCP request, p50 / p95 | 230.4 / 267.5 ms | 28.1 / 37.5 ms | 25.1 / 46.8 ms |
+| Warm long MCP request, p50 / p95 | 568.7 / 657.6 ms | 28.3 / 38.7 ms | 25.2 / 42.5 ms |
+| Exact cache hit, p50 | 2.20 ms | 1.70 ms | 1.58 ms |
+| 8-record batch throughput | 8.6 records/s | 39.0 records/s | 46.8 records/s |
+| Three related questions, p50 | 208.1 ms | 27.4 ms | 25.3 ms |
+| Resident server RSS snapshot (not peak) | 1.92 GiB | 1.91 GiB | 1.73 GiB |
 
 <!-- BENCHMARK_TABLE_END -->
 
@@ -249,7 +252,8 @@ follows from these results.
 
 [Protocol, dataset provenance, and metric definitions](integrations/codex/benchmarks/README.md) ·
 [Windows CPU report](integrations/codex/evidence/benchmark-windows-cpu.json) ·
-[Windows CUDA report](integrations/codex/evidence/benchmark-windows-cuda.json)
+[Windows CUDA report](integrations/codex/evidence/benchmark-windows-cuda.json) ·
+[Debian WSL2 CUDA report](integrations/codex/evidence/benchmark-linux-wsl-cuda.json)
 
 To reproduce from the repository root with the prepared companion environment activated:
 

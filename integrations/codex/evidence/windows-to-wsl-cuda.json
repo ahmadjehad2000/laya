@@ -1,0 +1,154 @@
+{
+  "client_platform": "Windows-11-10.0.26100-SP0",
+  "distro": "Debian",
+  "errors": [],
+  "tools": [
+    "laya_classify_file",
+    "laya_compact_file",
+    "laya_status",
+    "laya_predict",
+    "laya_predict_batch",
+    "laya_release",
+    "laya_benchmark"
+  ],
+  "status": {
+    "version": "0.1.1",
+    "runtime": "upstream-laya-pytorch",
+    "busy": false,
+    "configuration": {
+      "model": "multilingual",
+      "device": "cuda",
+      "max_items": 32,
+      "max_questions": 16,
+      "question_batch_size": 4,
+      "max_request_bytes": 131072,
+      "cache_entries": 128,
+      "cache_ttl_sec": 120,
+      "idle_unload_sec": 600,
+      "min_free_ram_gib": 1.0,
+      "min_free_vram_gib": 2.5,
+      "memory_reserve_gib": 0.75,
+      "threads": 4
+    },
+    "device": null,
+    "loaded": [],
+    "checkpoints": {
+      "english": {
+        "repo": "convaiinnovations/laya",
+        "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+        "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "english",
+          "cold": true,
+          "weight_file_gib": 0.7847409788519144,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.1041827965527773,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "multilingual": {
+        "repo": "convaiinnovations/laya-multilingual",
+        "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+        "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "multilingual",
+          "cold": true,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 2.5488230157643557,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "typed-decisions": {
+        "repo": "convaiinnovations/laya-typed-decisions",
+        "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+        "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "typed-decisions",
+          "cold": true,
+          "weight_file_gib": 0.7847409881651402,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.104182805866003,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      }
+    },
+    "ram_available_gib": 7.12,
+    "process_rss_mib": 70.8,
+    "calls": 0,
+    "cache_hits": 0,
+    "errors": 0,
+    "cache_entries": 0,
+    "scope": "Advisory decisions; Codex retains reasoning and execution permissions"
+  },
+  "prediction": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "topic": {
+        "type": "choice",
+        "choice": "sports",
+        "probabilities": {
+          "sports": 0.9999,
+          "science": 0.0001
+        },
+        "confidence": 0.9986,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 23,
+      "output_tokens": 0
+    },
+    "routing": {
+      "model": "multilingual",
+      "repo": "convaiinnovations/laya-multilingual",
+      "reason": "explicit model='multilingual'",
+      "detection": null,
+      "workflow": null
+    },
+    "checkpoint": {
+      "variant": "multilingual",
+      "repo": "convaiinnovations/laya-multilingual",
+      "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+      "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+    },
+    "context_tokens": {
+      "topic": 23
+    },
+    "runtime": {
+      "backend": "pytorch",
+      "device": "cuda",
+      "fallback_reason": null,
+      "memory_preflight": {
+        "checkpoint": "multilingual",
+        "cold": true,
+        "weight_file_gib": 0.59961854852736,
+        "fp32_parameters_gib": 1.1992044672369957,
+        "reserve_gib": 0.75,
+        "required_ram_gib": 2.5488230157643557,
+        "required_cuda_vram_gib": 2.5,
+        "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+        "available_ram_gib": 6.887969970703125
+      },
+      "cache_hit": false,
+      "load_ms": 8135.81,
+      "inference_ms": 327.68,
+      "elapsed_ms": 9459.59
+    }
+  },
+  "release": {
+    "released": true,
+    "cache_cleared": true
+  }
+}

@@ -41,8 +41,8 @@ Reports: [Windows CUDA](../evidence/windows-cuda.json),
 [Linux CPU CI](../evidence/linux-ci/ubuntu-latest.json),
 [macOS ARM64 CPU CI](../evidence/macos-cpu-ci.json),
 [version 2 fixture](../evidence/windows-cuda-v2.json). These are synthetic cases, not
-universal accuracy or latency claims. Apple MPS, Linux CUDA, and Intel macOS remain
-unverified. Python 3.12 is covered on all three desktop platforms; the companion bridge
+universal accuracy or latency claims. Apple MPS, bare-metal Linux CUDA, and Intel macOS remain
+unverified. Debian WSL2 CUDA is now separately verified below. Python 3.12 is covered on all three desktop platforms; the companion bridge
 also passed Ubuntu Python 3.13 in [run 35721329713](https://github.com/ahmadjehad2000/laya/actions/runs/35721329713).
 
 ## Benchmark and resource-policy evidence
@@ -92,3 +92,30 @@ A fresh Codex CLI session discovered and called both new tools successfully.
 All three checkpoints and both automatic-language routes also passed actual Windows
 CUDA inference under the adaptive memory policy: [report](../evidence/windows-checkpoints-adaptive-cuda.json).
 The prior fixed 4.5 GiB admission floor is no longer used by default.
+
+## Debian WSL2 CUDA (2026-09-22)
+
+Debian 13.6, WSL2 kernel 6.6.114.1, Python 3.13.5, PyTorch 2.11.0+cu128,
+RTX 4060 Laptop GPU 8 GiB, Windows driver 616.92. The VM exposed four virtual CPUs
+and 7.69 GiB RAM. No Linux NVIDIA display driver was installed.
+
+- Isolated Linux installation and installed seven-tool MCP smoke: zero integration
+  errors; synthetic decisions 17/24. [Report](../evidence/linux-wsl-cuda.json).
+- All three checkpoints and automatic English/Arabic routing ran on actual CUDA,
+  without a CPU fallback or lowered memory guards. [Report](../evidence/linux-wsl-checkpoints.json).
+- The Windows MCP client also launched the Linux server through wsl.exe, discovered
+  seven tools, obtained a correct CUDA prediction, and released the model.
+  [Transport evidence](../evidence/windows-to-wsl-cuda.json).
+- The same pinned 200-record benchmark completed with zero harness/record errors:
+  191/200 labels, macro-F1 0.9547, short-request median 21.9 ms, batch throughput
+  46.8 records/s. [Full measurements](../evidence/benchmark-linux-wsl-cuda.json).
+
+The installer now isolates pip temporary files on disk; Debian's small /tmp tmpfs
+previously exhausted space and reduced Windows host RAM during CUDA-wheel downloads.
+The manual wheel prefetch encountered HTTP 403 on the PyTorch R2 host; the same
+official wheel was obtained from download.pytorch.org and verified against the
+index SHA-256 before installation. These setup details do not change model weights.
+
+Windows CUDA remains the installed Codex plugin default. The WSL runtime is installed
+as a separately tested compute environment; instructions for selecting it are in
+the [Linux CUDA guide](LINUX_CUDA.md).

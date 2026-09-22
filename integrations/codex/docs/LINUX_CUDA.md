@@ -60,6 +60,14 @@ The child reads Debian's `~/.laya-for-codex/config.json`, where `device` should 
 Choose the Windows runtime or the WSL runtime as your regular integration; avoid leaving
 two inference servers loaded unintentionally. The supplied installer does not silently
 replace a Windows plugin with WSL. Open a new Codex session after changing registration.
+File tools running in WSL require Linux paths such as `/mnt/c/Users/.../project`,
+not Windows `C:\...` paths. Keep private `.laya` artifacts with that workspace.
+
+From Windows, verify the same stdio transport before registering it:
+
+```powershell
+& "$HOME/.laya-for-codex/venv/Scripts/python.exe" integrations/codex/scripts/smoke_wsl.py --python /home/YOUR_LINUX_USER/.laya-for-codex/venv/bin/python --output dist/windows-to-wsl.json
+```
 
 ## Verify actual GPU inference
 
@@ -85,6 +93,12 @@ For automatic device selection, run the checkpoint check with `--device auto
 an explicitly reported smaller-model fallback if automatic routing encounters RAM pressure.
 
 ## Memory and failure diagnosis
+
+The installer gives pip a disk-backed temporary directory at
+`~/.laya-for-codex/tmp`. This matters on Debian systems where `/tmp` is a small RAM
+filesystem: large CUDA wheels can otherwise exhaust both temporary space and host RAM
+before inference even starts. These temporary-directory environment variables apply
+only to installer subprocesses; global shell settings are unchanged.
 
 - WSL's memory limit is separate from total physical Windows RAM. Check `free -h` inside
   Linux, `nvidia-smi` for device memory, and Laya's own preflight details.
