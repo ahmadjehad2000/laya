@@ -54,6 +54,7 @@ async def smoke(args):
                         "workspace": temporary, "input_path": "records.json", "questions": {
                             "topic": {"type": "choice", "instructions": "What is the topic?", "criteria": ["sports", "science"]}}})
                     assert report["file_offload"]["records"] == 2
+                    assert report["file_offload"]["failed"] == 0
                     assert Path(report["file_offload"]["artifact"]).is_file()
                     if args.require_device:
                         assert report["file_offload"]["devices"] == [args.require_device]

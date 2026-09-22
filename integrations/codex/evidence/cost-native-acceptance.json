@@ -37,5 +37,16 @@
     "cache_write_input_tokens": 0,
     "output_tokens": 528,
     "reasoning_output_tokens": 117
+  },
+  "installed_lean_continuation": {
+    "new_thread_started": true,
+    "answer": "250 MiB; do not deploy.",
+    "usage": {
+      "input_tokens": 17575,
+      "cached_input_tokens": 11392,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 12,
+      "reasoning_output_tokens": 0
+    }
   }
 }

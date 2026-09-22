@@ -6,7 +6,7 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
 
 ## Local evidence, 2026-09-22
 
-- 70 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
+- 71 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
   New coverage includes all device-selection branches, checkpoint-aware RAM estimates,
   retryable resource errors, automatic smaller-model fallback, strict device validation,
   and benchmark metrics. Simulated MPS branches do not establish real MPS hardware support.

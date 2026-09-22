@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T12:06:35.049991+00:00",
+  "timestamp": "2026-09-22T12:13:47.743158+00:00",
   "platform": "Windows-11-10.0.26100-SP0",
   "python": "3.12.10",
   "integration_failures": [],
@@ -117,12 +117,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.889614105224609
+                "available_ram_gib": 6.591579437255859
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 32.09,
-              "elapsed_ms": 33.19
+              "inference_ms": 25.98,
+              "elapsed_ms": 26.99
             }
           }
         },
@@ -183,12 +183,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.8888092041015625
+                "available_ram_gib": 6.591724395751953
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 20.28,
-              "elapsed_ms": 21.25
+              "inference_ms": 27.2,
+              "elapsed_ms": 28.33
             }
           }
         },
@@ -249,12 +249,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.888339996337891
+                "available_ram_gib": 6.592952728271484
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 19.64,
-              "elapsed_ms": 20.6
+              "inference_ms": 27.72,
+              "elapsed_ms": 29.02
             }
           }
         },
@@ -315,12 +315,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.886951446533203
+                "available_ram_gib": 6.596004486083984
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 21.07,
-              "elapsed_ms": 22.02
+              "inference_ms": 28.13,
+              "elapsed_ms": 29.66
             }
           }
         }
@@ -388,12 +388,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.885578155517578
+                "available_ram_gib": 6.585670471191406
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 27.34,
-              "elapsed_ms": 28.36
+              "inference_ms": 46.77,
+              "elapsed_ms": 48.93
             }
           }
         },
@@ -454,12 +454,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.885532379150391
+                "available_ram_gib": 6.594383239746094
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 30.17,
-              "elapsed_ms": 31.29
+              "inference_ms": 25.63,
+              "elapsed_ms": 27.1
             }
           }
         },
@@ -520,12 +520,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.885246276855469
+                "available_ram_gib": 6.594821929931641
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 28.39,
-              "elapsed_ms": 29.34
+              "inference_ms": 27.22,
+              "elapsed_ms": 28.37
             }
           }
         },
@@ -586,12 +586,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.88360595703125
+                "available_ram_gib": 6.594791412353516
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 19.78,
-              "elapsed_ms": 20.74
+              "inference_ms": 26.55,
+              "elapsed_ms": 27.59
             }
           }
         }
@@ -669,12 +669,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.883350372314453
+                "available_ram_gib": 6.594429016113281
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.26,
-              "elapsed_ms": 23.3
+              "inference_ms": 27.94,
+              "elapsed_ms": 29.15
             }
           }
         },
@@ -745,12 +745,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.8831634521484375
+                "available_ram_gib": 6.593563079833984
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.13,
-              "elapsed_ms": 23.15
+              "inference_ms": 26.79,
+              "elapsed_ms": 27.92
             }
           }
         },
@@ -821,12 +821,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.882411956787109
+                "available_ram_gib": 6.596271514892578
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.24,
-              "elapsed_ms": 23.34
+              "inference_ms": 30.79,
+              "elapsed_ms": 32.02
             }
           }
         },
@@ -897,12 +897,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.881492614746094
+                "available_ram_gib": 6.5967559814453125
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.09,
-              "elapsed_ms": 23.17
+              "inference_ms": 26.85,
+              "elapsed_ms": 28.35
             }
           }
         },
@@ -973,12 +973,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.880718231201172
+                "available_ram_gib": 6.595783233642578
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.45,
-              "elapsed_ms": 23.52
+              "inference_ms": 37.85,
+              "elapsed_ms": 39.0
             }
           }
         },
@@ -1049,12 +1049,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.880073547363281
+                "available_ram_gib": 6.594417572021484
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.4,
-              "elapsed_ms": 23.43
+              "inference_ms": 33.74,
+              "elapsed_ms": 34.94
             }
           }
         }
@@ -1122,12 +1122,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.879390716552734
+                "available_ram_gib": 6.593227386474609
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 22.5,
-              "elapsed_ms": 23.5
+              "inference_ms": 27.37,
+              "elapsed_ms": 28.42
             }
           }
         },
@@ -1188,12 +1188,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.877910614013672
+                "available_ram_gib": 6.5931396484375
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 20.52,
-              "elapsed_ms": 21.49
+              "inference_ms": 25.3,
+              "elapsed_ms": 26.4
             }
           }
         },
@@ -1254,12 +1254,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.878421783447266
+                "available_ram_gib": 6.592708587646484
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 19.62,
-              "elapsed_ms": 20.58
+              "inference_ms": 42.98,
+              "elapsed_ms": 45.08
             }
           }
         },
@@ -1320,12 +1320,12 @@
                 "required_ram_gib": 0.75,
                 "required_cuda_vram_gib": 2.5,
                 "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-                "available_ram_gib": 6.877769470214844
+                "available_ram_gib": 6.590156555175781
               },
               "cache_hit": false,
               "load_ms": 0,
-              "inference_ms": 19.51,
-              "elapsed_ms": 20.43
+              "inference_ms": 29.68,
+              "elapsed_ms": 30.96
             }
           }
         }
@@ -1412,8 +1412,8 @@
         }
       }
     },
-    "ram_available_gib": 8.61,
-    "process_rss_mib": 67.9,
+    "ram_available_gib": 8.37,
+    "process_rss_mib": 67.6,
     "calls": 0,
     "cache_hits": 0,
     "errors": 0,
@@ -1421,9 +1421,11 @@
     "scope": "Advisory decisions; Codex retains reasoning and execution permissions"
   },
   "file_offload": {
-    "artifact": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp1eoke4rr\\.laya\\results\\89074111941c40ddabd415cd9b95b5fe.json",
+    "artifact": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp_dzmq9kn\\.laya\\results\\c6c356ce94e8435ba34cefb63a88583e.json",
     "source_sha256": "3060ea50b6dfa5cd73f1b632f354a6ecfb445b7fe02e077a2f58e0b9498087bc",
     "records": 2,
+    "succeeded": 2,
+    "failed": 0,
     "label_counts": {
       "topic:sports": 1,
       "topic:science": 1
@@ -1438,8 +1440,8 @@
     "scope": "Local classification only. Validate consequential labels; retrieve review records from source."
   },
   "local_handoff": {
-    "context": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp1eoke4rr\\.laya\\handoffs\\67571daadf59d09c133478ecf3178e3b1354fc0914af42b87ae7a814fb864faa.json",
-    "archive": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp1eoke4rr\\.laya\\handoffs\\d2681ce7b674fe20704d988b62907ea2d4e541a9998173c7ec5753c1fd7e8c3d.source",
+    "context": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp_dzmq9kn\\.laya\\handoffs\\bffccabf723318a44c945228332927d6561e23e07525e2b629f7729829a95304.json",
+    "archive": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmp_dzmq9kn\\.laya\\handoffs\\d2681ce7b674fe20704d988b62907ea2d4e541a9998173c7ec5753c1fd7e8c3d.source",
     "source_sha256": "d2681ce7b674fe20704d988b62907ea2d4e541a9998173c7ec5753c1fd7e8c3d",
     "messages": 3,
     "archived_tool_outputs": 1,
@@ -1530,12 +1532,12 @@
         "required_ram_gib": 0.75,
         "required_cuda_vram_gib": 2.5,
         "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
-        "available_ram_gib": 6.9543914794921875
+        "available_ram_gib": 6.656597137451172
       },
       "cache_hit": false,
       "load_ms": 0,
-      "inference_ms": 59.23,
-      "elapsed_ms": 62.5
+      "inference_ms": 79.18,
+      "elapsed_ms": 80.4
     }
   },
   "cache_verified": true,
@@ -1612,8 +1614,8 @@
         }
       }
     },
-    "ram_available_gib": 6.93,
-    "process_rss_mib": 1925.7,
+    "ram_available_gib": 6.71,
+    "process_rss_mib": 1926.3,
     "calls": 25,
     "cache_hits": 2,
     "errors": 1,

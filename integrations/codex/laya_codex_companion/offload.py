@@ -22,14 +22,26 @@ def classify_file(runtime, workspace, input_path, questions, model=None,
     if not isinstance(items, list) or not 1 <= len(items) <= 1000:
         raise ValueError("Supply a JSON array of 1–1000 {id,state} records")
     ids = [item.get("id") if isinstance(item, dict) else None for item in items]
-    if any(not isinstance(i, str) or not 1 <= len(i) <= 160 for i in ids) or len(set(ids)) != len(ids):
-        raise ValueError("Record IDs must be unique nonempty strings, at most 160 characters")
+    if any(not isinstance(i, str) or not 1 <= len(i) <= 120 for i in ids) or len(set(ids)) != len(ids):
+        raise ValueError("Record IDs must be unique nonempty strings, at most 120 characters")
     if any(set(item) != {"id", "state"} for item in items):
         raise ValueError("Every record must contain exactly id and state")
     output = artifact_dir(root, "results") / (uuid.uuid4().hex + ".json")
     records, counts, review, devices = [], Counter(), [], set()
-    for start in range(0, len(items), runtime.config.max_items):
-        batch = runtime.predict_batch(items[start:start + runtime.config.max_items], questions, model=model)
+    batches, pending = [], []
+    for item in items:
+        if pending and (len(pending) >= runtime.config.max_items or
+                        len(encoded([pending + [item], questions])) > runtime.config.max_request_bytes):
+            batches.append(pending)
+            pending = []
+        pending.append(item)
+    batches.append(pending)
+    for group in batches:
+        if len(encoded([group, questions])) > runtime.config.max_request_bytes:
+            batch = {"items": [{"id": item["id"], "error": {"type": "ValueError",
+                                "message": "Record exceeds request byte limit; split evidence explicitly"}} for item in group]}
+        else:
+            batch = runtime.predict_batch(group, questions, model=model)
         for item in batch["items"]:
             needs_review = "error" in item
             if not needs_review:
@@ -52,6 +64,7 @@ def classify_file(runtime, workspace, input_path, questions, model=None,
               "items": records, "scope": "Advisory; thresholds are not calibrated accuracy guarantees"}
     write_new(output, encoded(report))
     return {"artifact": str(output), "source_sha256": digest(raw), "records": len(records),
+            "succeeded": sum("result" in item for item in records), "failed": sum("error" in item for item in records),
             "label_counts": dict(counts), "needs_review": len(review), "review_ids_preview": review[:20],
             "review_ids_truncated": len(review) > 20, "devices": sorted(d for d in devices if d),
             "cloud_model_calls_by_laya": 0,

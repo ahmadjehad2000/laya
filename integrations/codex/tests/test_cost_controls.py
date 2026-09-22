@@ -72,6 +72,7 @@ def test_file_offload_flags_uncertainty_and_writes_full_result(tmp_path):
     result = classify_file(FakeRuntime(), str(tmp_path), "records.json", questions)
     assert result["needs_review"] == 1 and result["review_ids_preview"] == ["1"]
     assert result["records"] == 3 and result["cloud_model_calls_by_laya"] == 0
+    assert result["failed"] == 0 and result["succeeded"] == 3
     artifact = json.loads(Path(result["artifact"]).read_text())
     assert len(artifact["items"]) == 3
     assert [item["needs_review"] for item in artifact["items"]] == [False, True, False]
@@ -80,6 +81,15 @@ def test_file_offload_flags_uncertainty_and_writes_full_result(tmp_path):
     (tmp_path / "records.json").write_text(json.dumps([items[0], items[0]]))
     with pytest.raises(ValueError, match="unique"):
         classify_file(FakeRuntime(), str(tmp_path), "records.json", questions)
+
+
+def test_file_offload_oversized_record_keeps_other_results(tmp_path):
+    items = [{"id": "too-large", "state": "word " * 30000}, {"id": "good", "state": 0.99}]
+    (tmp_path / "records.json").write_text(json.dumps(items))
+    questions = {"topic": {"type": "choice", "instructions": "Select topic", "criteria": ["a", "b"]}}
+    result = classify_file(FakeRuntime(), str(tmp_path), "records.json", questions)
+    assert result["failed"] == 1 and result["succeeded"] == 1
+    assert result["review_ids_preview"] == ["too-large"]
 
 
 def test_continue_lean_uses_new_readonly_thread_and_explicit_model(tmp_path, monkeypatch):

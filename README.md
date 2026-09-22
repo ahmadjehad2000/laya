@@ -189,7 +189,7 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, memory policy, file offload, local handoffs, setup, and rollback | 70 automated tests passed |
+| Companion validation, memory policy, file offload, local handoffs, setup, and rollback | 71 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA passed |
