@@ -81,10 +81,13 @@ def install_plugin(root, codex_home):
     marketplace_root = root / "marketplace"
     plugin = marketplace_root / "plugins" / NAME
     shutil.copytree(HERE / "plugins" / NAME, plugin, dirs_exist_ok=True)
+    if (plugin / "plugin.json").exists():
+        os.replace(plugin / "plugin.json", plugin / "plugin.portable.json")
     # Codex loads a cached copy; give each installed build an explicit cache key.
-    for manifest in (plugin / "plugin.json", plugin / ".codex-plugin" / "plugin.json"):
+    cachebuster = f"+codex.local-{time.time_ns()}"
+    for manifest in (plugin / "plugin.portable.json", plugin / ".codex-plugin" / "plugin.json"):
         metadata = json.loads(manifest.read_text(encoding="utf-8"))
-        metadata["version"] = metadata["version"].split("+")[0] + f"+codex.local-{time.time_ns()}"
+        metadata["version"] = metadata["version"].split("+")[0] + cachebuster
         manifest.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     config = {"mcpServers": {NAME: mcp_entry(root)}}
     (plugin / ".mcp.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
@@ -159,6 +162,7 @@ def main():
     parser.add_argument("--model", choices=["multilingual", "english", "typed-decisions", "all"], default="multilingual")
     parser.add_argument("--mode", choices=["plugin", "direct", "none"], default="plugin")
     parser.add_argument("--migrate-existing", action="store_true")
+    parser.add_argument("--min-free-ram-gib", type=float, help="Override the cold-load RAM floor for a measured constrained host")
     args = parser.parse_args()
     root, codex_home = args.home.expanduser().resolve(), args.codex_home.expanduser().resolve()
     python = python_at(root)
@@ -177,6 +181,11 @@ def main():
         path = root / "config.json"
         settings = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         settings.update(device=args.device, model="multilingual" if args.model == "all" else args.model)
+        if args.min_free_ram_gib is not None:
+            settings["min_free_ram_gib"] = args.min_free_ram_gib
+        sys.path.insert(0, str(HERE))
+        from laya_codex_companion.config import Config
+        Config(**settings)
         path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
     if args.command in ("install", "prepare"):
         run([python, "-m", "laya_codex_companion", "prepare", "--model", args.model], env=environment)

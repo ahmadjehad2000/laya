@@ -16,7 +16,17 @@ with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
     for name in files:
         if name:
             bundle.write(root / name, "laya-for-codex/" + name)
-with archive.open("rb") as stream:
-    checksum = hashlib.file_digest(stream, "sha256").hexdigest()
-(args.output / "SHA256SUMS.txt").write_text(f"{checksum}  {archive.name}\n", encoding="utf-8")
+portable = args.output / "laya-for-codex-0.1.0-portable.zip"
+plugin = root / "integrations/codex/plugins/laya-for-codex"
+with zipfile.ZipFile(portable, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+    for path in plugin.rglob("*"):
+        if path.is_file():
+            name = path.relative_to(plugin).as_posix()
+            bundle.write(path, "plugin.json" if name == "plugin.portable.json" else name)
+checksums = []
+for artifact in (archive, portable):
+    with artifact.open("rb") as stream:
+        checksum = hashlib.file_digest(stream, "sha256").hexdigest()
+    checksums.append(f"{checksum}  {artifact.name}")
+(args.output / "SHA256SUMS.txt").write_text("\n".join(checksums) + "\n", encoding="utf-8")
 print(archive)

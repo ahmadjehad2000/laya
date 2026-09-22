@@ -19,8 +19,10 @@ def build():
                                    "Score these records against my rubric."]}
     write(PLUGIN / ".codex-plugin" / "plugin.json", {**identity, "interface": interface,
                                                     "skills": "./skills/", "mcpServers": "./.mcp.json"})
-    write(PLUGIN / "plugin.json", {"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-                                  **identity, "extensions": {"com.openai": {"interface": interface}}})
+    # Codex CLI 0.155.1 installs portable metadata but does not expose its MCP tools.
+    # Keep the tested compatibility entrypoint active; package the portable manifest separately.
+    write(PLUGIN / "plugin.portable.json", {"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+                                           **identity, "extensions": {"com.openai": {"interface": interface}}})
     server = {"command": "laya-for-codex", "args": ["serve"]}
     write(PLUGIN / ".mcp.json", {"mcpServers": {"laya-for-codex": server}})
     write(PLUGIN / "mcp.json", {"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",

@@ -122,6 +122,12 @@ The checked-in plugin uses `laya-for-codex` on PATH for developer use. The insta
 renders a separate local copy with absolute paths. Run `scripts/build_plugin.py` after
 changing shared plugin metadata. Never commit generated local executable paths.
 
+Codex CLI 0.155.1 was tested with the compatibility `.codex-plugin/plugin.json` entrypoint.
+In local testing, a root portable manifest installed successfully but did not expose MCP
+tools. Therefore the installer and repository marketplace use the compatibility layout.
+`plugin.portable.json` is packaged as root `plugin.json` in a separate portable ZIP for
+compatible hosts; that ZIP needs the prepared CLI on PATH and is not the verified install path.
+
 The evaluation fixture is manually labeled synthetic evidence, not an independent model
 benchmark. Read the report's individual disagreements; schema-valid responses do not
 prove the labels are correct. CPU tests do not establish CUDA or Apple MPS support.

@@ -4,7 +4,7 @@ setup(
     name="laya",
     version="0.3.4",
     description="Fast, non-autoregressive System 1 decision engine with calibrated probabilities",
-    long_description=open("README.md").read(),
+    long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="Convai Innovations",
     license="Apache-2.0",

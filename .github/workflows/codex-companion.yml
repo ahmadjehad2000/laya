@@ -23,6 +23,7 @@ jobs:
       USE_TF: '0'
       USE_TORCH: '1'
       TOKENIZERS_PARALLELISM: 'false'
+      PYTHONUTF8: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -46,7 +47,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.real_inference
         shell: bash
         run: |
-          python integrations/codex/bootstrap.py install --device cpu --mode none
+          python integrations/codex/bootstrap.py install --device cpu --mode none --min-free-ram-gib 2.5
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             RUNTIME="$USERPROFILE/.laya-for-codex/venv/Scripts/python.exe"
           else

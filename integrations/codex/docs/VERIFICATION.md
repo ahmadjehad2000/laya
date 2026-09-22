@@ -16,6 +16,11 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
   9/12, including errors on sales/billing and refund negation. Documents matched 4/4.
 - A separate Codex configuration successfully installed the native plugin from the
   generated local marketplace. Fresh model-driven Codex use is a separate pending check.
+- GitHub Actions bridge tests passed on Windows, Linux and macOS in run 35716547757.
+  A separate real-inference run passed on Linux CPU; Windows exposed an upstream
+  README encoding bug and macOS hit the conservative 4.5 GiB free-RAM check. The
+  source encoding is now explicit, and the constrained CI profile uses a 2.5 GiB
+  floor. Retesting is required before claiming these two CI paths passed.
 
 Reports: [Windows CUDA](../evidence/windows-cuda.json),
 [Windows CPU](../evidence/windows-cpu.json). These are synthetic cases, not universal
