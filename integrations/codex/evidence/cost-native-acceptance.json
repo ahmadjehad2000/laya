@@ -1,0 +1,41 @@
+{
+  "scope": "Fresh installed Codex plugin discovery and execution; not cost-savings evidence",
+  "codex_version": "0.155.1",
+  "tools": [
+    {
+      "name": "laya_classify_file",
+      "status": "completed",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"artifact\": \"C:\\\\Users\\\\Mr.Device\\\\Documents\\\\laya2codex\\\\dist\\\\cost-pilot\\\\.laya\\\\results\\\\180f40756ba44cfd9db99cf411769a31.json\",\n  \"source_sha256\": \"752b6a1fd4ec242793d75f370de77ea1010e8de1bba8eb22ff476620240808b0\",\n  \"records\": 20,\n  \"label_counts\": {\n    \"topic:world\": 5,\n    \"topic:sports\": 5,\n    \"topic:science_technology\": 4,\n    \"topic:business\": 6\n  },\n  \"needs_review\": 1,\n  \"review_ids_preview\": [\n    \"ag-news-test-2256\"\n  ],\n  \"review_ids_truncated\": false,\n  \"devices\": [\n    \"cuda\"\n  ],\n  \"cloud_model_calls_by_laya\": 0,\n  \"scope\": \"Local classification only. Validate consequential labels; retrieve review records from source.\"\n}"
+          }
+        ],
+        "structured_content": null
+      }
+    },
+    {
+      "name": "laya_compact_file",
+      "status": "completed",
+      "error": null,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"context\": \"C:\\\\Users\\\\Mr.Device\\\\Documents\\\\laya2codex\\\\dist\\\\cost-pilot\\\\.laya\\\\handoffs\\\\93c941cab69803ac68e54a77e7f0672f302d07113e18749453da96d4dac4d892.json\",\n  \"archive\": \"C:\\\\Users\\\\Mr.Device\\\\Documents\\\\laya2codex\\\\dist\\\\cost-pilot\\\\.laya\\\\handoffs\\\\3c188b7e9bf8e796699279d290fdb4c9eca68cb540bc9cf6d97322a581260e79.source\",\n  \"source_sha256\": \"3c188b7e9bf8e796699279d290fdb4c9eca68cb540bc9cf6d97322a581260e79\",\n  \"messages\": 16,\n  \"archived_tool_outputs\": 12,\n  \"archived_indices\": [\n    2,\n    3,\n    4,\n    5,\n    6,\n    7,\n    8,\n    9,\n    10,\n    11,\n    12,\n    13\n  ],\n  \"original_context_bytes\": 244912,\n  \"handoff_bytes\": 10986,\n  \"byte_reduction_fraction\": 0.9551430717972169,\n  \"cloud_model_calls\": 0,\n  \"native_compaction_replaced\": false\n}"
+          }
+        ],
+        "structured_content": null
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 126092,
+    "cached_input_tokens": 84480,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 528,
+    "reasoning_output_tokens": 117
+  }
+}

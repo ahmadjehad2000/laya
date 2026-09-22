@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import platform
 import sys
+import tempfile
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -24,6 +25,8 @@ def unpack(result):
 
 async def smoke(args):
     environment = {**os.environ, "PYTHONPATH": str(ROOT) + os.pathsep + str(ROOT.parents[1]), "USE_TF": "0"}
+    if args.installed:
+        environment.pop("PYTHONPATH", None)
     if args.device:
         environment["LAYA_COMPANION_DEVICE"] = args.device
     if args.model:
@@ -36,12 +39,32 @@ async def smoke(args):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 report["tools"] = [t.name for t in (await session.list_tools()).tools]
-                assert len(report["tools"]) == 5
+                assert len(report["tools"]) == 7
 
                 async def call(tool, request):
                     return unpack(await session.call_tool(tool, request))
 
                 report["initial_status"] = await call("laya_status", {})
+                with tempfile.TemporaryDirectory() as temporary:
+                    folder = Path(temporary)
+                    (folder / "records.json").write_text(json.dumps([
+                        {"id": "sports", "state": "The football team won the championship."},
+                        {"id": "science", "state": "Scientists discovered a new planet."}]), encoding="utf-8")
+                    report["file_offload"] = await call("laya_classify_file", {
+                        "workspace": temporary, "input_path": "records.json", "questions": {
+                            "topic": {"type": "choice", "instructions": "What is the topic?", "criteria": ["sports", "science"]}}})
+                    assert report["file_offload"]["records"] == 2
+                    assert Path(report["file_offload"]["artifact"]).is_file()
+                    if args.require_device:
+                        assert report["file_offload"]["devices"] == [args.require_device]
+                    (folder / "chat.json").write_text(json.dumps([
+                        {"role": "user", "content": "Do not deploy"},
+                        {"role": "tool", "content": "old data " * 3000},
+                        {"role": "user", "content": "Continue tests"}]), encoding="utf-8")
+                    report["local_handoff"] = await call("laya_compact_file", {
+                        "workspace": temporary, "input_path": "chat.json", "keep_recent": 1})
+                    assert report["local_handoff"]["archived_tool_outputs"] == 1
+                    assert report["local_handoff"]["handoff_bytes"] < report["local_handoff"]["original_context_bytes"]
                 request = json.loads((ROOT / "examples" / "quickstart.json").read_text(encoding="utf-8"))
                 report["quickstart"] = await call("laya_predict", request)
                 assert {a["type"] for a in report["quickstart"]["answers"].values()} == {"choice", "score", "noul"}
@@ -99,6 +122,7 @@ async def smoke(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--installed", action="store_true", help="Test the installed companion instead of the source checkout")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--device", choices=["cpu", "cuda", "mps", "auto"])
     parser.add_argument("--model", choices=["multilingual", "english", "typed-decisions", "auto"])

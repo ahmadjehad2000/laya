@@ -11,13 +11,14 @@
 </p>
 
 <p align="center">
-  <strong>Give Codex a local decision engine for repeated classification, routing, and rubric scoring.</strong><br />
+  <strong>Keep bulk classification and conversation handoffs local. Spend Codex context on the work that needs it.</strong><br />
   Built directly on the original <a href="https://github.com/NandhaKishorM/laya">Laya</a>, with PyTorch, a Codex plugin, and MCP.
 </p>
 
 <p align="center">
   <a href="#quickstart">Quickstart</a> ·
   <a href="#workflows">Workflows</a> ·
+  <a href="#cost-control">Cost control</a> ·
   <a href="#benchmarks">Benchmarks</a> ·
   <a href="#tuning-and-practical-recipes">Tuning recipes</a> ·
   <a href="integrations/codex/docs/API.md">API</a> ·
@@ -27,9 +28,30 @@
 
 ---
 
-Laya for Codex brings small, typed decisions into your existing Codex session. Codex gathers the relevant evidence, sends related questions to a local model, and checks the results against your sources. You get structured labels, rubric scores, and yes/no probabilities without running a separate model service.
+Laya for Codex brings small, typed decisions into your existing Codex session. Send a workspace file path to the local model and get counts, review exceptions and a result artifact. For exported conversations, create a reversible local handoff before continuing in a new Codex thread. The original PyTorch model supplies classification; deterministic code handles conversation extraction.
 
 **Preview:** the integration passed real inference tests on Windows, Linux, and macOS CPU, plus Windows CUDA. Model accuracy has clear limits: our small synthetic evaluation matched **17 of 24 decisions**. Read [what is verified](#verification) before choosing a workflow.
+
+## Cost control
+
+**Measured feasibility: 79.8% fewer Codex input tokens on one long-history recall test.**
+
+| Controlled pilot | Baseline | Local-first path | Observed quality |
+| :--- | ---: | ---: | :--- |
+| Conversation handoff | 84,355 input tokens | 17,001 input tokens | Same five requested facts retained |
+| 20 public news classifications | 14,980 input + 197 output tokens | Zero cloud calls for local classification | Both 19/20; Laya flagged its wrong answer for review |
+
+The handoff comparison used the same Codex model (`gpt-5.6-sol`), low reasoning,
+and fresh CLI threads; both reported zero cached input tokens and 49 output tokens.
+This is a small feasibility pilot, **not a universal cost or subscription-quota claim**.
+The zero-cloud classification measurement excludes Codex orchestration and review.
+
+- **Bulk files:** `laya_classify_file` reads local `{id,state}` JSON records and returns a compact report. Avoid putting the full dataset into Codex first.
+- **Conversation handoffs:** `laya_compact_file` archives older bulky tool output, preserves messages, and makes a new-thread context with exact retrieval.
+- **Native compaction:** the current plugin cannot replace Codex's internal compaction. No global interception or compaction-blocking hook is installed. `laya-for-codex continue` starts a new CLI thread from the local handoff.
+
+[How to use it, limits, and reproducible commands](integrations/codex/docs/COST_CONTROL.md) ·
+[Raw Codex usage evidence](integrations/codex/evidence/cost-pilot-windows.json)
 
 ## Workflows
 
@@ -135,6 +157,8 @@ flowchart LR
 | `laya_status` | Inspect readiness, actual device, loaded model, and resource counters |
 | `laya_predict` | Ask related `choice`, `score`, or `noul` questions over one state |
 | `laya_predict_batch` | Apply shared questions to up to 32 independent records |
+| `laya_classify_file` | Classify up to 1,000 local JSON records by file reference; return counts and review exceptions |
+| `laya_compact_file` | Create a reversible local conversation handoff for a new thread |
 | `laya_release` | Unload the model and clear in-memory caches |
 | `laya_benchmark` | Run an explicitly requested synthetic performance diagnostic |
 
@@ -165,7 +189,7 @@ This fork uses the **original Laya Router and Agent with PyTorch**. It contains 
 
 | Check | Result |
 | :--- | :--- |
-| Companion validation, memory policy, device selection, benchmark metrics, setup, and rollback | 63 automated tests passed |
+| Companion validation, memory policy, file offload, local handoffs, setup, and rollback | 70 automated tests passed |
 | Upstream routing / criteria contracts | 106 / 34 checks passed |
 | Fresh installation and real MCP inference | Windows CPU, Linux CPU, macOS ARM64 CPU passed |
 | Local GPU inference | Windows CUDA passed |

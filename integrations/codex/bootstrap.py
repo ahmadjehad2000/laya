@@ -171,13 +171,17 @@ def main():
         if not (3, 12) <= sys.version_info[:2] < (3, 14):
             raise RuntimeError("Use Python 3.12–3.13, preferably 3.12")
         root.mkdir(parents=True, exist_ok=True)
+        # Debian can mount /tmp as a small tmpfs; CUDA wheels must not consume RAM.
+        temporary = root / "tmp"
+        temporary.mkdir(parents=True, exist_ok=True)
+        install_environment = {**environment, "TMPDIR": str(temporary), "TMP": str(temporary), "TEMP": str(temporary)}
         if not python.exists():
             venv.EnvBuilder(with_pip=True).create(root / "venv")
-        run([python, "-m", "pip", "install", "--upgrade", "pip"])
+        run([python, "-m", "pip", "install", "--upgrade", "pip"], env=install_environment)
         torch_args = ["--index-url", f"https://download.pytorch.org/whl/{args.torch_index}"] if args.torch_index != "default" else []
-        run([python, "-m", "pip", "install", "torch==2.11.0", *torch_args])
-        run([python, "-m", "pip", "install", "-r", HERE / "requirements.lock"])
-        run([python, "-m", "pip", "install", "--no-deps", REPO, HERE])
+        run([python, "-m", "pip", "install", "--timeout", "120", "torch==2.11.0", *torch_args], env=install_environment)
+        run([python, "-m", "pip", "install", "--timeout", "120", "-r", HERE / "requirements.lock"], env=install_environment)
+        run([python, "-m", "pip", "install", "--no-deps", REPO, HERE], env=install_environment)
         path = root / "config.json"
         settings = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         settings.update(device=args.device, model="multilingual" if args.model == "all" else args.model)

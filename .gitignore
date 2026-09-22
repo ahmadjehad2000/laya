@@ -8,6 +8,7 @@ venv/
 .venv/
 .pytest_cache/
 .ruff_cache/
+.laya/
 build/
 develop-eggs/
 dist/

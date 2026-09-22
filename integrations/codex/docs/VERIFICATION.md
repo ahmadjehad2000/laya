@@ -6,7 +6,7 @@ not evidence of model accuracy. The MCP smoke test uses a real child server and 
 
 ## Local evidence, 2026-09-22
 
-- 63 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
+- 70 companion tests passed locally; upstream routing 106/106 and criteria 34/34 passed.
   New coverage includes all device-selection branches, checkpoint-aware RAM estimates,
   retryable resource errors, automatic smaller-model fallback, strict device validation,
   and benchmark metrics. Simulated MPS branches do not establish real MPS hardware support.
@@ -76,3 +76,19 @@ cannot establish broad real-world accuracy or confidence calibration.
 
 A fresh Codex-session check is separate from the SDK transport test. Report its result
 explicitly; do not infer tool discovery merely from configuration or manifest validation.
+
+## Cost-control acceptance (2026-09-22)
+
+The installed 0.1.1 Windows CUDA package passed seven-tool discovery and real MCP
+inference, including file-reference classification and a local handoff. The existing
+model evaluation remains 17/24; integration success does not erase those disagreements.
+A fresh Codex CLI session discovered and called both new tools successfully.
+
+- [Installed MCP evidence](../evidence/windows-cost-installed-mcp.json)
+- [Fresh native Codex acceptance](../evidence/cost-native-acceptance.json)
+- [Controlled token pilot and quality](../evidence/cost-pilot-windows.json)
+- [Cost interpretation and supported integration boundary](COST_CONTROL.md)
+
+All three checkpoints and both automatic-language routes also passed actual Windows
+CUDA inference under the adaptive memory policy: [report](../evidence/windows-checkpoints-adaptive-cuda.json).
+The prior fixed 4.5 GiB admission floor is no longer used by default.

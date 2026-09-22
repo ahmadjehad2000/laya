@@ -1,6 +1,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tomllib
 
 import pytest
@@ -64,3 +65,24 @@ def test_direct_mode_refuses_duplicate_plugin(tmp_path):
     (tmp_path / "config.toml").write_text('[plugins."laya-for-codex@laya-companion"]\nenabled = true\n')
     with pytest.raises(RuntimeError, match="plugin is enabled"):
         bootstrap.register(tmp_path / "runtime", tmp_path, "direct", False)
+
+
+def test_cuda_setup_uses_disk_temp_and_requires_actual_gpu(tmp_path, monkeypatch):
+    root = tmp_path / "runtime"
+    python = bootstrap.python_at(root)
+    python.parent.mkdir(parents=True)
+    python.write_text("stub")
+    calls = []
+    monkeypatch.setenv("TMPDIR", "/tmp")
+    monkeypatch.delenv("LAYA_COMPANION_DEVICE", raising=False)
+    monkeypatch.setattr(bootstrap, "run", lambda args, **kwargs: calls.append((args, kwargs)))
+    monkeypatch.setattr(sys, "argv", ["bootstrap", "install", "--home", str(root), "--mode", "none",
+                                      "--torch-index", "cu128", "--device", "cuda"])
+    bootstrap.main()
+    pip_calls = [(args, kw) for args, kw in calls if "pip" in args]
+    assert len(pip_calls) == 4
+    for args, kwargs in pip_calls:
+        assert kwargs["env"]["TMPDIR"] == str(root / "tmp")
+        assert kwargs["env"]["TEMP"] == str(root / "tmp")
+    assert calls[-1][0][-2:] == ["--require-device", "cuda"]
+    assert bootstrap.os.environ["TMPDIR"] == "/tmp"

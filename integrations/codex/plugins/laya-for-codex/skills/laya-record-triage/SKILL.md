@@ -3,7 +3,7 @@ name: laya-record-triage
 description: Classify multiple document excerpts or support tickets and score their urgency with local Laya, including Arabic and mixed-language records. Use when repeated items can be judged against shared explicit criteria.
 ---
 
-Read records using available file or connector tools within the user's request. Preserve each source locator in an ID-to-source mapping. Laya does not fetch attachments or read whole files itself.
+For records already stored in a workspace JSON array of `{id,state}`, prefer `laya_classify_file` with choice questions. Pass the file path instead of reading all records into Codex context; inspect the returned review items and validate consequential decisions. For other formats, read records using available file or connector tools within the user's request. Preserve each source locator in an ID-to-source mapping. Laya does not fetch attachments.
 
 Choose labels with concise definitions, including unknown when evidence is insufficient. For tickets, possible labels are billing, technical, sales, and unknown. Keep urgency separate from department. Use `laya_predict_batch` with independent `{id,state}` entries and shared `questions`; batch related questions on each state. Default to multilingual. Do not translate away details that determine the answer.
 

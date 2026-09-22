@@ -1,5 +1,18 @@
 # MCP contract
 
+`laya_classify_file(workspace, input_path, questions, min_probability=0.95, min_margin=0.5)`
+reads an explicit workspace JSON array of `{id,state}` records, writes full results under
+`.laya/results`, and returns compact counts, up to 20 review IDs, and the artifact path.
+It accepts choice questions only. Thresholds are advisory; errors and unknown labels
+need review. Limits: 1,000 records, 16 MiB source file, existing per-record model limits.
+
+`laya_compact_file(workspace, input_path, keep_recent=8)` creates a local handoff and
+hash-verified archive under `.laya/handoffs`. It returns artifact paths and byte counts.
+It never modifies the running conversation or replaces native compaction. The CLI
+provides `compact-file`, `recall`, and `continue` for explicit new-thread continuation.
+Both file tools reject resolved input/output paths outside the explicit workspace.
+See [cost control](COST_CONTROL.md) for data formats, commands and measured limits.
+
 `laya_predict(state, questions, use_cache=true, model=null)` accepts text, a JSON object,
 or a list as state. Model null uses configuration (multilingual by default). Question
 IDs are unique, 1–80 characters; there are at most 16 questions by default.
@@ -15,7 +28,8 @@ and options before inference. Limits include the entire question and state.
 `laya_predict_batch(items, questions, use_cache=true, model=null)` takes unique
 `{id,state}` records, maximum 32 by default. The total serialized request is limited to
 128 KiB. Structural batch errors reject the whole call; valid batches return per-item
-prediction errors and preserve order. No source files are read by the server.
+prediction errors and preserve order. These prediction tools do not read source files;
+the explicit file tools below do.
 
 Predictions retain upstream `model`, `answers`, and `usage` fields. Additions are:
 

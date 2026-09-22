@@ -1,0 +1,206 @@
+{
+  "timestamp": "2026-09-22T12:01:57.200593+00:00",
+  "model": "gpt-5.6-sol",
+  "codex_version": "codex-cli 0.155.1",
+  "scope": "Single synthetic handoff pair and 20 public AG News records; not general coding or billing savings",
+  "settings": {
+    "reasoning_effort": "low",
+    "ignore_user_config": true,
+    "ephemeral": true
+  },
+  "compaction": {
+    "baseline": {
+      "usage": {
+        "input_tokens": 84355,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 49,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_sec": 11.041962999999669,
+      "answer": {
+        "branch": "feat/cache-fix",
+        "budget": "250 MiB",
+        "test_command": "pytest tests/cache -q",
+        "restriction": "Do not deploy.",
+        "status": "FAILED \u2014 cache invalidation test unresolved"
+      },
+      "prompt_bytes": 245168
+    },
+    "local_handoff": {
+      "usage": {
+        "input_tokens": 17001,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 49,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_sec": 11.110760800000207,
+      "answer": {
+        "branch": "feat/cache-fix",
+        "budget": "250 MiB",
+        "test_command": "pytest tests/cache -q",
+        "restriction": "Do not deploy.",
+        "status": "FAILED cache invalidation test; unresolved"
+      },
+      "prompt_bytes": 11179
+    },
+    "expected": {
+      "branch": "feat/cache-fix",
+      "budget": "250 MiB",
+      "test_command": "pytest tests/cache -q",
+      "restriction": "Do not deploy",
+      "status": "unresolved"
+    },
+    "exact_fields_baseline": 3,
+    "exact_fields_handoff": 3,
+    "archived_outputs": 12,
+    "local_compaction_cloud_calls": 0,
+    "native_compaction_replaced": false
+  },
+  "classification": {
+    "records": 20,
+    "codex_control": {
+      "usage": {
+        "input_tokens": 14980,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 197,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_sec": 12.209297700001116,
+      "answer": {
+        "ag-news-test-7229": "world",
+        "ag-news-test-1393": "sports",
+        "ag-news-test-368": "world",
+        "ag-news-test-391": "sports",
+        "ag-news-test-7406": "science_technology",
+        "ag-news-test-2256": "business",
+        "ag-news-test-5467": "sports",
+        "ag-news-test-3353": "world",
+        "ag-news-test-4436": "business",
+        "ag-news-test-3158": "business",
+        "ag-news-test-7114": "business",
+        "ag-news-test-2614": "business",
+        "ag-news-test-6781": "science_technology",
+        "ag-news-test-1282": "sports",
+        "ag-news-test-3740": "sports",
+        "ag-news-test-7158": "business",
+        "ag-news-test-5245": "world",
+        "ag-news-test-7084": "science_technology",
+        "ag-news-test-1660": "science_technology",
+        "ag-news-test-3958": "world"
+      },
+      "prompt_bytes": 5813
+    },
+    "local_correct": 19,
+    "codex_correct": 19,
+    "local_needs_review": 1,
+    "local_devices": [
+      "cuda"
+    ],
+    "local_cloud_calls": 0,
+    "rows": [
+      {
+        "id": "ag-news-test-7229",
+        "expected": "world",
+        "local": "world"
+      },
+      {
+        "id": "ag-news-test-1393",
+        "expected": "sports",
+        "local": "sports"
+      },
+      {
+        "id": "ag-news-test-368",
+        "expected": "world",
+        "local": "world"
+      },
+      {
+        "id": "ag-news-test-391",
+        "expected": "sports",
+        "local": "sports"
+      },
+      {
+        "id": "ag-news-test-7406",
+        "expected": "science_technology",
+        "local": "science_technology"
+      },
+      {
+        "id": "ag-news-test-2256",
+        "expected": "science_technology",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-5467",
+        "expected": "sports",
+        "local": "sports"
+      },
+      {
+        "id": "ag-news-test-3353",
+        "expected": "world",
+        "local": "world"
+      },
+      {
+        "id": "ag-news-test-4436",
+        "expected": "business",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-3158",
+        "expected": "business",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-7114",
+        "expected": "business",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-2614",
+        "expected": "business",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-6781",
+        "expected": "science_technology",
+        "local": "science_technology"
+      },
+      {
+        "id": "ag-news-test-1282",
+        "expected": "sports",
+        "local": "sports"
+      },
+      {
+        "id": "ag-news-test-3740",
+        "expected": "sports",
+        "local": "sports"
+      },
+      {
+        "id": "ag-news-test-7158",
+        "expected": "business",
+        "local": "business"
+      },
+      {
+        "id": "ag-news-test-5245",
+        "expected": "world",
+        "local": "world"
+      },
+      {
+        "id": "ag-news-test-7084",
+        "expected": "science_technology",
+        "local": "science_technology"
+      },
+      {
+        "id": "ag-news-test-1660",
+        "expected": "science_technology",
+        "local": "science_technology"
+      },
+      {
+        "id": "ag-news-test-3958",
+        "expected": "world",
+        "local": "world"
+      }
+    ]
+  }
+}

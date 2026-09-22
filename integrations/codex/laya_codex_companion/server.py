@@ -7,6 +7,7 @@ from .runtime import Runtime
 INSTRUCTIONS = """Laya supplies local typed decisions using the original PyTorch runtime.
 Use it for repeated classification, routing, or explicit rubric scoring over concise evidence.
 Batch related questions over one state; use laya_predict_batch for independent records.
+For bulk workspace JSON, prefer laya_classify_file by path without loading all records into chat.
 Preserve source references outside model state and map results by item ID. Verify consequential
 labels against evidence. Probabilities and act_probability are advisory, not permissions.
 Do not force Laya into ordinary coding or reasoning. Do not silently truncate evidence.
@@ -20,6 +21,26 @@ def build_server(runtime):
 
     server = FastMCP("laya-for-codex", instructions=INSTRUCTIONS)
     read = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
+
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False))
+    async def laya_classify_file(workspace: str, input_path: str, questions: dict,
+                                 min_probability: float = 0.95, min_margin: float = 0.5) -> dict:
+        """Save Codex context: classify a workspace JSON array of {id,state} without reading it into chat.
+        Choice questions only. Writes .laya/results; returns counts, review IDs and artifact path.
+        Thresholds are advisory, not calibrated accuracy. Validate consequential results.
+        """
+        from .offload import classify_file
+        return await asyncio.to_thread(classify_file, runtime, workspace, input_path, questions,
+                                       min_probability=min_probability, min_margin=min_margin)
+
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False))
+    async def laya_compact_file(workspace: str, input_path: str, keep_recent: int = 8) -> dict:
+        """Make a local handoff from an explicit conversation export. Archives old large tool outputs.
+        Keeps all user/assistant/instruction messages. Returns paths and byte counts, not token savings.
+        Does NOT replace native compaction or change this thread. Start a new thread to use the handoff.
+        """
+        from .compaction import compact_file
+        return await asyncio.to_thread(compact_file, workspace, input_path, keep_recent)
 
     @server.tool(annotations=read)
     async def laya_status() -> dict:
