@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "laya-for-codex",
+  "version": "0.1.0",
+  "description": "Local Laya decisions for developer triage, multilingual records, and explicit rubrics.",
+  "author": {
+    "name": "ahmadjehad2000",
+    "url": "https://github.com/ahmadjehad2000"
+  },
+  "repository": "https://github.com/ahmadjehad2000/laya",
+  "license": "Apache-2.0",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Laya for Codex",
+        "shortDescription": "Local classification and rubric workflows.",
+        "longDescription": "Original Laya/PyTorch inference for concise, repeated decisions. Prepare the local runtime before enabling this plugin.",
+        "developerName": "ahmadjehad2000",
+        "category": "Productivity",
+        "capabilities": [],
+        "defaultPrompt": [
+          "Triage these issues using Laya and show the supporting evidence.",
+          "Classify these Arabic and English tickets.",
+          "Score these records against my rubric."
+        ]
+      }
+    }
+  }
+}

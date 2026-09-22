@@ -1,0 +1,6 @@
+Laya for Codex is an independent integration by ahmadjehad2000.
+It uses the original Laya project by Convai Innovations / NandhaKishorM,
+distributed under Apache License 2.0. The upstream source and license remain
+in the root of this fork. Model repositories have their own license metadata.
+No endorsement by OpenAI or Convai Innovations is implied.
+No Laya-MLX runtime, dependency, or vendored source is included.

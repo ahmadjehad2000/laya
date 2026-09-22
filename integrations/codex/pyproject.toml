@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=78.1,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "laya-codex-companion"
+version = "0.1.0"
+description = "Original Laya / PyTorch decision workflows for Codex"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = "Apache-2.0"
+dependencies = ["laya==0.3.4", "mcp==1.30.0", "psutil==7.2.2"]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[project.scripts]
+laya-for-codex = "laya_codex_companion.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["laya_codex_companion*"]
+
+[tool.setuptools.package-data]
+laya_codex_companion = ["models.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

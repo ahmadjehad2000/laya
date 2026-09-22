@@ -1,0 +1,20 @@
+{
+  "name": "laya-source",
+  "interface": {
+    "displayName": "Laya for Codex (source development)"
+  },
+  "plugins": [
+    {
+      "name": "laya-for-codex",
+      "source": {
+        "source": "local",
+        "path": "./integrations/codex/plugins/laya-for-codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

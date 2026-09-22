@@ -1,3 +1,7 @@
+> **This fork includes [Laya for Codex](integrations/codex/README.md)**: an independent,
+> local PyTorch-only companion with MCP tools and skills. Preview quality and platform
+> verification limits are documented in the integration. The original Laya README follows.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NandhaKishorM/laya/main/assets/logo-lockup-dark.png" />

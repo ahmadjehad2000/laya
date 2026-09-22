@@ -1,0 +1,137 @@
+# Laya for Codex
+
+A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
+Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
+
+**Preview 0.1.0.** Windows, Linux and macOS are implementation targets. See
+[verification](docs/VERIFICATION.md) for actual tests and remaining release gates.
+
+## What you can do
+
+- Categorize natural-language issues and summarized log records with source-backed labels.
+- Triage English, Arabic and mixed-language tickets or document excerpts.
+- Score comparable records against your own ordered rubric.
+- Check readiness, inspect actual device/fallback information and release model memory.
+
+The plugin packages four discoverable skills and five MCP tools. Codex collects evidence
+and reviews results; Laya supplies small typed decisions. It does not automatically see
+your whole repository or conversation. Model predictions can be confidently wrong.
+
+**Measured limits:** the first multilingual CUDA fixture got 14/20 decisions correct.
+Raw-code role classification failed 3/4 cases and is excluded from the recommended
+workflow. Sales/billing and explicit refund negation also produced errors. The plugin
+requires source review rather than treating confidence as a correctness guarantee.
+
+## Install
+
+Use a local Codex client, Python 3.12 (64 bit), several GB free disk, and preferably
+16 GB+ RAM. Cold loading requires 4.5 GiB available RAM by default. Model preparation
+needs internet; inference is offline afterward. No model API key is required.
+
+Clone the **complete fork**, then run:
+
+```powershell
+git clone https://github.com/ahmadjehad2000/laya.git
+cd laya/integrations/codex
+py -3.12 bootstrap.py install --torch-index cu128
+```
+
+For CPU-only Windows/Linux, use `--torch-index cpu --device cpu`.
+On macOS use native Python (ARM64 on Apple Silicon):
+
+```sh
+python3 bootstrap.py install --device auto
+```
+
+The installer creates `~/.laya-for-codex/venv`, prepares pinned multilingual weights,
+tests a real prediction, then installs the plugin through a generated local marketplace.
+It materializes absolute executable paths so Codex does not depend on an activated shell.
+`Install.ps1` and `install.sh` are convenience wrappers.
+
+If an older managed Laya server is installed, first use `--mode none` to test separately.
+Then migrate deliberately:
+
+```sh
+python3 bootstrap.py register --mode plugin --migrate-existing
+```
+
+Configuration is backed up; unrelated settings are preserved. Open a **new Codex session**:
+
+> Use Laya to categorize “I was charged twice and want a refund” and show the actual device.
+
+Plugin support varies by Codex surface. For a local client requiring direct MCP, use
+`--mode direct` instead. Direct registration sets a 300-second cold-load tool timeout.
+The plugin uses host timeout defaults. Hosted Codex cannot read your desktop's local
+configuration. Installing this package does not provide remote inference.
+
+## Models and tools
+
+The default checkpoint is `multilingual`. Explicit alternatives are `english`,
+`typed-decisions`, and `auto` (upstream language routing). Auto needs both English and
+multilingual checkpoints prepared. Typed-decisions is specialized and never selected
+automatically by task-name heuristics.
+
+```sh
+python3 bootstrap.py prepare --model all
+```
+
+| Tool | Behavior |
+|---|---|
+| `laya_status` | Readiness, loaded checkpoints, resource and cache counters; no weight loading |
+| `laya_predict` | One state and related choice/score/noul questions |
+| `laya_predict_batch` | Up to 32 independent `{id,state}` records with shared questions |
+| `laya_release` | Unload model and clear memory-only caches |
+| `laya_benchmark` | Explicit synthetic diagnostic; not an accuracy evaluation |
+
+See [the quickstart request](examples/quickstart.json) and [the API contract](docs/API.md).
+Batch processing is sequential within one MCP request; it reduces tool round trips, not
+the number of model forward passes. One model remains resident per server. Switching
+models unloads the old model first. Multiple Codex processes can each hold a model.
+
+Edit `~/.laya-for-codex/config.json` and restart the server to change model, device,
+thread count, batch limits, cache limits, or idle timeout. Configuration is validated.
+
+## Repair and remove
+
+```sh
+python3 bootstrap.py doctor
+python3 bootstrap.py uninstall
+python3 bootstrap.py rollback
+```
+
+Uninstall disconnects the integration and retains environments, checkpoints, and backups.
+Rollback restores the saved configuration only if it has not changed since registration;
+otherwise it points to the backup for a targeted restore. It does not erase model files.
+Missing weights require explicit `prepare`; inference never downloads them.
+
+## Development
+
+Install the upstream package from this checkout, followed by the companion:
+
+```sh
+python -m pip install -r integrations/codex/requirements.lock
+python -m pip install --no-deps -e .
+python -m pip install -e 'integrations/codex[test]'
+python -m pytest integrations/codex/tests -q
+python tests/test_router.py
+python tests/test_criteria.py
+python integrations/codex/scripts/smoke_mcp.py
+```
+
+The checked-in plugin uses `laya-for-codex` on PATH for developer use. The installer
+renders a separate local copy with absolute paths. Run `scripts/build_plugin.py` after
+changing shared plugin metadata. Never commit generated local executable paths.
+
+The evaluation fixture is manually labeled synthetic evidence, not an independent model
+benchmark. Read the report's individual disagreements; schema-valid responses do not
+prove the labels are correct. CPU tests do not establish CUDA or Apple MPS support.
+
+## Privacy and attribution
+
+Runtime inference uses local stdio with no listening network port. Setup downloads
+packages and pinned model files. Raw prompts are not logged to disk or uploaded by the
+companion. Results returned to Codex become part of its conversation and normal data handling.
+`act_probability` and confidence are never execution permissions or a security boundary.
+
+This is an independent integration by ahmadjehad2000, not an official OpenAI or Convai
+Innovations product. Upstream license and attribution remain intact. See [NOTICE](NOTICE).

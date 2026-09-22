@@ -1,0 +1,81 @@
+import asyncio
+import os
+import sys
+
+from .runtime import Runtime
+
+INSTRUCTIONS = """Laya supplies local typed decisions using the original PyTorch runtime.
+Use it for repeated classification, routing, or explicit rubric scoring over concise evidence.
+Batch related questions over one state; use laya_predict_batch for independent records.
+Preserve source references outside model state and map results by item ID. Verify consequential
+labels against evidence. Probabilities and act_probability are advisory, not permissions.
+Do not force Laya into ordinary coding or reasoning. Do not silently truncate evidence.
+Use status for readiness. Benchmark only when performance tuning is relevant.
+Missing weights require the separate prepare command; inference never downloads models."""
+
+
+def build_server(runtime):
+    from mcp.server.fastmcp import FastMCP
+    from mcp.types import ToolAnnotations
+
+    server = FastMCP("laya-for-codex", instructions=INSTRUCTIONS)
+    read = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
+
+    @server.tool(annotations=read)
+    async def laya_status() -> dict:
+        """Inspect readiness and counters without importing PyTorch or loading weights."""
+        return runtime.status()
+
+    @server.tool(annotations=read)
+    async def laya_predict(state: str | dict | list, questions: dict,
+                           use_cache: bool = True, model: str | None = None) -> dict:
+        """Evaluate one state. Questions map IDs to {type,instructions,criteria}.
+        choice: 2–16 labels or label-description map; score: ordered rubric, zero-based expected index;
+        noul: proposition P(true). Model: multilingual (default), english, typed-decisions, or auto.
+        Rejects token truncation. Results include routing, checkpoint, actual device and timings.
+        """
+        return await asyncio.to_thread(runtime.predict, state, questions, use_cache, model)
+
+    @server.tool(annotations=read)
+    async def laya_predict_batch(items: list[dict], questions: dict,
+                                 use_cache: bool = True, model: str | None = None) -> dict:
+        """Evaluate independent {id,state} items with shared questions in one MCP round trip.
+        IDs must be unique. Preserves input order and returns per-item result or error.
+        Each item has its own context; do not combine unrelated records into one state.
+        """
+        return await asyncio.to_thread(runtime.predict_batch, items, questions, use_cache, model)
+
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False))
+    async def laya_release() -> dict:
+        """Unload resident models and clear memory-only answer caches."""
+        return await asyncio.to_thread(runtime.release)
+
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False))
+    async def laya_benchmark(iterations: int = 3) -> dict:
+        """Explicit synthetic timing diagnostic, 3–10 iterations. Not a quality evaluation."""
+        return await asyncio.to_thread(runtime.benchmark, iterations)
+
+    return server
+
+
+def serve():
+    import anyio
+    from mcp.server.stdio import stdio_server
+
+    # Reserve protocol stdout; upstream library warnings must never corrupt JSON-RPC.
+    protocol = os.fdopen(os.dup(sys.stdout.fileno()), "w", encoding="utf-8", buffering=1)
+    os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
+    # Windows native imports can stall when first initialized inside stdio worker threads.
+    import numpy  # noqa: F401
+    runtime = Runtime()
+    server = build_server(runtime)
+
+    async def run():
+        async with stdio_server(stdout=anyio.wrap_file(protocol)) as (read, write):
+            await server._mcp_server.run(read, write, server._mcp_server.create_initialization_options())
+
+    try:
+        asyncio.run(run())
+    finally:
+        runtime.close()
+        protocol.close()

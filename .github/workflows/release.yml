@@ -60,7 +60,7 @@ jobs:
 
   pypi:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.repository == 'NandhaKishorM/laya' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     environment: pypi
     permissions:

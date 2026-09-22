@@ -1,0 +1,9 @@
+{
+  "state": "The customer was charged twice and requests a refund.",
+  "questions": {
+    "team": {"type": "choice", "instructions": "Which team handles this request?", "criteria": {"billing": "payments and refunds", "technical": "software errors", "sales": "new purchases"}},
+    "urgency": {"type": "score", "instructions": "Score the urgency.", "criteria": ["routine", "needs attention soon", "service unavailable now"]},
+    "refund": {"type": "noul", "instructions": "The customer explicitly requests a refund."}
+  },
+  "use_cache": false
+}

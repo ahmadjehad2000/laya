@@ -1,0 +1,9 @@
+# Direct runtime pins tested together; platform-specific Torch wheel chosen by installer.
+torch==2.11.0
+transformers==5.17.0
+safetensors==0.8.0
+huggingface-hub==1.32.0
+numpy==2.5.3
+tokenizers==0.23.2
+mcp==1.30.0
+psutil==7.2.2

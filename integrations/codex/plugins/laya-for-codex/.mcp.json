@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "laya-for-codex": {
+      "command": "laya-for-codex",
+      "args": [
+        "serve"
+      ]
+    }
+  }
+}

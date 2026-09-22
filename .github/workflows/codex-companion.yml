@@ -1,0 +1,65 @@
+name: Codex companion
+on:
+  push:
+    branches: [main, 'feat/codex-companion']
+    paths: ['integrations/codex/**', 'laya/**', '.github/workflows/codex-companion.yml']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      real_inference:
+        description: Download the pinned multilingual checkpoint and test real CPU inference on all platforms
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  bridge:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      USE_TF: '0'
+      USE_TORCH: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install CPU PyTorch on Windows/Linux
+        if: runner.os != 'macOS'
+        run: python -m pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Install packages
+        run: |
+          python -m pip install -r integrations/codex/requirements.lock
+          python -m pip install --no-deps -e .
+          python -m pip install -e "integrations/codex[test]"
+      - name: Test bridge and upstream contracts
+        run: |
+          python -m pytest integrations/codex/tests -q
+          python tests/test_router.py
+          python tests/test_criteria.py
+      - name: Real CPU acceptance
+        if: github.event_name == 'workflow_dispatch' && inputs.real_inference
+        shell: bash
+        run: |
+          python integrations/codex/bootstrap.py install --device cpu --mode none
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            RUNTIME="$USERPROFILE/.laya-for-codex/venv/Scripts/python.exe"
+          else
+            RUNTIME="$HOME/.laya-for-codex/venv/bin/python"
+          fi
+          set +e
+          "$RUNTIME" integrations/codex/scripts/smoke_mcp.py --output integrations/codex/evidence/${{ matrix.os }}.json
+          status=$?
+          # Model disagreements are preserved as evidence; transport failures fail CI.
+          if [[ $status -ne 0 && $status -ne 2 ]]; then exit $status; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: companion-evidence-${{ matrix.os }}
+          path: integrations/codex/evidence/*.json
+          if-no-files-found: ignore

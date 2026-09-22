@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "provenance": "Synthetic cases and labels authored for companion acceptance testing; not independent benchmark data.",
+  "groups": [
+    {
+      "name": "developer-issues",
+      "questions": {"category": {"type": "choice", "instructions": "Classify this software issue.", "criteria": {"bug": "existing behavior is broken", "feature": "request for a new capability", "documentation": "instructions need clarification", "unknown": "not enough information"}}},
+      "cases": [
+        {"id": "issue-bug", "state": "Clicking Save crashes the application and discards my changes. It worked before the latest update.", "expected": {"category": "bug"}, "evidence": "An existing save operation now crashes and loses changes."},
+        {"id": "issue-feature", "state": "Please add the ability to export reports as PDF. Currently only CSV export is offered.", "expected": {"category": "feature"}, "evidence": "Requests a new export capability."},
+        {"id": "issue-docs", "state": "The installation guide does not explain where to put the config file. Please clarify the instructions.", "expected": {"category": "documentation"}, "evidence": "Requests clarification of installation instructions."},
+        {"id": "issue-unknown", "state": "Issue body is empty. No description was supplied.", "expected": {"category": "unknown"}, "evidence": "The issue contains no actionable description."}
+      ]
+    },
+    {
+      "name": "developer",
+      "questions": {"role": {"type": "choice", "instructions": "Classify the role shown by this file excerpt.", "criteria": {"test": "assertions checking software behavior", "application": "business logic used by the application", "configuration": "settings for tools or packaging", "unknown": "not enough evidence"}}},
+      "cases": [
+        {"id": "dev-test", "state": "def test_sum():\n    assert add(2, 3) == 5", "expected": {"role": "test"}, "evidence": "The excerpt asserts expected behavior in a test function."},
+        {"id": "dev-app", "state": "def total_price(items):\n    return sum(item.price * item.quantity for item in items)", "expected": {"role": "application"}, "evidence": "Computes the purchase total from items."},
+        {"id": "dev-config", "state": "[tool.pytest.ini_options]\ntestpaths = [\"tests\"]", "expected": {"role": "configuration"}, "evidence": "Configures pytest test discovery."},
+        {"id": "dev-missing", "state": "File contents unavailable. Only its name, helper.py, is known.", "expected": {"role": "unknown"}, "evidence": "A filename without contents does not establish its role."}
+      ]
+    },
+    {
+      "name": "tickets",
+      "questions": {"team": {"type": "choice", "instructions": "Which team handles the request?", "criteria": {"billing": "payments, charges, refunds", "technical": "software failures and outages", "sales": "pricing for new purchases", "unknown": "no actionable request is described"}}, "refund": {"type": "noul", "instructions": "The customer explicitly asks for a refund."}},
+      "cases": [
+        {"id": "ticket-en", "state": "I was charged twice. Please refund the duplicate charge.", "expected": {"team": "billing", "refund": true}, "evidence": "Explicit duplicate charge and refund request."},
+        {"id": "ticket-ar", "state": "تم خصم المبلغ مرتين، أرجو إعادة المبلغ الزائد.", "expected": {"team": "billing", "refund": true}, "evidence": "Arabic: the amount was charged twice; return the extra amount."},
+        {"id": "ticket-mixed", "state": "The app crashes عند تسجيل الدخول. Please fix the login error.", "expected": {"team": "technical", "refund": false}, "evidence": "Reports a login crash, with no refund request."},
+        {"id": "ticket-sales", "state": "How much does a new subscription for twenty people cost?", "expected": {"team": "sales", "refund": false}, "evidence": "Asks for pricing for a new purchase."},
+        {"id": "ticket-negation", "state": "I do not want a refund. The application will not open; please fix it.", "expected": {"team": "technical", "refund": false}, "evidence": "Explicitly rejects a refund and requests technical help."},
+        {"id": "ticket-unknown", "state": "Hello. I need help but have not described the problem yet.", "expected": {"team": "unknown", "refund": false}, "evidence": "No issue details or refund request are given."}
+      ]
+    },
+    {
+      "name": "documents",
+      "questions": {"kind": {"type": "choice", "instructions": "Classify this document excerpt.", "criteria": {"invoice": "requests payment for goods or services", "meeting": "meeting discussion or action notes", "guide": "instructions for performing a task", "unknown": "insufficient information"}}},
+      "cases": [
+        {"id": "doc-invoice", "state": "Invoice 41. Amount due: USD 200. Payment due October 1.", "expected": {"kind": "invoice"}, "evidence": "States invoice number, amount due and payment deadline."},
+        {"id": "doc-meeting", "state": "Meeting notes: Sara will deliver the revised design by Friday. Omar will review it.", "expected": {"kind": "meeting"}, "evidence": "Records meeting action owners and a deadline."},
+        {"id": "doc-guide", "state": "To reset your password, open Settings, select Security, and choose Reset password.", "expected": {"kind": "guide"}, "evidence": "Gives steps to perform password reset."},
+        {"id": "doc-unknown", "state": "Document is unreadable; no text could be extracted.", "expected": {"kind": "unknown"}, "evidence": "No document contents are available."}
+      ]
+    }
+  ]
+}
