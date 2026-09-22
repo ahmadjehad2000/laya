@@ -25,3 +25,4 @@ laya_codex_companion = ["models.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]

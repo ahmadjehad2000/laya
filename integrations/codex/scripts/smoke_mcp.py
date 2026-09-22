@@ -45,6 +45,8 @@ async def smoke(args):
                 request = json.loads((ROOT / "examples" / "quickstart.json").read_text(encoding="utf-8"))
                 report["quickstart"] = await call("laya_predict", request)
                 assert {a["type"] for a in report["quickstart"]["answers"].values()} == {"choice", "score", "noul"}
+                if args.require_device:
+                    assert report["quickstart"]["runtime"]["device"] == args.require_device, "Unexpected device fallback"
                 request["use_cache"] = True
                 await call("laya_predict", request)
                 cached = await call("laya_predict", request)
@@ -65,6 +67,8 @@ async def smoke(args):
                         if "error" in prediction:
                             report["integration_failures"].append(record)
                         else:
+                            if args.require_device:
+                                assert prediction["result"]["runtime"]["device"] == args.require_device, "Unexpected device fallback"
                             for qid, expected in case["expected"].items():
                                 answer = prediction["result"]["answers"][qid]
                                 actual = answer["choice"] if answer["type"] == "choice" else answer["noul"] >= 0.5
@@ -98,4 +102,5 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path)
     parser.add_argument("--device", choices=["cpu", "cuda", "mps", "auto"])
     parser.add_argument("--model", choices=["multilingual", "english", "typed-decisions", "auto"])
+    parser.add_argument("--require-device", choices=["cpu", "cuda", "mps"], help="Fail if real inference falls back to another device")
     raise SystemExit(asyncio.run(smoke(parser.parse_args())))

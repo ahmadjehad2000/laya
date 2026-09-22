@@ -2,7 +2,7 @@ name: Codex companion
 on:
   push:
     branches: [main, 'feat/codex-companion']
-    paths: ['integrations/codex/**', 'laya/**', '.github/workflows/codex-companion.yml']
+    paths: ['integrations/codex/**', 'laya/**', 'README.md', 'setup.py', 'pyproject.toml', '.github/workflows/codex-companion.yml']
   pull_request:
   workflow_dispatch:
     inputs:
@@ -12,12 +12,19 @@ on:
         default: false
 permissions:
   contents: read
+concurrency:
+  group: codex-companion-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
 jobs:
   bridge:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.12']
+        include:
+          - os: ubuntu-latest
+            python: '3.13'
     runs-on: ${{ matrix.os }}
     env:
       USE_TF: '0'
@@ -28,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
           cache: pip
       - name: Install CPU PyTorch on Windows/Linux
         if: runner.os != 'macOS'
@@ -44,23 +51,23 @@ jobs:
           python tests/test_router.py
           python tests/test_criteria.py
       - name: Real CPU acceptance
-        if: github.event_name == 'workflow_dispatch' && inputs.real_inference
+        if: github.event_name == 'workflow_dispatch' && inputs.real_inference && matrix.python == '3.12'
         shell: bash
         run: |
-          python integrations/codex/bootstrap.py install --device cpu --mode none --min-free-ram-gib 2.5
+          python integrations/codex/bootstrap.py install --device cpu --mode none
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             RUNTIME="$USERPROFILE/.laya-for-codex/venv/Scripts/python.exe"
           else
             RUNTIME="$HOME/.laya-for-codex/venv/bin/python"
           fi
           set +e
-          "$RUNTIME" integrations/codex/scripts/smoke_mcp.py --output integrations/codex/evidence/${{ matrix.os }}.json
+          "$RUNTIME" integrations/codex/scripts/smoke_mcp.py --output integrations/codex/evidence/${{ matrix.os }}-py${{ matrix.python }}.json
           status=$?
           # Model disagreements are preserved as evidence; transport failures fail CI.
           if [[ $status -ne 0 && $status -ne 2 ]]; then exit $status; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: companion-evidence-${{ matrix.os }}
-          path: integrations/codex/evidence/${{ matrix.os }}.json
+          name: companion-evidence-${{ matrix.os }}-py${{ matrix.python }}
+          path: integrations/codex/evidence/${{ matrix.os }}-py${{ matrix.python }}.json
           if-no-files-found: ignore

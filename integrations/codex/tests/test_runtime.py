@@ -99,12 +99,11 @@ def test_idle_release(runtime):
     instance = Runtime(runtime.root, replace(runtime.config, idle_unload_sec=1), FakeBackend)
     try:
         instance.predict("fine", QUESTIONS)
-        instance.last_use = time.monotonic() - 5
-        deadline = time.monotonic() + 3
-        while instance.status()["loaded"] and time.monotonic() < deadline:
-            time.sleep(0.05)
+        assert not instance._expire_idle(instance.last_use + .5)
+        assert instance._expire_idle(instance.last_use + 1)
         assert instance.status()["loaded"] == []
         assert instance.status()["cache_entries"] == 0
+        assert not instance._expire_idle(instance.last_use + 5)
     finally:
         instance.close()
 

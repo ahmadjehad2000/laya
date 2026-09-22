@@ -11,6 +11,7 @@ from . import __version__
 from .checkpoints import MODELS, ready
 from .config import Config, home
 from .validation import bounded_json, questions_check, request_check
+from .resources import ResourcePressureError, memory_plan
 
 
 class Runtime:
@@ -30,12 +31,19 @@ class Runtime:
 
     def _idle(self):
         while not self.stop.wait(min(10, self.config.idle_unload_sec)):
-            if self.lock.acquire(blocking=False):
-                try:
-                    if self.backend and time.monotonic() - self.last_use >= self.config.idle_unload_sec:
-                        self._release()
-                finally:
-                    self.lock.release()
+            self._expire_idle()
+
+    def _expire_idle(self, now=None):
+        if not self.lock.acquire(blocking=False):
+            return False
+        try:
+            if (self.backend and self.backend.router.loaded and
+                    (time.monotonic() if now is None else now) - self.last_use >= self.config.idle_unload_sec):
+                self._release()
+                return True
+            return False
+        finally:
+            self.lock.release()
 
     def _release(self):
         if self.backend:
@@ -56,7 +64,8 @@ class Runtime:
             return {"version": __version__, "runtime": "upstream-laya-pytorch", "busy": False,
                     "configuration": self.config.as_dict(), "device": self.device,
                     "loaded": list(self.backend.router.loaded) if self.backend else [],
-                    "checkpoints": {k: {**v, "prepared": ready(self.root, k)} for k, v in MODELS.items()},
+                    "checkpoints": {k: {**v, "prepared": ready(self.root, k),
+                                        "memory_estimate": memory_plan(self.root, k, self.config)} for k, v in MODELS.items()},
                     "ram_available_gib": round(psutil.virtual_memory().available / 2**30, 2),
                     "process_rss_mib": round(psutil.Process().memory_info().rss / 2**20, 1),
                     "calls": self.calls, "cache_hits": self.hits, "errors": self.errors,
@@ -104,12 +113,20 @@ class Runtime:
                                  "elapsed_ms": round((time.perf_counter() - start) * 1000, 2)}
             return result
         cold = name not in self.backend.router.loaded
-        floor = self.config.min_free_ram_gib if cold else 0.5
-        if psutil.virtual_memory().available / 2**30 < floor:
+        if cold and self.backend.router.loaded:
+            # Old resident weights must not count against the next checkpoint's preflight.
             self._release()
-            raise MemoryError(f"Need at least {floor} GiB available RAM; model released")
+        preflight = memory_plan(self.root, name, self.config, cold)
+        preflight["available_ram_gib"] = psutil.virtual_memory().available / 2**30
+        if preflight["available_ram_gib"] < preflight["required_ram_gib"]:
+            self._release()
+            raise ResourcePressureError(preflight)
         loading = time.perf_counter()
-        agent = self.backend.load(name)
+        try:
+            agent = self.backend.load(name)
+        except (MemoryError, RuntimeError):
+            self._release()
+            raise
         load_ms = (time.perf_counter() - loading) * 1000 if cold else 0
         context = self.backend.check(agent, state, questions)
         inference = time.perf_counter()
@@ -131,6 +148,7 @@ class Runtime:
                   "checkpoint": {"variant": name, **MODELS[name]}, "context_tokens": context,
                   "runtime": {"backend": "pytorch", "device": self.device,
                               "fallback_reason": self.backend.fallback_reason,
+                              "memory_preflight": preflight,
                               "cache_hit": False, "load_ms": round(load_ms, 2),
                               "inference_ms": round(inference_ms, 2),
                               "elapsed_ms": round((time.perf_counter() - start) * 1000, 2)}}
@@ -162,7 +180,10 @@ class Runtime:
                 result = self.predict(item["state"], questions, use_cache, model)
                 results.append({"id": item["id"], "result": result})
             except (ValueError, FileNotFoundError, MemoryError, RuntimeError) as exc:
-                results.append({"id": item["id"], "error": {"type": type(exc).__name__, "message": str(exc)}})
+                error = {"type": type(exc).__name__, "message": str(exc)}
+                if isinstance(exc, ResourcePressureError):
+                    error.update(code="memory_pressure", retryable=True, details=exc.details)
+                results.append({"id": item["id"], "error": error})
         return {"items": results, "succeeded": sum("result" in r for r in results),
                 "failed": sum("error" in r for r in results)}
 

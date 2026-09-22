@@ -3,6 +3,7 @@ import os
 
 from .checkpoints import MODELS, model_path, ready
 from .validation import context_check
+from .resources import memory_plan
 
 
 class Backend:
@@ -43,7 +44,7 @@ class Backend:
             if device == "cuda":
                 if not torch.cuda.is_available():
                     self.fallback_reason, device = "CUDA unavailable", "cpu"
-                elif torch.cuda.mem_get_info()[0] / 2**30 < self.config.min_free_vram_gib:
+                elif torch.cuda.mem_get_info()[0] / 2**30 < memory_plan(self.root, name, self.config)["required_cuda_vram_gib"]:
                     self.fallback_reason, device = "Insufficient free CUDA memory", "cpu"
             if device == "mps" and not torch.backends.mps.is_available():
                 self.fallback_reason, device = "MPS unavailable", "cpu"

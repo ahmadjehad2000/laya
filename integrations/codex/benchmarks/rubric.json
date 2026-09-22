@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "provenance": "Synthetic, manually labeled rubric diagnostics; not an independent benchmark.",
+  "questions": {"severity": {"type": "score", "instructions": "Rate the incident severity using the evidence.", "criteria": ["cosmetic only; normal work unaffected", "minor inconvenience; easy workaround exists", "important workflow blocked for some users", "entire service unavailable to all users"]}},
+  "cases": [
+    {"id": "cosmetic-1", "state": "The footer has a spelling mistake. Every feature works normally.", "expected": 0, "evidence": "Only spelling is affected."},
+    {"id": "cosmetic-2", "state": "The logo is slightly misaligned. No users are prevented from working.", "expected": 0, "evidence": "Visual alignment only."},
+    {"id": "cosmetic-3", "state": "A button has the wrong color, but it works correctly and all tasks can be completed.", "expected": 0, "evidence": "Color only; behavior is intact."},
+    {"id": "minor-1", "state": "The keyboard shortcut fails. Clicking the menu runs the same command successfully.", "expected": 1, "evidence": "An easy equivalent action remains available."},
+    {"id": "minor-2", "state": "The page needs one extra refresh to show new messages. Refreshing always fixes it.", "expected": 1, "evidence": "Minor extra step with an effective workaround."},
+    {"id": "minor-3", "state": "The date picker is broken, but typing the date manually works for everyone.", "expected": 1, "evidence": "Manual entry provides an easy workaround."},
+    {"id": "blocked-1", "state": "A subset of customers cannot complete checkout. They have no workaround. Other customers can still buy.", "expected": 2, "evidence": "Important workflow blocked for some customers."},
+    {"id": "blocked-2", "state": "Report export is completely broken for the finance team. Other teams and the rest of the service work.", "expected": 2, "evidence": "A team's important workflow is blocked."},
+    {"id": "blocked-3", "state": "Users in one region cannot log in and have no alternative. Users elsewhere can log in normally.", "expected": 2, "evidence": "Some users are blocked; service is not down for everyone."},
+    {"id": "outage-1", "state": "The entire service is down. No user can access any feature.", "expected": 3, "evidence": "Explicit total outage."},
+    {"id": "outage-2", "state": "All production servers are offline globally. Every customer is unable to use the application.", "expected": 3, "evidence": "All servers and customers affected."},
+    {"id": "outage-3", "state": "A complete worldwide outage has made the service unavailable to all users.", "expected": 3, "evidence": "Explicit worldwide unavailability."}
+  ]
+}
