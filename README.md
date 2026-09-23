@@ -6,7 +6,7 @@
 
 Give **Astra and Sol** a local decision companion throughout the task. Laya for Codex combines the original [Laya/PyTorch](https://github.com/NandhaKishorM/laya) engine with a native Codex integration for approach selection, verification advice, reasoning effort, context selection, and reversible handoffs.
 
-**0.4.0 preview** · Windows verified · CPU/CUDA · Eight MCP tools · Apache-2.0
+**0.4.0 preview** · CPU/CUDA · Eight MCP tools · Apache-2.0
 
 ```powershell
 laya-for-codex                    # Astra + Laya
