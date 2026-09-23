@@ -51,7 +51,7 @@ For optional stability checking, set `"verify_choice_order": true` in `~/.laya-f
 - [Typed checkpoint comparison](../evidence/session-typed-comparison.json)
 - [Core overflow and stability](../evidence/session-core-safeguards.json)
 
-`native/verify_native.py` uses a local provider fixture. `native/verify_session.py <output-directory>` makes real Astra/Sol calls and consumes normal provider usage. `scripts/smoke_mcp.py --installed` distinguishes transport failures from model disagreements.
+`native/verify_native.py` uses a local provider fixture. `native/verify_session.py --output <directory>` checks only the local worker. Add `--live` to make real Astra/Sol calls and consume normal provider usage. `scripts/smoke_mcp.py --installed` distinguishes transport failures from model disagreements.
 
 ## Scope and rollback
 
