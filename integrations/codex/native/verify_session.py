@@ -50,7 +50,7 @@ def main():
         if p.returncode: row["error"]=(p.stdout+p.stderr)[-2500:]
        except subprocess.TimeoutExpired: row={"model":model,"arm":arm,"error":"timeout","correct":False}
        report["runs"].append(row); (out/"session-pilot.json").write_text(json.dumps(report,indent=2)); print(json.dumps(row),flush=True)
-    
+
     if not all(r.get("returncode") == 0 and r.get("correct") and r.get("stats_emitted") and r.get("usage") for r in report["runs"]):
         raise SystemExit("Live session verification failed; inspect session-pilot.json")
 
