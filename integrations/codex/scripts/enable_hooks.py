@@ -43,7 +43,7 @@ def main():
                 return response["result"]
 
     try:
-        rpc(1, "initialize", {"clientInfo": {"name": "laya-setup", "version": "0.3.0"},
+        rpc(1, "initialize", {"clientInfo": {"name": "laya-setup", "version": "0.4.0"},
                               "capabilities": {"experimentalApi": True}})
         process.stdin.write('{"method":"initialized"}\n')
         process.stdin.flush()

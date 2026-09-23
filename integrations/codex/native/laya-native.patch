@@ -1352,10 +1352,10 @@ index 5394382df2..c0daede522 100644
   "assert_cmd",
 diff --git a/codex-rs/core/src/session/laya_controller.rs b/codex-rs/core/src/session/laya_controller.rs
 new file mode 100644
-index 0000000000..6dd5c39fb5
+index 0000000000..1a70278ede
 --- /dev/null
 +++ b/codex-rs/core/src/session/laya_controller.rs
-@@ -0,0 +1,482 @@
+@@ -0,0 +1,504 @@
 +//! Laya supplies typed effort decisions; Codex owns settings, history and execution.
 +//! Child pipes keep inference local and work on Windows without a listening port.
 +
@@ -1496,6 +1496,8 @@ index 0000000000..6dd5c39fb5
 +    window: String,
 +    pending: Option<Value>,
 +    disabled: bool,
++    decision_ms: f64,
++    cache_hits: u64,
 +}
 +
 +impl Controller {
@@ -1588,7 +1590,7 @@ index 0000000000..6dd5c39fb5
 +        }
 +        let id = format!("{}:{}", turn.sub_id, self.generation);
 +        let request = json!({"protocol": 1, "id": id, "generation": self.generation,
-+            "model": current.model_info.slug, "evidence": evidence,
++            "model": current.model_info.slug, "evidence": evidence, "milestones": true,
 +            "supported_efforts": current.model_info.supported_reasoning_levels.iter()
 +                .filter(|p| p.effort != ReasoningEffort::Ultra)
 +                .map(|p| p.effort.to_string()).collect::<Vec<_>>()});
@@ -1706,6 +1708,13 @@ index 0000000000..6dd5c39fb5
 +        record["actual_effort"] = actual;
 +        record["turn_id"] = json!(step.turn.sub_id);
 +        if applied && record["decision"]["status"] == "decided" {
++            self.decision_ms += record["decision"]["elapsed_ms"].as_f64().unwrap_or(0.0);
++            self.cache_hits += u64::from(record["decision"]["runtime"]["cache_hit"] == true);
++            let choices = &record["decision"]["milestone"]["choices"];
++            let advice = format!("Laya milestone advice (partial public evidence; advisory, never permission): approach={}, verification={}, context={}. Validate against original sources. Use file context selection before bulk reads; archive and recall omitted evidence. Codex owns generation and tests.", choices["approach"], choices["verification"], choices["context"]);
++            let item = crate::context::ContextualUserFragment::into(crate::context::DeveloperInstructions::new(advice));
++            session.record_conversation_items(&step.turn, &step.settings.model_info, &[item]).await;
++
 +            let effort = record["actual_effort"].as_str().unwrap_or("default");
 +            self.notice(
 +                session,
@@ -1744,6 +1753,16 @@ index 0000000000..6dd5c39fb5
 +        Ok(())
 +    }
 +
++    pub(super) async fn report(&self, session: &Session, turn: &TurnContext, before: codex_protocol::protocol::TokenUsage, elapsed: f64) {
++        if self.generation == 0 { return; }
++        let usage = session.token_usage_info().await;
++        let message = if let Some(info) = usage {
++            let u = info.total_token_usage;
++            format!("Laya task stats: input={} cached_input={} output={} reasoning_output={} total={} | decisions={} cached_effort_decisions={} local_ms={:.1} task_seconds={:.2}. Cached input is included in input; reasoning is included in output. Savings are not inferred.", u.input_tokens-before.input_tokens, u.cached_input_tokens-before.cached_input_tokens, u.output_tokens-before.output_tokens, u.reasoning_output_tokens-before.reasoning_output_tokens, u.total_tokens-before.total_tokens, self.generation, self.cache_hits, self.decision_ms, elapsed)
++        } else { format!("Laya task stats: provider usage unavailable | decisions={} local_ms={:.1} task_seconds={:.2}", self.generation, self.decision_ms, elapsed) };
++        self.notice(session, turn, &message).await;
++    }
++
 +    async fn notice(&self, session: &Session, turn: &TurnContext, message: &str) {
 +        session
 +            .send_event(
@@ -1778,6 +1797,9 @@ index 0000000000..6dd5c39fb5
 +            && matches!(reply["lease"].as_u64(), Some(1 | 2)),
 +        "invalid Laya effort or duration"
 +    );
++    for (key, allowed) in [("approach", &["inspect", "implement", "verify"][..]), ("verification", &["focused", "broaden"][..]), ("context", &["retain", "select"][..])] {
++        anyhow::ensure!(reply["milestone"]["choices"][key].as_str().is_some_and(|v| allowed.contains(&v)), "invalid or missing milestone decision");
++    }
 +    let _: ReasoningEffort = serde_json::from_value(reply["effort"].clone())?;
 +    Ok(reply)
 +}
@@ -1840,16 +1862,16 @@ index 0000000000..6dd5c39fb5
 +mod tests;
 diff --git a/codex-rs/core/src/session/laya_controller_tests.rs b/codex-rs/core/src/session/laya_controller_tests.rs
 new file mode 100644
-index 0000000000..feccf7f2a1
+index 0000000000..15a9fc35eb
 --- /dev/null
 +++ b/codex-rs/core/src/session/laya_controller_tests.rs
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,43 @@
 +use super::*;
 +use pretty_assertions::assert_eq;
 +
 +#[test]
 +fn rejects_stale_identity_and_unadvertised_effort() {
-+    let reply = json!({"protocol":1,"id":"turn:2","generation":2,"status":"decided","effort":"high","lease":1});
++    let reply = json!({"protocol":1,"id":"turn:2","generation":2,"status":"decided","effort":"high","lease":1,"milestone":{"choices":{"approach":"inspect","verification":"focused","context":"retain"}}});
 +    assert!(validate_reply(reply.clone(), "turn:1", 1, &json!(["high", "low"])).is_err());
 +    assert!(validate_reply(reply.clone(), "turn:2", 2, &json!(["low", "medium"])).is_err());
 +    assert_eq!(
@@ -1878,6 +1900,14 @@ index 0000000000..feccf7f2a1
 +    ])).unwrap();
 +    let (evidence, _) = project_evidence(items.iter());
 +    assert_eq!(evidence["incomplete_requests"], json!(true));
++}
++
++#[test]
++fn milestone_missing_or_unknown_blocks() {
++    let mut reply = json!({"protocol":1,"id":"t","generation":1,"status":"decided","effort":"high","lease":1});
++    assert!(validate_reply(reply.clone(), "t", 1, &json!(["high", "low"])).is_err());
++    reply["milestone"] = json!({"choices":{"approach":"deploy","verification":"focused","context":"retain"}});
++    assert!(validate_reply(reply, "t", 1, &json!(["high", "low"])).is_err());
 +}
 diff --git a/codex-rs/core/src/session/mod.rs b/codex-rs/core/src/session/mod.rs
 index 98bfa792b2..0bdd5454a3 100644
@@ -1986,18 +2016,20 @@ index f5887b10b0..c6f8daf53b 100644
  #[test_case(TaskChangeDuringLookup::FinishedAndReplaced; "completed task is replaced")]
  #[test_case(TaskChangeDuringLookup::FinishedAndReusedContext; "completed context is reused by another task")]
 diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
-index 5d5fa3a0aa..c4eeabceb4 100644
+index 5d5fa3a0aa..5fc9cbd821 100644
 --- a/codex-rs/core/src/session/turn.rs
 +++ b/codex-rs/core/src/session/turn.rs
-@@ -420,6 +420,7 @@ pub(crate) async fn run_turn(
+@@ -420,6 +420,9 @@ pub(crate) async fn run_turn(
  
      let mut next_step_context = Some(first_step_context);
      let mut guardian_budget_compacted = false;
 +    let mut laya = super::laya_controller::Controller::default();
++    let laya_started = std::time::Instant::now();
++    let laya_usage_before = sess.token_usage_info().await.map(|i| i.total_token_usage).unwrap_or_default();
      loop {
          // Note that pending_input would be something like a message the user
          // submitted through the UI while the model was running. Though the UI
-@@ -454,6 +455,12 @@ pub(crate) async fn run_turn(
+@@ -454,6 +457,12 @@ pub(crate) async fn run_turn(
          .await;
  
          // Capture once so context, advertised tools, and tool calls share one request view.
@@ -2010,7 +2042,7 @@ index 5d5fa3a0aa..c4eeabceb4 100644
          let step_context = match next_step_context.take() {
              Some(step_context) if pending_input.is_empty() => step_context,
              None if pending_input.is_empty() => {
-@@ -491,6 +498,7 @@ pub(crate) async fn run_turn(
+@@ -491,6 +500,7 @@ pub(crate) async fn run_turn(
                  .await?
              }
          };
@@ -2018,6 +2050,14 @@ index 5d5fa3a0aa..c4eeabceb4 100644
          let sampling_request_result: CodexResult<_> = async {
              super::time_reminder::maybe_record_current_time_reminder(
                  sess.as_ref(),
+@@ -779,6 +789,7 @@ pub(crate) async fn run_turn(
+         }
+     }
+ 
++    laya.report(&sess, &turn_context, laya_usage_before, laya_started.elapsed().as_secs_f64()).await;
+     Ok(last_agent_message)
+ }
+ 
 diff --git a/codex-rs/models-manager/models.json b/codex-rs/models-manager/models.json
 index 1b5ce2c515..5fea4d8b52 100644
 --- a/codex-rs/models-manager/models.json
@@ -2347,6 +2387,27 @@ index 6e538ad0c0..120a32ee84 100644
      assert!(
          popup.contains("test-visible-model"),
          "expected visible model to appear in picker:\n{popup}"
+diff --git a/codex-rs/tui/src/chatwidget/turn_runtime.rs b/codex-rs/tui/src/chatwidget/turn_runtime.rs
+index 388af9dffc..ae3b29a3e6 100644
+--- a/codex-rs/tui/src/chatwidget/turn_runtime.rs
++++ b/codex-rs/tui/src/chatwidget/turn_runtime.rs
+@@ -518,6 +518,16 @@ impl ChatWidget {
+ 
+     pub(super) fn on_warning(&mut self, message: impl Into<String>) {
+         let message = message.into();
++        if let Some(status) = message.strip_prefix("Laya APPLIED: ") {
++            self.set_status_header(format!("Laya · {}", status.replace("; generation ", " · step ")));
++            self.request_redraw();
++            return;
++        }
++        if message.starts_with("Laya task stats:") {
++            self.add_info_message(message, None);
++            self.request_redraw();
++            return;
++        }
+         if !self.warning_display_state.should_display(&message) {
+             return;
+         }
 diff --git a/codex-rs/tui/src/config_update.rs b/codex-rs/tui/src/config_update.rs
 index 9814b6a2be..d49d6cef85 100644
 --- a/codex-rs/tui/src/config_update.rs

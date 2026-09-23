@@ -1,0 +1,917 @@
+{
+  "strict_overflow_rejected": true,
+  "cases": [
+    {
+      "id": "issue-bug",
+      "answers": {
+        "category": {
+          "type": "choice",
+          "choice": "bug",
+          "probabilities": {
+            "bug": 0.9976,
+            "feature": 0.0005,
+            "documentation": 0.0005,
+            "unknown": 0.0014
+          },
+          "confidence": 0.986,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "bug"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 116,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": true,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 2.5488230157643557,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 11.787479400634766
+        },
+        "cache_hit": false,
+        "load_ms": 10550.75,
+        "inference_ms": 455.91,
+        "elapsed_ms": 12582.49
+      }
+    },
+    {
+      "id": "issue-feature",
+      "answers": {
+        "category": {
+          "type": "choice",
+          "choice": "feature",
+          "probabilities": {
+            "bug": 0.0003,
+            "feature": 0.9991,
+            "documentation": 0.0002,
+            "unknown": 0.0004
+          },
+          "confidence": 0.9942,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "feature"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 114,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 9.018962860107422
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 45.76,
+        "elapsed_ms": 46.78
+      }
+    },
+    {
+      "id": "issue-docs",
+      "answers": {
+        "category": {
+          "type": "choice",
+          "choice": "documentation",
+          "probabilities": {
+            "bug": 0.0113,
+            "feature": 0.0024,
+            "documentation": 0.791,
+            "unknown": 0.1954
+          },
+          "confidence": 0.5893,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "documentation"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 116,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 9.016548156738281
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 54.23,
+        "elapsed_ms": 55.18
+      }
+    },
+    {
+      "id": "issue-unknown",
+      "answers": {
+        "category": {
+          "type": "choice",
+          "choice": "bug",
+          "probabilities": {
+            "bug": 0.8857,
+            "feature": 0.003,
+            "documentation": 0.038,
+            "unknown": 0.0733
+          },
+          "confidence": 0.6822,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "bug"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 100,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 9.015933990478516
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 56.96,
+        "elapsed_ms": 58.04
+      }
+    },
+    {
+      "id": "dev-test",
+      "answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.4137,
+            "application": 0.0364,
+            "configuration": 0.003,
+            "unknown": 0.547
+          },
+          "confidence": 0.3992,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": true,
+            "alternate_choice": "test"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 134,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 9.016033172607422
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 92.98,
+        "elapsed_ms": 94.44
+      }
+    },
+    {
+      "id": "dev-app",
+      "answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.018,
+            "application": 0.3942,
+            "configuration": 0.0186,
+            "unknown": 0.5692
+          },
+          "confidence": 0.3983,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "unknown"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 146,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 8.962017059326172
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 65.92,
+        "elapsed_ms": 67.34
+      }
+    },
+    {
+      "id": "dev-config",
+      "answers": {
+        "role": {
+          "type": "choice",
+          "choice": "test",
+          "probabilities": {
+            "test": 0.9998,
+            "application": 0.0,
+            "configuration": 0.0,
+            "unknown": 0.0001
+          },
+          "confidence": 0.9985,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "test"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 126,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 8.95241928100586
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 90.75,
+        "elapsed_ms": 91.92
+      }
+    },
+    {
+      "id": "dev-missing",
+      "answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.0024,
+            "application": 0.0311,
+            "configuration": 0.0066,
+            "unknown": 0.9599
+          },
+          "confidence": 0.8596,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "unknown"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 124,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 8.95330810546875
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 50.42,
+        "elapsed_ms": 51.45
+      }
+    },
+    {
+      "id": "ticket-en",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 1.0,
+            "technical": 0.0,
+            "sales": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 0.9998,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "billing"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.9702,
+          "confidence": 0.9702,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 153,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 8.955577850341797
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 66.96,
+        "elapsed_ms": 68.08
+      }
+    },
+    {
+      "id": "ticket-ar",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 0.8483,
+            "technical": 0.0146,
+            "sales": 0.0328,
+            "unknown": 0.1043
+          },
+          "confidence": 0.6039,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "billing"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.7118,
+          "confidence": 0.7118,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 171,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 9.269462585449219
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 57.62,
+        "elapsed_ms": 58.95
+      }
+    },
+    {
+      "id": "ticket-mixed",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "technical",
+          "probabilities": {
+            "billing": 0.0019,
+            "technical": 0.9827,
+            "sales": 0.0023,
+            "unknown": 0.0132
+          },
+          "confidence": 0.9281,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "technical"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.0022,
+          "confidence": 0.9978,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 165,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.188079833984375
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 50.34,
+        "elapsed_ms": 51.45
+      }
+    },
+    {
+      "id": "ticket-sales",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 1.0,
+            "technical": 0.0,
+            "sales": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 0.9999,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "billing"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.1147,
+          "confidence": 0.8853,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 153,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.769554138183594
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 56.39,
+        "elapsed_ms": 57.47
+      }
+    },
+    {
+      "id": "ticket-negation",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 0.5708,
+            "technical": 0.3008,
+            "sales": 0.0322,
+            "unknown": 0.0961
+          },
+          "confidence": 0.2662,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "billing"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.6128,
+          "confidence": 0.6128,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 171,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.774627685546875
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 57.15,
+        "elapsed_ms": 58.3
+      }
+    },
+    {
+      "id": "ticket-unknown",
+      "answers": {
+        "team": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "billing": 0.019,
+            "technical": 0.1286,
+            "sales": 0.0395,
+            "unknown": 0.8129
+          },
+          "confidence": 0.5419,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "unknown"
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.007,
+          "confidence": 0.993,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 159,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.773841857910156
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 53.22,
+        "elapsed_ms": 54.35
+      }
+    },
+    {
+      "id": "doc-invoice",
+      "answers": {
+        "kind": {
+          "type": "choice",
+          "choice": "invoice",
+          "probabilities": {
+            "invoice": 1.0,
+            "meeting": 0.0,
+            "guide": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 1.0,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "invoice"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 126,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.774765014648438
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 54.33,
+        "elapsed_ms": 55.44
+      }
+    },
+    {
+      "id": "doc-meeting",
+      "answers": {
+        "kind": {
+          "type": "choice",
+          "choice": "meeting",
+          "probabilities": {
+            "invoice": 0.0,
+            "meeting": 1.0,
+            "guide": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 1.0,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "meeting"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 120,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.774578094482422
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 49.98,
+        "elapsed_ms": 50.99
+      }
+    },
+    {
+      "id": "doc-guide",
+      "answers": {
+        "kind": {
+          "type": "choice",
+          "choice": "guide",
+          "probabilities": {
+            "invoice": 0.0899,
+            "meeting": 0.027,
+            "guide": 0.5382,
+            "unknown": 0.3448
+          },
+          "confidence": 0.268,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "guide"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 118,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.774612426757812
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 47.82,
+        "elapsed_ms": 48.9
+      }
+    },
+    {
+      "id": "doc-unknown",
+      "answers": {
+        "kind": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "invoice": 0.1094,
+            "meeting": 0.0372,
+            "guide": 0.0384,
+            "unknown": 0.8149
+          },
+          "confidence": 0.5264,
+          "action": {
+            "act_probability": 1.0
+          },
+          "verification": {
+            "method": "choice-order",
+            "review_required": false,
+            "alternate_choice": "unknown"
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 108,
+        "output_tokens": 0
+      },
+      "runtime": {
+        "backend": "pytorch",
+        "device": "cuda",
+        "fallback_reason": null,
+        "memory_preflight": {
+          "checkpoint": "multilingual",
+          "cold": false,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 0.75,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+          "available_ram_gib": 10.774246215820312
+        },
+        "cache_hit": false,
+        "load_ms": 0,
+        "inference_ms": 47.4,
+        "elapsed_ms": 48.42
+      }
+    }
+  ]
+}

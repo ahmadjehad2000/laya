@@ -85,10 +85,10 @@ laya-codex -m gpt-5.6-sol
    credential environment variables are not passed to the worker.
    Python isolated mode prevents a workspace module or `PYTHONPATH` from shadowing
    the installed companion entrypoint.
-3. Two questions share the evidence: supported reasoning effort and duration (one or
+3. Effort questions share the evidence: supported reasoning effort and duration (one or
    two generations). Inference uses the prepared multilingual checkpoint with actual
    tokenizer admission. Optional excerpts may be dropped, with omission counts;
-   essential requests are never silently truncated. Oversized essential input abstains.
+   essential requests are never silently truncated. Oversized essential input is split and every request character is assessed; admission-limit or inference failures still abstain.
 4. Codex checks the response identity/capabilities, atomically verifies the settings
    snapshot is still current, then applies effort through its native settings owner.
    An `APPLIED` notice/audit record is emitted only after a fresh step captures the
@@ -179,3 +179,17 @@ The [native Windows workflow](../../../.github/workflows/laya-native.yml) is man
 dispatched because source builds are expensive. It always checks required-worker blocking;
 the optional `real_laya` input additionally prepares weights and exercises real CPU
 inference. The ordinary companion CI does not establish native-client coverage.
+
+## Version 0.4.0 session support
+
+Each supported generation also requires validated approach, verification and context
+choices. These choices are supplied to the next provider request as advisory context.
+The milestone packet uses explicit partial public excerpts with source hashes and
+coverage counts. It is not a semantic summary or a permission grant.
+
+The TUI renders normal Laya application as a status header, without a warning icon.
+Normal task completion emits provider token deltas and local assessment timing.
+Early aborts or fatal gate errors may exit before this footer; the explicit error and
+audit records remain the source of truth. JSON exec retains machine-readable usage.
+
+See [0.4.0 verification](../docs/SESSION_RELEASE.md).

@@ -59,7 +59,14 @@ class Backend:
 
     def predict(self, agent, state, questions):
         before = str(agent.device)
-        result = agent.predict(state, questions)
+        result = (agent.predict_checked(state, questions) if self.config.verify_choice_order
+                  else agent.predict(state, questions))
+        verification = result.get("verification")
+        if verification:
+            for key in verification["checked"]:
+                result["answers"][key]["verification"] = {
+                    "method": "choice-order", "review_required": key in verification["review_required"],
+                    "alternate_choice": verification["alternate_answers"][key]["choice"]}
         if str(agent.device) != before:
             self.fallback_reason = "Upstream fell back during inference"
         return result

@@ -16,7 +16,7 @@ def test_gate_requires_correlated_real_decision(model, monkeypatch):
         request = json.loads(kwargs["input"])
         assert request["model"] in ("gpt-6-astra", "gpt-6-sol")
         assert request["evidence"]["requests"] == ["Fix tests; do not deploy"]
-        return SimpleNamespace(returncode=0, stdout=json.dumps({**request, "status": "decided", "effort": "high"}))
+        return SimpleNamespace(returncode=0, stdout=json.dumps({**request, "status": "decided", "effort": "high", "milestone": {"choices": {"approach": "inspect", "verification": "focused", "context": "retain"}}}))
     assert prompt_gate.evaluate({"model": model, "prompt": "Fix tests; do not deploy"}, run)["effort"] == "high"
 
 
@@ -46,3 +46,11 @@ def test_hook_blocks_worker_failure_without_persisting_prompt(monkeypatch, tmp_p
     records = list((tmp_path / "hook-audit").glob("*.json"))
     assert records and "private task" not in records[0].read_text()
     assert json.loads(records[0].read_text())["admitted"] is False
+
+
+def test_gate_blocks_old_worker_without_milestone_choices():
+    def run(*args, **kwargs):
+        request = json.loads(kwargs["input"])
+        return SimpleNamespace(returncode=0, stdout=json.dumps({**request, "status": "decided", "effort": "low"}))
+    with pytest.raises(RuntimeError, match="milestone"):
+        prompt_gate.evaluate({"model": "gpt-6-sol", "prompt": "Verify source"}, run)

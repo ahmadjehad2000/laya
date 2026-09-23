@@ -1,25 +1,25 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "laya-for-codex",
-  "version": "0.3.0",
-  "description": "Required Laya prompt assessment for Astra/Sol, with local tools and native generation enforcement.",
+  "version": "0.4.0",
+  "description": "Local decision support for Astra/Sol: milestone guidance, context selection, handoffs and native task stats.",
   "author": {
     "name": "ahmadjehad2000",
     "url": "https://github.com/ahmadjehad2000"
   },
-  "repository": "https://github.com/ahmadjehad2000/laya",
-  "homepage": "https://github.com/ahmadjehad2000/laya",
+  "repository": "https://github.com/ahmadjehad2000/laya-for-codex",
+  "homepage": "https://github.com/ahmadjehad2000/laya-for-codex",
   "license": "Apache-2.0",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Laya for Codex",
-        "shortDescription": "Required Laya for Astra and Sol.",
-        "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
+        "shortDescription": "Local decisions for Astra and Sol.",
+        "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations with milestone advice and task usage reports. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
         "developerName": "ahmadjehad2000",
         "category": "Productivity",
         "capabilities": [],
-        "websiteURL": "https://github.com/ahmadjehad2000/laya",
+        "websiteURL": "https://github.com/ahmadjehad2000/laya-for-codex",
         "brandColor": "#62E9C2",
         "composerIcon": "./assets/icon.png",
         "logo": "./assets/icon.png",

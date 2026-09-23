@@ -10,14 +10,14 @@ PLUGIN = ROOT / "plugins" / "laya-for-codex"
 def build():
     version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
     identity = {"name": "laya-for-codex", "version": version,
-                "description": "Required Laya prompt assessment for Astra/Sol, with local tools and native generation enforcement.",
+                "description": "Local decision support for Astra/Sol: milestone guidance, context selection, handoffs and native task stats.",
                 "author": {"name": "ahmadjehad2000", "url": "https://github.com/ahmadjehad2000"},
-                "repository": "https://github.com/ahmadjehad2000/laya",
-                "homepage": "https://github.com/ahmadjehad2000/laya", "license": "Apache-2.0"}
-    interface = {"displayName": "Laya for Codex", "shortDescription": "Required Laya for Astra and Sol.",
-                 "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
+                "repository": "https://github.com/ahmadjehad2000/laya-for-codex",
+                "homepage": "https://github.com/ahmadjehad2000/laya-for-codex", "license": "Apache-2.0"}
+    interface = {"displayName": "Laya for Codex", "shortDescription": "Local decisions for Astra and Sol.",
+                 "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations with milestone advice and task usage reports. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
                  "developerName": "ahmadjehad2000", "category": "Productivity", "capabilities": [],
-                 "websiteURL": "https://github.com/ahmadjehad2000/laya",
+                 "websiteURL": "https://github.com/ahmadjehad2000/laya-for-codex",
                  "brandColor": "#62E9C2", "composerIcon": "./assets/icon.png",
                  "logo": "./assets/icon.png", "logoDark": "./assets/icon.png",
                  "defaultPrompt": ["Triage these issues using Laya and show the supporting evidence.",

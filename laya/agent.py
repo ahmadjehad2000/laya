@@ -258,7 +258,7 @@ class Agent:
 
         for qid in ids:
             q = self._to_internal(questions[qid])
-            seq, markers = build_sequence(self.tok, state, q, max_len, head_max_len)
+            seq, markers = build_sequence(self.tok, state, q, max_len, head_max_len, strict=True)
             if len(markers) != len(render_options(q)):
                 raise ValueError("question %r options exceed head_max_len=%d" % (qid, head_max_len))
             items.append({"ids": seq, "markers": markers, "qtype": QTYPES[q["t"]]})
@@ -302,6 +302,8 @@ class Agent:
             k = len(items[r]["markers"])
             qt = QTYPES[q["t"]]
             t_scale = self.temperature_by_options.get(temp_bucket(qt, k), self.temperature[qt])
+            if not np.isfinite(t_scale) or float(t_scale) <= 0 or not np.isfinite(logits[r, :k]).all():
+                raise ValueError("Non-finite logits or invalid temperature; no valid decision")
             z = logits[r, :k] / max(1e-3, float(t_scale))
             p = np.exp(z - z.max())
             p = p / p.sum()
@@ -341,6 +343,34 @@ class Agent:
             "answers": answers,
             "usage": {"input_tokens": n_tokens, "output_tokens": 0},
         }
+
+    def predict_checked(self, state, questions):
+        """Check choice stability under reversed option order (extra inference).
+
+        Preserves the primary answer. A disagreement requires source review;
+        agreement is not proof of correctness. Score/noul ordering is unchanged.
+        """
+        primary = self.system_one(state, questions)
+        reversed_questions = {}
+        for key, definition in questions.items():
+            if definition["type"] == "choice":
+                criteria = definition["criteria"]
+                reversed_criteria = (dict(reversed(list(criteria.items()))) if isinstance(criteria, dict)
+                                     else list(reversed(criteria)))
+                reversed_questions[key] = {**definition, "criteria": reversed_criteria}
+        if not reversed_questions:
+            primary["verification"] = {"method": "choice-order", "checked": [], "review_required": [],
+                                       "note": "No choice questions; no stability inference performed"}
+            return primary
+        alternate = self.system_one(state, reversed_questions)
+        unstable = [key for key in reversed_questions
+                    if primary["answers"][key]["choice"] != alternate["answers"][key]["choice"]]
+        primary["usage"] = {key: primary["usage"].get(key, 0) + alternate["usage"].get(key, 0)
+                            for key in ("input_tokens", "output_tokens")}
+        primary["verification"] = {"method": "choice-order", "checked": list(reversed_questions),
+                                   "review_required": unstable, "alternate_answers": alternate["answers"],
+                                   "note": "Stability is not correctness; validate consequential decisions against sources"}
+        return primary
 
     predict = system_one
 

@@ -141,6 +141,11 @@ def main():
                 checks["wire_matches_capture"] = effort == record["actual_effort"]
                 if not checks["wire_matches_capture"]:
                     break
+        if not args.missing_worker:
+            checks["milestone_on_every_generation"] = len(records) == 3 and all(r["decision"].get("milestone") for r in records)
+            checks["advice_reaches_provider"] = len(requests) == 3 and all("Laya milestone advice" in json.dumps(r.get("input", [])) for r in requests)
+            checks["task_stats_emitted"] = "Laya task stats:" in completed.stdout + completed.stderr
+            checks["task_stats_totals"] = "input=30 cached_input=0 output=15 reasoning_output=0 total=45" in completed.stdout + completed.stderr
         with args.binary.open("rb") as binary_file:
             binary_sha256 = hashlib.file_digest(binary_file, "sha256").hexdigest()
         report = {"timestamp": datetime.now(timezone.utc).isoformat(), "fixture": "local-responses-three-generations",

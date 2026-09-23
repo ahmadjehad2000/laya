@@ -43,7 +43,7 @@ def main():
                   "codex-rs/core/src/session/step_activation_tests.rs",
                   "codex-rs/models-manager/src/manager_tests.rs", "codex-rs/models-manager/models.json", "codex-rs/Cargo.lock",
                   "scripts/codex_package/cargo.py", "codex-rs/tui/src/config_update.rs",
-                  "codex-rs/tui/src/config_update_tests.rs", "codex-rs/tui/src/chatwidget/model_popups.rs",
+                  "codex-rs/tui/src/config_update_tests.rs", "codex-rs/tui/src/chatwidget/turn_runtime.rs", "codex-rs/tui/src/chatwidget/model_popups.rs",
                   "codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs",
                   "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__model_picker_filters_hidden_models.snap"]
         raw = subprocess.check_output(["git", "diff", "--binary", "--", *paths], cwd=source)
@@ -82,6 +82,7 @@ def main():
     # Use upstream's canonical packager: code-mode host, rg and platform sandbox
     # helpers are required too. Installing only codex.exe is not a complete client.
     env = {**os.environ, "CODEX_REPO_ROOT": str(source)}
+    env.setdefault("CARGO_BUILD_JOBS", "1")
     if args.toolchain:
         if os.name == "nt" and not args.toolchain.endswith("pc-windows-msvc"):
             raise ValueError("Windows packages require an MSVC toolchain (including the V8 host)")

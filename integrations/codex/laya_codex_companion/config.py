@@ -23,8 +23,11 @@ class Config:
     min_free_vram_gib: float = 2.5
     memory_reserve_gib: float = 0.75
     threads: int = 4
+    verify_choice_order: bool = False
 
     def __post_init__(self):
+        if type(self.verify_choice_order) is not bool:
+            raise ValueError("verify_choice_order must be boolean")
         if self.model not in ("auto", "english", "multilingual", "typed-decisions"):
             raise ValueError("model must be auto, english, multilingual, or typed-decisions")
         if self.device not in ("auto", "cpu", "cuda", "mps"):

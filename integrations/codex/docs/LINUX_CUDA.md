@@ -10,7 +10,7 @@ Use 64-bit Python 3.12 or 3.13, a functioning `venv` module, and a local Codex C
 plugin registration. Clone the complete repository, then run:
 
 ```sh
-git clone https://github.com/ahmadjehad2000/laya.git
+git clone https://github.com/ahmadjehad2000/laya-for-codex.git
 cd laya/integrations/codex
 python3 bootstrap.py install --torch-index cu128 --device cuda
 ```

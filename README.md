@@ -2,222 +2,150 @@
 
 # Laya for Codex
 
-**Astra or Sol reasoning, local Laya decisions, one CLI.** Version **0.3.0 preview**.
+**Local decisions. Focused context. Visible usage.**
 
-Built on the original [Laya/PyTorch](https://github.com/NandhaKishorM/laya), this integration combines a native Astra/Sol effort controller with local MCP tools for classification, context selection and reversible conversation handoffs.
+Give **Astra and Sol** a local decision companion throughout the task. Laya for Codex combines the original [Laya/PyTorch](https://github.com/NandhaKishorM/laya) engine with a native Codex integration for approach selection, verification advice, reasoning effort, context selection, and reversible handoffs.
+
+**0.4.0 preview** · Windows verified · CPU/CUDA · Eight MCP tools · Apache-2.0
 
 ```powershell
-laya-for-codex
-laya-for-codex -m laya-sol
-laya-for-codex exec "Inspect the failing tests and report what remains unresolved."
+laya-for-codex                    # Astra + Laya
+laya-for-codex -m laya-sol        # Sol + Laya
+laya-for-codex exec "Fix the failing test, verify the change, and report the result."
 ```
 
-Once the runtime, checkpoint and native package are installed, the CLI starts with **Astra + Laya** and its **eight MCP tools enabled by default**. No plugin registration or activation prompt is needed for this native path, including with `--ignore-user-config`. `laya-codex` remains a compatibility launcher. Stock `codex` and its settings remain separate.
+[Install](#install-on-windows) · [Recipes](#recipes) · [How it works](#how-it-works) · [Verification](integrations/codex/docs/SESSION_RELEASE.md) · [Detailed setup](integrations/codex/README.md)
 
-Use `-m laya-sol` for **Sol + Laya**, or set the native default in `~/.laya-for-codex/native/model.json` to `{"model":"laya-sol"}`. Both aliases retain the eight tools; stock desktop Codex uses the real model name with its Laya plugin.
+## Why use it?
 
-## Required Laya for Astra and Sol
+- **Decisions throughout the task.** The native gate requires local Laya assessment before each supported generation. It supplies effort plus advice on the next approach, verification scope, and context handling.
+- **Read less bulk data.** Select relevant local file excerpts before bringing them into cloud context. Keep source IDs and inspect omissions when they matter.
+- **Continue with a smaller handoff.** Archive long tool output while preserving goals, instructions, failures, and recent messages. Recall originals when needed.
+- **See what each task used.** A completion report shows provider input, cached input, output, reasoning output and total tokens, local assessment time, and task duration.
+- **Reuse work safely.** Exact-evidence decisions use a bounded local cache. Changed evidence is reassessed; native failures and requirement changes invalidate old leases.
+- **Keep control.** Codex owns generation, tools and permissions. Laya decisions are advisory and never authorize actions.
 
-Version 0.3.0 adds runtime gates instead of relying on a model to choose a tool:
+Laya is a typed decision model: it returns choices, scores and probabilities. It does **not** generate free-form code or prose. Use Codex to draft candidates and Laya to evaluate them against clear criteria.
 
-| Client | Enforcement |
-|---|---|
-| Custom `laya-for-codex` CLI | A valid Laya decision is required before every supported main-loop generation, for both aliases and regular `gpt-6-astra` / `gpt-6-sol` names. Failure stops generation. |
-| Stock Codex desktop/CLI | The installed, enabled and trusted `UserPromptSubmit` hook runs Laya before each Astra/Sol task. Worker failure or timeout returns a blocking result. It supplies task context, not a change to desktop reasoning settings. |
+## Install on Windows
 
-Update an existing installation (PowerShell, from this repository):
-
-```powershell
-git pull --ff-only
-& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" -m pip install --no-deps ./integrations/codex
-py -3.12 integrations/codex/bootstrap.py register
-# Review the installed local hook, then explicitly enable and trust it:
-py -3.12 integrations/codex/scripts/enable_hooks.py --enable
-py -3.12 integrations/codex/native/build.py --toolchain 1.95.0-x86_64-pc-windows-msvc
-laya-for-codex -m gpt-6-sol
-```
-
-Start a new desktop thread after updating. Select `gpt-6-sol` or `gpt-6-astra` there.
-For the native CLI, the saved preference in `~/.laya-for-codex/native/model.json`
-selects `laya-sol` or `laya-astra`; explicit `-m` overrides it.
-
-**Boundaries:** desktop hooks run at prompt submission, not every internal generation.
-Stock Codex can fail open if the hook host itself cannot launch, crashes, or is disabled;
-this plugin cannot change that host behavior. Its worker timeout is shorter than the host
-hook timeout so normal inference failures return an explicit block. Native enforcement
-covers supported standard single-agent main-loop generations, not guardian, subagent,
-or internal compaction calls. It never grants execution permissions.
-
-Native enforcement is on by default. An explicit `LAYA_ENFORCE=0` environment override
-opts into the older advisory/fallback behavior. Do not use that override when enforcement
-is required. Raw evidence overflow blocks; it is never silently truncated.
-Desktop audit records are under `~/.laya-for-codex/hook-audit/`; native decisions are in
-`~/.laya-for-codex/native/logs/`. A model saying it did not call Laya does not override
-these runtime records. Cold inference adds latency; this release makes no cost-saving claim.
-
-## How they work together
-
-| Responsibility | Laya | Codex / Astra |
-|---|---|---|
-| Before supported generations | Selects reasoning effort and a short lease from bounded public evidence | Validates and applies the decision; generates the answer |
-| Repeated judgments | Classifies independent records and evaluates explicit rubrics locally | Defines criteria and checks consequential labels against sources |
-| Extra working context | Selects bounded relevant excerpts from workspace JSON evidence | Reasons over those excerpts and retrieves omitted evidence when needed |
-| Large datasets | Reads files locally and returns counts, exceptions and artifact paths | Avoids importing whole datasets into cloud context |
-| Continuation | Creates an exact archive and a smaller working handoff from an explicit export | Starts a new thread and preserves normal permissions |
-
-Tool instructions encourage suitable local workflows without the user naming Laya. Tool choice remains model-dependent; the generation-loop controller runs automatically where supported. Laya does not generate Astra's answers, change execution permissions, or replace encrypted native compaction.
-
-## Install
-
-Use 64-bit Python 3.12 or 3.13. Model preparation needs internet and several GB of disk; prepared inference is offline. A 16 GB or larger host is recommended. Native Astra conversations require normal Codex authentication and model access.
+You need Python 3.12, Git, and an installed/authenticated Codex CLI. The custom native build also needs Rust 1.95.0 with the MSVC toolchain and Visual Studio C++ Build Tools plus a Windows SDK. Allow time and disk space for compilation.
 
 ```powershell
-git clone https://github.com/ahmadjehad2000/laya.git
-cd laya
+git clone https://github.com/ahmadjehad2000/laya-for-codex.git
+cd laya-for-codex
+
+# Install the isolated runtime, prepared multilingual model, commands, and plugin.
 py -3.12 integrations/codex/bootstrap.py install --torch-index cu128 --device cuda
+
+# Build the separate native client. One build job reduces peak memory use.
+$env:CARGO_BUILD_JOBS = "1"
 py -3.12 integrations/codex/native/build.py --toolchain 1.95.0-x86_64-pc-windows-msvc
-py -3.12 integrations/codex/bootstrap.py command
+
+# Open a fresh terminal if the commands are not yet on PATH.
 laya-for-codex
 ```
 
-The native Windows build requires Git, Rust, PowerShell 7 and Visual Studio C++ Build Tools with a Windows SDK. It is a source build and may take substantial time and disk. See the [native guide](integrations/codex/native/README.md).
+For a CPU installation, replace the install flags with `--torch-index cpu --device cpu`. Downloads happen during setup; prepared Laya inference runs locally. Astra/Sol still require normal provider access and consume normal provider usage.
 
-For a CPU runtime, use `--torch-index cpu --device cpu`. Companion CPU inference has been verified on Windows, Linux and macOS ARM64; native-client execution is verified separately on Windows. Apple MPS and Linux/macOS native builds are not established by these results.
+The native launcher enables its controller and eight MCP tools automatically. `laya-codex` is a compatible command. Native build instructions and platform limitations are in the [native guide](integrations/codex/native/README.md).
 
-**Existing managed installation:** pull the latest source and update the companion package without downloading weights again:
+### Update an existing installation
+
+From your checkout:
 
 ```powershell
 git pull --ff-only
-& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" -m pip install --no-deps ./integrations/codex
-py -3.12 integrations/codex/bootstrap.py command
-laya-for-codex --version
-laya-for-codex doctor
+& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" -m pip install --no-deps . ./integrations/codex
+py -3.12 integrations/codex/bootstrap.py register
+$env:CARGO_BUILD_JOBS = "1"
+py -3.12 integrations/codex/native/build.py --toolchain 1.95.0-x86_64-pc-windows-msvc
 ```
 
-An existing compatible native build remains usable. If it is missing, the CLI reports the build command; it does not download or build native code during a normal launch. Restart running CLI/MCP sessions after upgrading. Older plugin skills need separate re-registration only when using the stock-client plugin path.
+Restart native sessions after upgrading. Existing processes continue using the code they loaded. The native builder retains the previous package and `build.previous.json` for rollback; it updates the active receipt only after a successful build. See [rollback and removal](integrations/codex/README.md).
 
-## Daily commands
+### Stock Codex desktop
+
+The plugin provides local tools and a prompt-submission hook. To enable the local hook after reviewing it:
 
 ```powershell
-# Interactive native CLI, or one task.
-laya-for-codex -C "$PWD"
-laya-for-codex exec -C "$PWD" "Review this repository. Do not deploy."
-
-# Inspect native options or resume a thread.
-laya-for-codex chat --help
-laya-for-codex resume --last
-
-# Local utilities keep their existing explicit commands.
-laya-for-codex doctor
-laya-for-codex predict integrations/codex/examples/quickstart.json --require-device cuda
-laya-for-codex prepare --model all
-
-# Explicit model override. Other models do not activate the Astra controller.
-laya-for-codex -m gpt-5.6-sol
+py -3.12 integrations/codex/scripts/enable_hooks.py --enable
 ```
 
-`--help` describes the unified CLI; `chat --help` shows native options. Bare prompts and native flags pass through unchanged. Names such as `doctor` and `predict` are reserved utility commands; use `chat` or `--` to pass a conflicting word as a native prompt.
+Start a new thread with `gpt-6-astra` or `gpt-6-sol`. Desktop hooks assess submitted prompts; the custom native CLI provides generation-by-generation gating, the status display, and task stats. A disabled or crashed stock hook host can fail open; the plugin cannot change that host behavior.
 
-## Local context and tools
+## Recipes
 
-Put evidence in a workspace JSON array with unique IDs:
-
-```json
-[
-  {"id":"incident-42","state":"Payment API returns HTTP 503; retry queue stopped."},
-  {"id":"release-note","state":"The dashboard color scheme changed."}
-]
-```
-
-Ask the CLI: **“Find relevant evidence about the payment outage in records.json. Return source IDs and a concise explanation.”** The context tool applies local relevance criteria, returns original excerpts within a character budget, and saves a full relevance report. Uncertain and failed classifications remain review candidates. Omission counts and excerpt truncation are explicit.
-
-This makes larger evidence collections practical to inspect; it does **not** enlarge Astra's model window or guarantee exhaustive retrieval. Selected text remains untrusted task data. Retrieve originals before consequential conclusions.
-
-| Tool | Purpose |
-|---|---|
-| `laya_context_file` | Select relevant source excerpts from workspace `{id,state}` JSON |
-| `laya_classify_file` | Classify a local file; return counts, review IDs and an artifact |
-| `laya_predict` | Multiple typed questions over one state |
-| `laya_predict_batch` | Shared criteria over independent records |
-| `laya_compact_file` | Reversible handoff from an explicit conversation export |
-| `laya_status` | Readiness, actual runtime state and resource counters |
-| `laya_release` | Unload weights and clear answer caches |
-| `laya_benchmark` | Explicitly requested synthetic timing diagnostic |
-
-The launcher configures the installed Python executable directly for MCP, with offline inference and a 300-second tool timeout. Its per-invocation configuration takes precedence over a same-name plugin server, preventing duplicate managed Laya servers. User CLI overrides remain available. Workspace files and global Codex configuration are not rewritten at launch.
-
-## Automatic handoffs
+### 1. Fix and verify code
 
 ```powershell
-laya-for-codex continue --workspace "$PWD" --input conversation.json --keep-recent 8 --prompt "Continue; check unresolved failures."
+laya-for-codex -m laya-sol exec "Find the cause of the failing tests, make the smallest complete fix, and run relevant checks. Use Laya advice at major milestones. Report unresolved failures."
 ```
 
-This automatically archives the supplied export and launches the unified native CLI. `--context` reuses an existing handoff; `--target codex` explicitly chooses stock Codex. `--lean` skips user configuration while retaining the native Laya defaults.
+In the native TUI, normal progress appears as `Laya · xhigh · step 6`, without a warning icon. Genuine inference failures remain warnings or blocking errors.
 
-Extraction preserves instruction/user/assistant messages, recent messages and recognized failure markers. Exact original bytes remain available through `recall`. Short exports can grow; inspect the preparation report. This is an explicit new-thread workflow, not background interception of your active chat. Keep `.laya/` private and out of version control.
+### 2. Review a large evidence file
 
-## Performance, cost and limitations
+Store records as a JSON array of `{"id":"record-1","state":"source evidence"}`. Ask Codex:
 
-- **Exact repeated controller evidence:** one installed-worker comparison measured 42.62 ms for a warm forward pass versus 0.12 ms for an exact cache hit. This is not a speedup for new evidence. Cold controller loading still took about 11 seconds.
-- **Earlier handoff pilot:** 79.8% fewer input tokens on one synthetic long-history recall task, retaining five requested facts. It does not establish general coding savings.
-- **Native six-turn cost pilot:** adaptive estimated $0.25228 versus $0.28377 fixed-low and $0.28387 fixed-medium across two small tasks; every arm answered 2/2 correctly. Adaptive took 38.47 seconds versus 12.74 and 11.33 seconds. The alias sent fewer input tokens, confounding any claim that effort selection saved money.
-- **Classification quality:** the 200-record AG News subset scored 191/200, but the synthetic workflow fixture scored 17/24 and rubric scoring only 4/12 rounded levels. Confidence is not a correctness guarantee.
-- Default MCP tools and context selection add overhead. The older pilot predates this default integration and must not be treated as its measured cost. Quantization, new trained weights, universally cheaper reasoning and cross-turn persistent controllers are not claimed.
+> Use laya_context_file to select evidence relevant to <question> from <path> before reading the full collection. Preserve IDs and check omitted records that might affect the conclusion.
 
-[Cost evidence and protocol](integrations/codex/docs/COST_CONTROL.md) · [Benchmark protocol](integrations/codex/benchmarks/README.md) · [Verification and hardware coverage](integrations/codex/docs/VERIFICATION.md)
+For repeated classifications, use `laya_classify_file` with shared explicit labels. Keep credentials and hidden reasoning out of model inputs.
 
-## Development and references
+### 3. Resume with less context
 
 ```powershell
-python -m pytest integrations/codex/tests -q
-python tests/test_router.py
-python tests/test_criteria.py
+$json = laya-for-codex compact-file --workspace "$PWD" --input conversation.json --keep-recent 2
+if ($LASTEXITCODE -ne 0) { throw "Handoff failed" }
+$handoff = $json | ConvertFrom-Json
+laya-for-codex continue --workspace "$PWD" --context ($handoff.context) --target laya-codex --lean --model laya-sol --prompt "Continue the task, preserving restrictions and unresolved checks."
 ```
 
-Local utilities and server tests are distinct from real model accuracy and native-client acceptance. Reports under `integrations/codex/evidence/` preserve individual failures and measurements.
+Use an explicit message export. The archive is reversible and hash-checked. This workflow preserves source evidence; it does not replace encrypted native Codex compaction or create a larger model context window.
 
-[Installation / repair](integrations/codex/README.md) · [Native architecture](integrations/codex/native/README.md) · [API](integrations/codex/docs/API.md) · [Original Laya documentation](UPSTREAM_README.md)
+### 4. Evaluate candidate plans or drafts
 
-Independent integration by [ahmadjehad2000](https://github.com/ahmadjehad2000), based on original Laya by its upstream authors. Not an official OpenAI product. [Apache 2.0](LICENSE) · [Attribution](integrations/codex/NOTICE).
+> Draft two to four candidate approaches. Give Laya concise public evidence and an explicit choice rubric covering correctness, missing evidence, effort, and verification. Validate its recommendation before implementing the selected approach.
 
-## Tweaks and configuration
+This combines Codex generation with local Laya selection. It does not turn Laya into a text generator.
 
-The verified development machine uses an RTX 4060 Laptop GPU (8 GiB), the pinned
-multilingual checkpoint and these conservative local settings. They are a measured
-working configuration, not a universal fastest preset:
+### 5. Reuse a domain prompt
 
-```json
-{
-  "device": "cuda",
-  "model": "multilingual",
-  "threads": 4,
-  "question_batch_size": 4,
-  "cache_entries": 128,
-  "cache_ttl_sec": 120,
-  "idle_unload_sec": 600,
-  "min_free_ram_gib": 1.0,
-  "min_free_vram_gib": 2.5,
-  "memory_reserve_gib": 0.75
-}
-```
+Start with the [universal domain task prompt](integrations/codex/SESSION_PROMPT.md). Fill in the domain, task, constraints, and acceptance criteria. It includes coding, security, research, document, and data-review criteria. Prompts guide workflow; native runtime checks enforce inference participation.
 
-Edit `~/.laya-for-codex/config.json` and restart CLI/MCP processes to apply changes.
-Checkpoint-aware cold-load estimates still apply above the RAM floor. Do not lower
-memory guards just to pass a GPU check. `--require-device cuda` rejects CPU fallback.
+## How it works
 
-| Tweak | When useful | Tradeoff |
-|---|---|---|
-| Keep multilingual pinned | English/Arabic mixed work and lower model-loading footprint | Automatic language routing may switch and reload checkpoints |
-| Batch related questions | Multiple judgments about one record | Larger question batches consume more memory |
-| Use file/context tools | Large workspace evidence collections | Relevance errors require source review |
-| Shorten idle timeout | Many concurrent CLI/MCP sessions | More cold loads; controller workers already exit at turn end |
-| Keep answer caching enabled | Exact repeated states and criteria | Novel states do not benefit; cache expires and release clears it |
-| `continue --lean` | Explicit new-thread handoff with fewer configured integrations | User configuration is skipped only for that invocation |
-| `-c mcp_servers.laya-for-codex.enabled=false` | Diagnose the native controller separately | Local MCP tools are unavailable for that invocation |
-| `-m gpt-6-astra` / `-m gpt-6-sol` | Use native required Laya decisions | Regular model names are enforced too; explicit `LAYA_ENFORCE=0` restores the legacy advisory/baseline behavior |
+1. The native client sends accepted task requests and bounded public progress to a local worker. Hidden reasoning and provider credential environment variables are excluded.
+2. Laya assesses effort and milestone advice. Oversized requests are split for effort assessment without dropping request characters. Milestone excerpts have explicit coverage metadata.
+3. Native Codex validates the decision and applies supported effort. Validated milestone labels enter the next provider request as advisory context.
+4. Codex executes authorized work and reassesses after new results. Decisions, timing, device and evidence hashes are recorded locally.
+5. At normal task completion, the native client displays usage and timing. Cached input is included in input; reasoning output is included in output. Neither is counted twice.
 
-Normal launches preserve user configuration, including the existing Astra medium
-baseline. The ignored-config acceptance test only proves self-contained startup;
-it is not a global setting. The launcher adds local MCP defaults per invocation and
-respects later command-line overrides. No universal speed or savings claim follows
-from these knobs; compare matched tasks, correctness, cache state and total latency.
+Audit logs: `~/.laya-for-codex/native/logs/`. Desktop hook audit: `~/.laya-for-codex/hook-audit/`.
+
+## Original Laya safeguards
+
+This fork also hardens the original PyTorch engine: direct inference rejects evidence or rubric truncation and invalid numeric outputs. Optional choice-order verification flags unstable answers for review while preserving the primary prediction. Enable `"verify_choice_order": true` in the local runtime config when the additional inference cost is justified; see the [verification guide](integrations/codex/docs/SESSION_RELEASE.md).
+
+## What is measured, and what is not
+
+Local inference adds overhead, especially on a cold checkpoint. Context selection and handoffs can reduce provider input when source content can be omitted safely. **Faster end-to-end work, lower billing, and higher accuracy are task-dependent and are not guaranteed.** See the [release evidence](integrations/codex/docs/SESSION_RELEASE.md) for actual results and scope.
+
+| Model | Full input tokens | Handoff input tokens | Reduction | Full elapsed | Handoff elapsed |
+|---|---:|---:|---:|---:|---:|
+| laya-astra | 20,653 | 13,122 | 36.5% | 17.19s | 16.00s |
+| laya-sol | 20,204 | 12,673 | 37.3% | 16.70s | 16.39s |
+
+One synthetic task per model and arm; both retained the required answer. This illustrates context reduction, not general speed or accuracy.
+
+Enforcement covers supported Astra/Sol standard single-agent main-loop generations. Guardian, subagents, internal compaction calls and stock desktop internal generations are outside this native gate. Missing inference blocks the enforced native path. `LAYA_ENFORCE=0` explicitly opts into legacy advisory behavior.
+
+## Documentation and credit
+
+- [Setup, configuration, devices and removal](integrations/codex/README.md)
+- [Native client, enforcement and build details](integrations/codex/native/README.md)
+- [Context and cost controls](integrations/codex/docs/COST_CONTROL.md)
+- [Verification history](integrations/codex/docs/VERIFICATION.md)
+- [Original upstream README](UPSTREAM_README.md)
+
+This fork integrates **NandhaKishorM/laya** with Codex using its original PyTorch runtime. It is a community integration, not an official OpenAI product. See [LICENSE](LICENSE).

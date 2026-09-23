@@ -1,0 +1,254 @@
+{
+  "scope": "Observed mismatches compared with the original upstream agent on identical states, rubrics and checkpoint",
+  "cases": [
+    {
+      "id": "issue-unknown",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "category": {
+          "type": "choice",
+          "choice": "bug",
+          "probabilities": {
+            "bug": 0.8857,
+            "feature": 0.003,
+            "documentation": 0.038,
+            "unknown": 0.0733
+          },
+          "confidence": 0.6822,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "category": {
+          "type": "choice",
+          "choice": "bug",
+          "probabilities": {
+            "bug": 0.8857,
+            "feature": 0.003,
+            "documentation": 0.038,
+            "unknown": 0.0733
+          },
+          "confidence": 0.6822,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "dev-test",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.4137,
+            "application": 0.0364,
+            "configuration": 0.003,
+            "unknown": 0.547
+          },
+          "confidence": 0.3992,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.4137,
+            "application": 0.0364,
+            "configuration": 0.003,
+            "unknown": 0.547
+          },
+          "confidence": 0.3992,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "dev-app",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.018,
+            "application": 0.3942,
+            "configuration": 0.0186,
+            "unknown": 0.5692
+          },
+          "confidence": 0.3983,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "unknown",
+          "probabilities": {
+            "test": 0.018,
+            "application": 0.3942,
+            "configuration": 0.0186,
+            "unknown": 0.5692
+          },
+          "confidence": 0.3983,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "dev-config",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "test",
+          "probabilities": {
+            "test": 0.9998,
+            "application": 0.0,
+            "configuration": 0.0,
+            "unknown": 0.0001
+          },
+          "confidence": 0.9985,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "role": {
+          "type": "choice",
+          "choice": "test",
+          "probabilities": {
+            "test": 0.9998,
+            "application": 0.0,
+            "configuration": 0.0,
+            "unknown": 0.0001
+          },
+          "confidence": 0.9985,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "ticket-sales",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 1.0,
+            "technical": 0.0,
+            "sales": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 0.9999,
+          "action": {
+            "act_probability": 1.0
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.1147,
+          "confidence": 0.8853,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 1.0,
+            "technical": 0.0,
+            "sales": 0.0,
+            "unknown": 0.0
+          },
+          "confidence": 0.9999,
+          "action": {
+            "act_probability": 1.0
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.1147,
+          "confidence": 0.8853,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "ticket-negation",
+      "matches_direct_upstream": true,
+      "bridge_answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 0.5708,
+            "technical": 0.3008,
+            "sales": 0.0322,
+            "unknown": 0.0961
+          },
+          "confidence": 0.2662,
+          "action": {
+            "act_probability": 1.0
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.6128,
+          "confidence": 0.6128,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      },
+      "direct_answers": {
+        "team": {
+          "type": "choice",
+          "choice": "billing",
+          "probabilities": {
+            "billing": 0.5708,
+            "technical": 0.3008,
+            "sales": 0.0322,
+            "unknown": 0.0961
+          },
+          "confidence": 0.2662,
+          "action": {
+            "act_probability": 1.0
+          }
+        },
+        "refund": {
+          "type": "noul",
+          "noul": 0.6128,
+          "confidence": 0.6128,
+          "action": {
+            "act_probability": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "passed": true
+}

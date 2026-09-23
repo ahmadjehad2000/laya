@@ -1,0 +1,9 @@
+{
+  "checks": {
+    "generation_blocked": true,
+    "zero_provider_requests": true,
+    "explicit_enforcement_error": true
+  },
+  "model": "laya-astra",
+  "request_count": 0
+}

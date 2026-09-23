@@ -174,3 +174,50 @@ def test_native_launcher_keeps_explicit_model_and_sets_private_worker(monkeypatc
     assert "laya-astra" not in args and "gpt-5.6-sol" in args
     assert options["env"]["LAYA_CONTROLLER_PYTHON"] == sys.executable
     assert "LAYA_CONTROLLER_LOG_DIR" in options["env"]
+
+
+def test_long_requests_are_completely_assessed():
+    class Chunked(Runtime):
+        def predict(self, state, questions, **options):
+            if sum(map(len, state["requests"])) > 100:
+                raise ValueError("needs 7900 tokens, checkpoint limit 1024")
+            return super().predict(state, questions, **options)
+    runtime = Chunked()
+    original = "constraint " * 1000
+    result = decide(runtime, request(evidence={"requests": [original], "recent": []}))
+    assert result["status"] == "decided"
+    assert result["lease"] == 1
+    assert "".join(s["requests"][0] for s in runtime.states) == original
+    assert result["runtime"]["chunk_count"] > 1
+
+
+@pytest.mark.parametrize("model", ["gpt-6-astra", "gpt-6-sol"])
+def test_milestones_required_and_validated(model):
+    class MilestoneRuntime(Runtime):
+        def predict(self, state, questions, **kwargs):
+            if "approach" in questions:
+                return {"answers": {k: {"choice": next(iter(q["criteria"]))} for k,q in questions.items()},
+                        "runtime": {"cache_hit": False}, "context_tokens": {"approach": 123}}
+            return super().predict(state, questions, **kwargs)
+    result = decide(MilestoneRuntime(), request(model=model, milestones=True))
+    assert result["status"] == "decided"
+    assert result["milestone"]["choices"]["approach"] == "inspect"
+    assert result["milestone"]["partial_evidence"]
+    assert decide(Runtime(), request(model=model, milestones=True))["status"] == "fallback"
+
+
+def test_milestone_cache_identity_includes_omitted_source_changes():
+    from laya_codex_companion.controller import milestone_decision
+    class Spy:
+        def __init__(self):
+            self.states = []
+        def predict(self, state, questions, **kwargs):
+            self.states.append(state)
+            return {"answers": {key: {"choice": next(iter(value["criteria"]))} for key,value in questions.items()},
+                    "runtime": {}, "context_tokens": {}}
+    runtime = Spy()
+    prefix = "public evidence " * 200
+    milestone_decision(runtime, {"requests": [prefix + "old constraint"], "recent": []})
+    milestone_decision(runtime, {"requests": [prefix + "changed constraint"], "recent": []})
+    assert runtime.states[0]["request_excerpt"] == runtime.states[1]["request_excerpt"]
+    assert runtime.states[0]["source_sha256"] != runtime.states[1]["source_sha256"]

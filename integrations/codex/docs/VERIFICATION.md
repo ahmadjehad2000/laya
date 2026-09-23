@@ -179,7 +179,7 @@ benchmarks below must not be attributed to the native effort controller.
   an RTX 4060 Laptop GPU: configured `cuda`, actual `cuda`, no fallback, source-supported
   billing classification, and successful release. See [GPU-default evidence](../evidence/windows-cuda-default.json).
 - GitHub Actions fresh installation and real CPU inference passed on Windows, Linux,
-  and macOS ARM64 in [run 35717300148](https://github.com/ahmadjehad2000/laya/actions/runs/35717300148).
+  and macOS ARM64 in [run 35717300148](https://github.com/ahmadjehad2000/laya-for-codex/actions/runs/35717300148).
   This follows fixes for Windows README encoding and a small macOS runner's RAM floor.
   That historical CI run used a 2.5 GiB floor. The current workflow now exercises the
   normal checkpoint-aware estimate rather than overriding a blanket 4.5 GiB floor.
@@ -193,7 +193,7 @@ Reports: [Windows CUDA](../evidence/windows-cuda.json),
 [version 2 fixture](../evidence/windows-cuda-v2.json). These are synthetic cases, not
 universal accuracy or latency claims. Apple MPS, bare-metal Linux CUDA, and Intel macOS remain
 unverified. Debian WSL2 CUDA is now separately verified below. Python 3.12 is covered on all three desktop platforms; the companion bridge
-also passed Ubuntu Python 3.13 in [run 35721329713](https://github.com/ahmadjehad2000/laya/actions/runs/35721329713).
+also passed Ubuntu Python 3.13 in [run 35721329713](https://github.com/ahmadjehad2000/laya-for-codex/actions/runs/35721329713).
 
 ## Benchmark and resource-policy evidence
 

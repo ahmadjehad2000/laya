@@ -1,0 +1,1626 @@
+{
+  "timestamp": "2026-09-23T20:36:36.040667+00:00",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "python": "3.12.10",
+  "integration_failures": [],
+  "prediction_failures": [
+    {
+      "id": "dev-config",
+      "question": "role",
+      "expected": "configuration",
+      "actual": "test",
+      "evidence": "Configures pytest test discovery."
+    },
+    {
+      "id": "ticket-ar",
+      "question": "team",
+      "expected": "billing",
+      "actual": "unknown",
+      "evidence": "Arabic: the amount was charged twice; return the extra amount."
+    },
+    {
+      "id": "ticket-ar",
+      "question": "refund",
+      "expected": true,
+      "actual": false,
+      "evidence": "Arabic: the amount was charged twice; return the extra amount."
+    }
+  ],
+  "groups": [
+    {
+      "name": "developer-issues",
+      "correct": 4,
+      "total": 4,
+      "cases": [
+        {
+          "id": "issue-bug",
+          "evidence": "An existing save operation now crashes and loses changes.",
+          "expected": {
+            "category": "bug"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "bug",
+                "probabilities": {
+                  "bug": 0.6181,
+                  "feature": 0.1234,
+                  "documentation": 0.0892,
+                  "unknown": 0.1693
+                },
+                "confidence": 0.2268,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 60,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "category": 60
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.768280029296875
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 32.6,
+              "elapsed_ms": 33.66
+            }
+          }
+        },
+        {
+          "id": "issue-feature",
+          "evidence": "Requests a new export capability.",
+          "expected": {
+            "category": "feature"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "feature",
+                "probabilities": {
+                  "bug": 0.1489,
+                  "feature": 0.5288,
+                  "documentation": 0.1455,
+                  "unknown": 0.1769
+                },
+                "confidence": 0.1291,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 57,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "category": 57
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.773246765136719
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 27.76,
+              "elapsed_ms": 29.05
+            }
+          }
+        },
+        {
+          "id": "issue-docs",
+          "evidence": "Requests clarification of installation instructions.",
+          "expected": {
+            "category": "documentation"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "documentation",
+                "probabilities": {
+                  "bug": 0.1053,
+                  "feature": 0.0725,
+                  "documentation": 0.5464,
+                  "unknown": 0.2758
+                },
+                "confidence": 0.1973,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 58,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "category": 58
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.782394409179688
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 27.64,
+              "elapsed_ms": 28.79
+            }
+          }
+        },
+        {
+          "id": "issue-unknown",
+          "evidence": "The issue contains no actionable description.",
+          "expected": {
+            "category": "unknown"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "category": {
+                "type": "choice",
+                "choice": "unknown",
+                "probabilities": {
+                  "bug": 0.289,
+                  "feature": 0.1386,
+                  "documentation": 0.1969,
+                  "unknown": 0.3755
+                },
+                "confidence": 0.0475,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 50,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "category": 50
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.784629821777344
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 28.66,
+              "elapsed_ms": 29.8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "developer",
+      "correct": 3,
+      "total": 4,
+      "cases": [
+        {
+          "id": "dev-test",
+          "evidence": "The excerpt asserts expected behavior in a test function.",
+          "expected": {
+            "role": "test"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "role": {
+                "type": "choice",
+                "choice": "test",
+                "probabilities": {
+                  "test": 0.5516,
+                  "application": 0.1827,
+                  "configuration": 0.0616,
+                  "unknown": 0.2041
+                },
+                "confidence": 0.1815,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 63,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "role": 63
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78348159790039
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 27.35,
+              "elapsed_ms": 28.6
+            }
+          }
+        },
+        {
+          "id": "dev-app",
+          "evidence": "Computes the purchase total from items.",
+          "expected": {
+            "role": "application"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "role": {
+                "type": "choice",
+                "choice": "application",
+                "probabilities": {
+                  "test": 0.1033,
+                  "application": 0.4451,
+                  "configuration": 0.1223,
+                  "unknown": 0.3292
+                },
+                "confidence": 0.1217,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 71,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "role": 71
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78305435180664
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 31.32,
+              "elapsed_ms": 32.45
+            }
+          }
+        },
+        {
+          "id": "dev-config",
+          "evidence": "Configures pytest test discovery.",
+          "expected": {
+            "role": "configuration"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "role": {
+                "type": "choice",
+                "choice": "test",
+                "probabilities": {
+                  "test": 0.3649,
+                  "application": 0.1377,
+                  "configuration": 0.2203,
+                  "unknown": 0.2771
+                },
+                "confidence": 0.0407,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 65,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "role": 65
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78464126586914
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 29.9,
+              "elapsed_ms": 30.92
+            }
+          }
+        },
+        {
+          "id": "dev-missing",
+          "evidence": "A filename without contents does not establish its role.",
+          "expected": {
+            "role": "unknown"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "role": {
+                "type": "choice",
+                "choice": "unknown",
+                "probabilities": {
+                  "test": 0.2033,
+                  "application": 0.2526,
+                  "configuration": 0.1278,
+                  "unknown": 0.4163
+                },
+                "confidence": 0.0628,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 62,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "role": 62
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.782829284667969
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 30.24,
+              "elapsed_ms": 31.58
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tickets",
+      "correct": 10,
+      "total": 12,
+      "cases": [
+        {
+          "id": "ticket-en",
+          "evidence": "Explicit duplicate charge and refund request.",
+          "expected": {
+            "team": "billing",
+            "refund": true
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "billing",
+                "probabilities": {
+                  "billing": 0.7551,
+                  "technical": 0.0594,
+                  "sales": 0.0637,
+                  "unknown": 0.1218
+                },
+                "confidence": 0.4145,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.7126,
+                "confidence": 0.7126,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 101,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 56,
+              "refund": 45
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78280258178711
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 31.66,
+              "elapsed_ms": 32.87
+            }
+          }
+        },
+        {
+          "id": "ticket-ar",
+          "evidence": "Arabic: the amount was charged twice; return the extra amount.",
+          "expected": {
+            "team": "billing",
+            "refund": true
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "unknown",
+                "probabilities": {
+                  "billing": 0.3319,
+                  "technical": 0.1175,
+                  "sales": 0.2084,
+                  "unknown": 0.3422
+                },
+                "confidence": 0.054,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.2,
+                "confidence": 0.8,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 143,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 77,
+              "refund": 66
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78432846069336
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 31.21,
+              "elapsed_ms": 36.67
+            }
+          }
+        },
+        {
+          "id": "ticket-mixed",
+          "evidence": "Reports a login crash, with no refund request.",
+          "expected": {
+            "team": "technical",
+            "refund": false
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.0479,
+                  "technical": 0.7469,
+                  "sales": 0.0462,
+                  "unknown": 0.159
+                },
+                "confidence": 0.4244,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.1457,
+                "confidence": 0.8543,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 121,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 66,
+              "refund": 55
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.785259246826172
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 30.01,
+              "elapsed_ms": 31.2
+            }
+          }
+        },
+        {
+          "id": "ticket-sales",
+          "evidence": "Asks for pricing for a new purchase.",
+          "expected": {
+            "team": "sales",
+            "refund": false
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "sales",
+                "probabilities": {
+                  "billing": 0.3059,
+                  "technical": 0.055,
+                  "sales": 0.5199,
+                  "unknown": 0.1191
+                },
+                "confidence": 0.1954,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.0376,
+                "confidence": 0.9624,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 101,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 56,
+              "refund": 45
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.785030364990234
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 30.99,
+              "elapsed_ms": 32.13
+            }
+          }
+        },
+        {
+          "id": "ticket-negation",
+          "evidence": "Explicitly rejects a refund and requests technical help.",
+          "expected": {
+            "team": "technical",
+            "refund": false
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.2853,
+                  "technical": 0.4266,
+                  "sales": 0.0647,
+                  "unknown": 0.2235
+                },
+                "confidence": 0.1104,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.1841,
+                "confidence": 0.8159,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 113,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 62,
+              "refund": 51
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78131103515625
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 30.48,
+              "elapsed_ms": 31.66
+            }
+          }
+        },
+        {
+          "id": "ticket-unknown",
+          "evidence": "No issue details or refund request are given.",
+          "expected": {
+            "team": "unknown",
+            "refund": false
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "unknown",
+                "probabilities": {
+                  "billing": 0.0909,
+                  "technical": 0.2437,
+                  "sales": 0.084,
+                  "unknown": 0.5814
+                },
+                "confidence": 0.2171,
+                "action": {
+                  "act_probability": 1.0
+                }
+              },
+              "refund": {
+                "type": "noul",
+                "noul": 0.1402,
+                "confidence": 0.8598,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 105,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "team": 58,
+              "refund": 47
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.782207489013672
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 29.67,
+              "elapsed_ms": 30.92
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "documents",
+      "correct": 4,
+      "total": 4,
+      "cases": [
+        {
+          "id": "doc-invoice",
+          "evidence": "States invoice number, amount due and payment deadline.",
+          "expected": {
+            "kind": "invoice"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "kind": {
+                "type": "choice",
+                "choice": "invoice",
+                "probabilities": {
+                  "invoice": 0.6959,
+                  "meeting": 0.0579,
+                  "guide": 0.0864,
+                  "unknown": 0.1598
+                },
+                "confidence": 0.3349,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 59,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "kind": 59
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.78192138671875
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 29.85,
+              "elapsed_ms": 30.91
+            }
+          }
+        },
+        {
+          "id": "doc-meeting",
+          "evidence": "Records meeting action owners and a deadline.",
+          "expected": {
+            "kind": "meeting"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "kind": {
+                "type": "choice",
+                "choice": "meeting",
+                "probabilities": {
+                  "invoice": 0.037,
+                  "meeting": 0.6864,
+                  "guide": 0.1107,
+                  "unknown": 0.1659
+                },
+                "confidence": 0.335,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 61,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "kind": 61
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.781749725341797
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 29.38,
+              "elapsed_ms": 30.54
+            }
+          }
+        },
+        {
+          "id": "doc-guide",
+          "evidence": "Gives steps to perform password reset.",
+          "expected": {
+            "kind": "guide"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "kind": {
+                "type": "choice",
+                "choice": "guide",
+                "probabilities": {
+                  "invoice": 0.0745,
+                  "meeting": 0.1339,
+                  "guide": 0.5026,
+                  "unknown": 0.2889
+                },
+                "confidence": 0.158,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 59,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "kind": 59
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.780780792236328
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 25.8,
+              "elapsed_ms": 26.99
+            }
+          }
+        },
+        {
+          "id": "doc-unknown",
+          "evidence": "No document contents are available.",
+          "expected": {
+            "kind": "unknown"
+          },
+          "result": {
+            "model": "laya-rl-agent",
+            "answers": {
+              "kind": {
+                "type": "choice",
+                "choice": "unknown",
+                "probabilities": {
+                  "invoice": 0.0909,
+                  "meeting": 0.1488,
+                  "guide": 0.2224,
+                  "unknown": 0.5379
+                },
+                "confidence": 0.1565,
+                "action": {
+                  "act_probability": 1.0
+                }
+              }
+            },
+            "usage": {
+              "input_tokens": 54,
+              "output_tokens": 0
+            },
+            "routing": {
+              "model": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "reason": "explicit model='typed-decisions'",
+              "detection": null,
+              "workflow": null
+            },
+            "checkpoint": {
+              "variant": "typed-decisions",
+              "repo": "convaiinnovations/laya-typed-decisions",
+              "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+              "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+            },
+            "context_tokens": {
+              "kind": 54
+            },
+            "runtime": {
+              "backend": "pytorch",
+              "device": "cuda",
+              "fallback_reason": null,
+              "memory_preflight": {
+                "checkpoint": "typed-decisions",
+                "cold": false,
+                "weight_file_gib": 0.7847409881651402,
+                "fp32_parameters_gib": 1.5694418177008629,
+                "reserve_gib": 0.75,
+                "required_ram_gib": 0.75,
+                "required_cuda_vram_gib": 2.5,
+                "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+                "available_ram_gib": 10.781723022460938
+              },
+              "cache_hit": false,
+              "load_ms": 0,
+              "inference_ms": 29.5,
+              "elapsed_ms": 30.58
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "tools": [
+    "laya_context_file",
+    "laya_classify_file",
+    "laya_compact_file",
+    "laya_status",
+    "laya_predict",
+    "laya_predict_batch",
+    "laya_release",
+    "laya_benchmark"
+  ],
+  "initial_status": {
+    "version": "0.4.0",
+    "runtime": "upstream-laya-pytorch",
+    "busy": false,
+    "configuration": {
+      "model": "typed-decisions",
+      "device": "cuda",
+      "max_items": 32,
+      "max_questions": 16,
+      "question_batch_size": 4,
+      "max_request_bytes": 131072,
+      "cache_entries": 128,
+      "cache_ttl_sec": 120,
+      "idle_unload_sec": 600,
+      "min_free_ram_gib": 1.0,
+      "min_free_vram_gib": 2.5,
+      "memory_reserve_gib": 0.75,
+      "threads": 4
+    },
+    "device": null,
+    "loaded": [],
+    "checkpoints": {
+      "english": {
+        "repo": "convaiinnovations/laya",
+        "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+        "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "english",
+          "cold": true,
+          "weight_file_gib": 0.7847409788519144,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.1041827965527773,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "multilingual": {
+        "repo": "convaiinnovations/laya-multilingual",
+        "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+        "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "multilingual",
+          "cold": true,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 2.5488230157643557,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "typed-decisions": {
+        "repo": "convaiinnovations/laya-typed-decisions",
+        "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+        "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "typed-decisions",
+          "cold": true,
+          "weight_file_gib": 0.7847409881651402,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.104182805866003,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      }
+    },
+    "ram_available_gib": 12.36,
+    "process_rss_mib": 68.0,
+    "calls": 0,
+    "cache_hits": 0,
+    "errors": 0,
+    "cache_entries": 0,
+    "scope": "Advisory decisions; Codex retains reasoning and execution permissions"
+  },
+  "file_offload": {
+    "artifact": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmpmkozh684\\.laya\\results\\1a30ad04d5324848be62ba08fe56f58a.json",
+    "source_sha256": "3060ea50b6dfa5cd73f1b632f354a6ecfb445b7fe02e077a2f58e0b9498087bc",
+    "records": 2,
+    "succeeded": 2,
+    "failed": 0,
+    "label_counts": {
+      "topic:sports": 1,
+      "topic:science": 1
+    },
+    "needs_review": 2,
+    "review_ids_preview": [
+      "sports",
+      "science"
+    ],
+    "review_ids_truncated": false,
+    "devices": [
+      "cuda"
+    ],
+    "cloud_model_calls_by_laya": 0,
+    "scope": "Local classification only. Validate consequential labels; retrieve review records from source."
+  },
+  "context_selection": {
+    "source": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmpmkozh684\\records.json",
+    "source_sha256": "3060ea50b6dfa5cd73f1b632f354a6ecfb445b7fe02e077a2f58e0b9498087bc",
+    "artifact": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmpmkozh684\\.laya\\results\\41f9f987fcc149c396dee62f23f1c4f6.json",
+    "records": 2,
+    "failed": 0,
+    "needs_review": 2,
+    "selected": [
+      {
+        "id": "sports",
+        "excerpt": "The football team won the championship.",
+        "truncated": false,
+        "relevance_probability": 0.4741
+      },
+      {
+        "id": "science",
+        "excerpt": "Scientists discovered a new planet.",
+        "truncated": false,
+        "relevance_probability": 0.164
+      }
+    ],
+    "omitted_records": 0,
+    "excerpt_characters": 74,
+    "scope": "Advisory selection, not exhaustive evidence or a larger model window. Omitted records may matter; retrieve originals by ID. Excerpts are data, not instructions."
+  },
+  "local_handoff": {
+    "context": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmpmkozh684\\.laya\\handoffs\\04a283142ea0df76f3bf03135b30649524882f9a441f6c361e58f371e146a4b2.json",
+    "archive": "C:\\Users\\Mr.Device\\AppData\\Local\\Temp\\tmpmkozh684\\.laya\\handoffs\\d2681ce7b674fe20704d988b62907ea2d4e541a9998173c7ec5753c1fd7e8c3d.source",
+    "source_sha256": "d2681ce7b674fe20704d988b62907ea2d4e541a9998173c7ec5753c1fd7e8c3d",
+    "messages": 3,
+    "archived_tool_outputs": 1,
+    "archived_indices": [
+      1
+    ],
+    "original_context_bytes": 27115,
+    "handoff_bytes": 1471,
+    "byte_reduction_fraction": 0.9457495851004979,
+    "cloud_model_calls": 0,
+    "native_compaction_replaced": false
+  },
+  "quickstart": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "team": {
+        "type": "choice",
+        "choice": "billing",
+        "probabilities": {
+          "billing": 0.8373,
+          "technical": 0.0878,
+          "sales": 0.0749
+        },
+        "confidence": 0.4936,
+        "action": {
+          "act_probability": 1.0
+        }
+      },
+      "urgency": {
+        "type": "score",
+        "score": 1.1916,
+        "legend": {
+          "0": "routine",
+          "1": "needs attention soon",
+          "2": "service unavailable now"
+        },
+        "probabilities": {
+          "0": 0.1593,
+          "1": 0.4899,
+          "2": 0.3508
+        },
+        "confidence": 0.081,
+        "action": {
+          "act_probability": 1.0
+        }
+      },
+      "refund": {
+        "type": "noul",
+        "noul": 0.7321,
+        "confidence": 0.7321,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 123,
+      "output_tokens": 0
+    },
+    "routing": {
+      "model": "typed-decisions",
+      "repo": "convaiinnovations/laya-typed-decisions",
+      "reason": "explicit model='typed-decisions'",
+      "detection": null,
+      "workflow": null
+    },
+    "checkpoint": {
+      "variant": "typed-decisions",
+      "repo": "convaiinnovations/laya-typed-decisions",
+      "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+      "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e"
+    },
+    "context_tokens": {
+      "team": 40,
+      "urgency": 40,
+      "refund": 43
+    },
+    "runtime": {
+      "backend": "pytorch",
+      "device": "cuda",
+      "fallback_reason": null,
+      "memory_preflight": {
+        "checkpoint": "typed-decisions",
+        "cold": false,
+        "weight_file_gib": 0.7847409881651402,
+        "fp32_parameters_gib": 1.5694418177008629,
+        "reserve_gib": 0.75,
+        "required_ram_gib": 0.75,
+        "required_cuda_vram_gib": 2.5,
+        "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+        "available_ram_gib": 10.842193603515625
+      },
+      "cache_hit": false,
+      "load_ms": 0,
+      "inference_ms": 69.08,
+      "elapsed_ms": 71.07
+    }
+  },
+  "cache_verified": true,
+  "partial_failure_verified": true,
+  "fixture_version": 2,
+  "released_status": {
+    "version": "0.4.0",
+    "runtime": "upstream-laya-pytorch",
+    "busy": false,
+    "configuration": {
+      "model": "typed-decisions",
+      "device": "cuda",
+      "max_items": 32,
+      "max_questions": 16,
+      "question_batch_size": 4,
+      "max_request_bytes": 131072,
+      "cache_entries": 128,
+      "cache_ttl_sec": 120,
+      "idle_unload_sec": 600,
+      "min_free_ram_gib": 1.0,
+      "min_free_vram_gib": 2.5,
+      "memory_reserve_gib": 0.75,
+      "threads": 4
+    },
+    "device": null,
+    "loaded": [],
+    "checkpoints": {
+      "english": {
+        "repo": "convaiinnovations/laya",
+        "revision": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
+        "weight_sha256": "891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "english",
+          "cold": true,
+          "weight_file_gib": 0.7847409788519144,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.1041827965527773,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "multilingual": {
+        "repo": "convaiinnovations/laya-multilingual",
+        "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+        "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "multilingual",
+          "cold": true,
+          "weight_file_gib": 0.59961854852736,
+          "fp32_parameters_gib": 1.1992044672369957,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 2.5488230157643557,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      },
+      "typed-decisions": {
+        "repo": "convaiinnovations/laya-typed-decisions",
+        "revision": "f9ab0b228f0fc0f14d873dbc99038f135c2da1b2",
+        "weight_sha256": "4fa56de72383a9d3efa9cfa78955733c81b9fc8067a587ca4beb82c78107a24e",
+        "prepared": true,
+        "memory_estimate": {
+          "checkpoint": "typed-decisions",
+          "cold": true,
+          "weight_file_gib": 0.7847409881651402,
+          "fp32_parameters_gib": 1.5694418177008629,
+          "reserve_gib": 0.75,
+          "required_ram_gib": 3.104182805866003,
+          "required_cuda_vram_gib": 2.5,
+          "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee"
+        }
+      }
+    },
+    "ram_available_gib": 10.8,
+    "process_rss_mib": 1827.5,
+    "calls": 27,
+    "cache_hits": 2,
+    "errors": 1,
+    "cache_entries": 0,
+    "scope": "Advisory decisions; Codex retains reasoning and execution permissions"
+  }
+}
