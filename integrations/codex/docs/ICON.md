@@ -2,7 +2,7 @@
 
 The plugin icon is `../plugins/laya-for-codex/assets/icon.png`. The same asset is
 used for the composer and plugin listing in light and dark mode. The website and
-homepage point to https://github.com/ahmadjehad2000/laya.
+homepage point to https://github.com/ahmadjehad2000/laya-for-codex.
 
 Generated with the built-in image-generation tool on 2026-09-22. The original PNG
 was copied without image edits, preserving its alpha channel.

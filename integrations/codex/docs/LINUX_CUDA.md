@@ -11,7 +11,7 @@ plugin registration. Clone the complete repository, then run:
 
 ```sh
 git clone https://github.com/ahmadjehad2000/laya-for-codex.git
-cd laya/integrations/codex
+cd laya-for-codex/integrations/codex
 python3 bootstrap.py install --torch-index cu128 --device cuda
 ```
 

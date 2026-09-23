@@ -45,7 +45,7 @@ Clone the **complete fork**, then run:
 
 ```powershell
 git clone https://github.com/ahmadjehad2000/laya-for-codex.git
-cd laya/integrations/codex
+cd laya-for-codex/integrations/codex
 py -3.12 bootstrap.py install --torch-index cu128 --device cuda
 ```
 
