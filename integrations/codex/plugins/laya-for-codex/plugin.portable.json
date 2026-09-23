@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "laya-for-codex",
-  "version": "0.2.0",
-  "description": "Local Laya decisions for developer triage, multilingual records, and explicit rubrics.",
+  "version": "0.3.0",
+  "description": "Required Laya prompt assessment for Astra/Sol, with local tools and native generation enforcement.",
   "author": {
     "name": "ahmadjehad2000",
     "url": "https://github.com/ahmadjehad2000"
@@ -14,8 +14,8 @@
     "com.openai": {
       "interface": {
         "displayName": "Laya for Codex",
-        "shortDescription": "Local classification and rubric workflows.",
-        "longDescription": "Original Laya/PyTorch inference for concise, repeated decisions. Prepare the local runtime before enabling this plugin.",
+        "shortDescription": "Required Laya for Astra and Sol.",
+        "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
         "developerName": "ahmadjehad2000",
         "category": "Productivity",
         "capabilities": [],

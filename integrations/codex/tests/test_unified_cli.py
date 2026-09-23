@@ -22,17 +22,20 @@ def test_native_dispatch_preserves_arguments_and_exit_code(monkeypatch, args, fo
     assert seen == [forwarded]
 
 
-def test_default_launch_enables_controller_and_keeps_parent_environment(monkeypatch, tmp_path):
+@pytest.mark.parametrize("model", [None, "laya-astra", "laya-sol"])
+def test_default_launch_enables_controller_and_keeps_parent_environment(monkeypatch, tmp_path, model):
     binary = tmp_path / "native/bin" / ("codex.exe" if os.name == "nt" else "codex")
     binary.parent.mkdir(parents=True)
     binary.touch()
+    if model:
+        (tmp_path / "native/model.json").write_text(json.dumps({"model": model}))
     monkeypatch.setattr(native, "home", lambda: tmp_path)
     calls = []
     before = dict(os.environ)
     monkeypatch.setattr(native.subprocess, "run", lambda args, **kw: calls.append((args, kw)) or SimpleNamespace(returncode=0))
     assert cli.main([]) == 0
     args, options = calls[0]
-    assert args[-2:] == ["-m", "laya-astra"]
+    assert args[-2:] == ["-m", model or "laya-astra"]
     assert "step_model_switching" in args and "reasoning_effort_override" in args
     assert options["env"]["LAYA_CONTROLLER_PYTHON"]
     assert dict(os.environ) == before

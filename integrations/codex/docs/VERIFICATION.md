@@ -1,4 +1,41 @@
 # Verification and release gates
+## 0.3.0 Astra/Sol enforcement
+
+Windows validation for this release covers the installed package, not only source:
+
+- 133 Python companion tests, including correlated hook decisions, worker failures,
+  timeouts, blocking output, and provider-credential exclusion.
+- 62 focused Rust tests across model metadata, controller and terminal UI. The full
+  upstream Rust suite was not run.
+- Real CUDA decisions for both regular `gpt-6-astra` and `gpt-6-sol` names, with provider
+  request model and effective effort checked against captured native settings.
+- Missing native worker: explicit enforcement error and **zero provider requests**.
+  The explicit advisory override retains the historical fallback test.
+- Live Sol handoff completed with a valid applied native decision.
+- Stock Codex with the installed trusted prompt hook ran local Laya before responding.
+  An isolated missing-checkpoint test produced no model answer and zero input/output
+  tokens. The stock exec JSON stream still emits a zero-token `turn.completed`; its
+  hook failure reason is retained in the local hook audit.
+- README banner rendered and inspected at 1200 x 340.
+
+Evidence: [Sol wire](../evidence/enforced-sol-wire.json),
+[Astra wire](../evidence/enforced-astra-wire.json),
+[native block](../evidence/enforced-missing-worker.json),
+[desktop block](../evidence/enforced-desktop-blocked.json),
+[live native Sol](../evidence/enforced-sol-live.json).
+
+Limits: desktop enforcement is at UserPromptSubmit, not every generation, and the
+stock hook host can fail open if the supervisor cannot start or the host fails.
+The native gate covers supported standard single-agent main-loop generations;
+internal guardian/subagent/compaction calls are outside its scope. Enforcement
+establishes execution of a bounded advisory judgment, not classifier correctness
+or cost/quality improvements. Native Linux/macOS enforcement is not verified.
+
+The initial parallel Windows rebuild exhausted memory. Rebuilding with
+`CARGO_BUILD_JOBS=2` succeeded. Whole-repository `just fmt` hit the Windows command
+length limit and a missing unrelated Bazel formatter; edited Rust files were
+formatted directly. Earlier release evidence below remains historical.
+
 
 ## 0.2.1 unified CLI acceptance
 

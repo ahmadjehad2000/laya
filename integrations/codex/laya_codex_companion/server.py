@@ -9,7 +9,7 @@ Proactively use these tools for suitable repeated classification, routing, or ex
 scoring; users need not name Laya or request activation. Prefer file-reference offload for
 bulk records before reading them into cloud context. Create reversible handoffs from explicit
 exports when the task calls for continuation; never claim this replaces native compaction.
-The native Astra + Laya controller can separately adjust generation effort without an MCP
+The native Astra/Sol + Laya controller can separately adjust generation effort without an MCP
 tool call. Do not infer that no Laya inference occurred merely because no tool was called.
 Use concise source evidence for each decision.
 For large workspace evidence collections in {id,state} JSON, proactively use laya_context_file

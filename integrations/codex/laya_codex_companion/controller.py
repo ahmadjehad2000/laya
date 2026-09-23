@@ -42,8 +42,8 @@ def decide(runtime, request):
     try:
         if request.get("protocol") != PROTOCOL or not isinstance(request.get("id"), str):
             raise ValueError("Unsupported controller protocol or missing request identity")
-        if request.get("model") != "gpt-6-astra":
-            raise ValueError("Adaptive effort currently supports gpt-6-astra only")
+        if request.get("model") not in ("gpt-6-astra", "gpt-6-sol"):
+            raise ValueError("Adaptive effort currently supports gpt-6-astra and gpt-6-sol only")
         efforts = request.get("supported_efforts")
         if (not isinstance(efforts, list) or not 2 <= len(efforts) <= 8 or
                 len(set(efforts)) != len(efforts) or any(e not in EFFORTS for e in efforts)):

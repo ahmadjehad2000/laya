@@ -10,12 +10,12 @@ PLUGIN = ROOT / "plugins" / "laya-for-codex"
 def build():
     version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
     identity = {"name": "laya-for-codex", "version": version,
-                "description": "Local Laya decisions for developer triage, multilingual records, and explicit rubrics.",
+                "description": "Required Laya prompt assessment for Astra/Sol, with local tools and native generation enforcement.",
                 "author": {"name": "ahmadjehad2000", "url": "https://github.com/ahmadjehad2000"},
                 "repository": "https://github.com/ahmadjehad2000/laya",
                 "homepage": "https://github.com/ahmadjehad2000/laya", "license": "Apache-2.0"}
-    interface = {"displayName": "Laya for Codex", "shortDescription": "Local classification and rubric workflows.",
-                 "longDescription": "Original Laya/PyTorch inference for concise, repeated decisions. Prepare the local runtime before enabling this plugin.",
+    interface = {"displayName": "Laya for Codex", "shortDescription": "Required Laya for Astra and Sol.",
+                 "longDescription": "Runs local Laya before Astra/Sol tasks through a trusted prompt hook. The custom native CLI also gates supported main-loop generations. Includes eight MCP tools. Prepare the local runtime before enabling enforcement.",
                  "developerName": "ahmadjehad2000", "category": "Productivity", "capabilities": [],
                  "websiteURL": "https://github.com/ahmadjehad2000/laya",
                  "brandColor": "#62E9C2", "composerIcon": "./assets/icon.png",
@@ -29,6 +29,7 @@ def build():
     # Keep the tested compatibility entrypoint active; package the portable manifest separately.
     write(PLUGIN / "plugin.portable.json", {"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
                                            **identity, "extensions": {"com.openai": {"interface": interface}}})
+    write(PLUGIN / "hooks" / "hooks.json", {"hooks": {"UserPromptSubmit": [{"hooks": [{"type": "command", "command": "laya-for-codex prompt-gate", "timeout": 150}]}]}})
     server = {"command": "laya-for-codex", "args": ["serve"]}
     write(PLUGIN / ".mcp.json", {"mcpServers": {"laya-for-codex": server}})
     write(PLUGIN / "mcp.json", {"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",

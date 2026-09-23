@@ -65,7 +65,7 @@ def main():
             arms = arms[index:] + arms[:index]
             for arm in arms:
                 logdir = work / (name + "-" + arm)
-                env = {**os.environ, "LAYA_CONTROLLER_PYTHON": sys.executable,
+                env = {**os.environ, "LAYA_ENFORCE": "0", "LAYA_CONTROLLER_PYTHON": sys.executable,
                        "LAYA_CONTROLLER_LOG_DIR": str(logdir)}
                 command = [str(binary), "--enable", "step_model_switching", "--enable", "reasoning_effort_override",
                            "exec", "--ignore-user-config", "--ephemeral", "--json", "--skip-git-repo-check",

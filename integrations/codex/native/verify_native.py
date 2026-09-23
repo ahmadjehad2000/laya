@@ -27,6 +27,9 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--missing-worker", action="store_true")
     parser.add_argument("--unified", action="store_true", help="Exercise installed laya-for-codex dispatch and its default model")
+    parser.add_argument("--model", choices=["laya-astra", "laya-sol", "gpt-6-astra", "gpt-6-sol"], default="laya-astra")
+    parser.add_argument("--advisory", action="store_true")
+    parser.add_argument("--expect-blocked", action="store_true")
     args = parser.parse_args()
     if args.unified and args.missing_worker:
         parser.error("Use the direct binary for missing-worker injection")
@@ -72,13 +75,13 @@ def main():
         server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
-        env = {**os.environ, "CODEX_HOME": str(root / "home"),
+        env = {**os.environ, "LAYA_ENFORCE": "0" if args.advisory else "1", "CODEX_HOME": str(root / "home"),
                "LAYA_CONTROLLER_PYTHON": str(root / "missing-python") if args.missing_worker else sys.executable,
                "LAYA_CONTROLLER_LOG_DIR": str(root / "decisions")}
         # A custom fixture provider has no auth and no external endpoint.
         command = [str(args.binary.resolve()), "--enable", "step_model_switching", "--enable",
                    "reasoning_effort_override", "exec", "--ignore-user-config", "--skip-git-repo-check",
-                   "--json", "-s", "read-only", "-C", str(root), "-m", "laya-astra",
+                   "--json", "-s", "read-only", "-C", str(root), "-m", args.model,
                    "-c", 'model_provider="fixture"', "-c", 'model_reasoning_effort="medium"',
                    "-c", 'model_providers.fixture.name="OpenAI"',
                    "-c", f'model_providers.fixture.base_url="http://127.0.0.1:{server.server_port}/v1"',
@@ -88,7 +91,8 @@ def main():
         if args.unified:
             command[:1] = [sys.executable, "-I", "-m", "laya_codex_companion"]
             model_index = command.index("-m", 4)
-            del command[model_index:model_index + 2]
+            if args.model == "laya-astra":
+                del command[model_index:model_index + 2]
         start = time.perf_counter()
         try:
             completed = subprocess.run(command, env=env, input="", capture_output=True, text=True, encoding="utf-8", timeout=240)
@@ -96,6 +100,13 @@ def main():
             server.shutdown()
             server.server_close()
             thread.join(timeout=5)
+        if args.expect_blocked:
+            checks = {"generation_blocked": completed.returncode != 0,
+                      "zero_provider_requests": len(requests) == 0,
+                      "explicit_enforcement_error": "Laya enforcement" in completed.stdout + completed.stderr}
+            args.output.write_text(json.dumps({"checks": checks, "model": args.model, "request_count": len(requests)}, indent=2) + "\n")
+            print(json.dumps(checks))
+            return 0 if all(checks.values()) else 1
         records = []
         logs = list((root / "decisions").glob("*.jsonl"))
         if args.unified:
@@ -105,7 +116,7 @@ def main():
         for log in logs:
             records += [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()]
         checks = {"exit_success": completed.returncode == 0, "three_generations": len(requests) == 3,
-                  "alias_not_sent_to_provider": bool(requests) and all(r["model"] == "gpt-6-astra" for r in requests),
+                  "alias_not_sent_to_provider": bool(requests) and all(r["model"] == args.model.replace("laya-", "gpt-6-") for r in requests),
                   "audited_capture": bool(records) and all(r["applied"] for r in records)}
         if args.missing_worker:
             checks["explicit_fallback"] = bool(records) and records[0]["decision"]["status"] == "fallback"

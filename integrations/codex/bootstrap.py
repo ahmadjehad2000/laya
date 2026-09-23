@@ -141,6 +141,9 @@ def install_plugin(root, codex_home):
         metadata = json.loads(manifest.read_text(encoding="utf-8"))
         metadata["version"] = metadata["version"].split("+")[0] + cachebuster
         manifest.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    hook_command = subprocess.list2cmdline([str(python_at(root)), "-I", "-m", "laya_codex_companion.prompt_gate"]) if os.name == "nt" else __import__("shlex").join([str(python_at(root)), "-I", "-m", "laya_codex_companion.prompt_gate"])
+    (plugin / "hooks").mkdir(exist_ok=True)
+    (plugin / "hooks/hooks.json").write_text(json.dumps({"hooks": {"UserPromptSubmit": [{"hooks": [{"type": "command", "command": hook_command, "timeout": 150}]}]}}), encoding="utf-8")
     config = {"mcpServers": {NAME: mcp_entry(root)}}
     (plugin / ".mcp.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
     portable = {"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",

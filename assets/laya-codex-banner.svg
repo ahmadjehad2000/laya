@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
   <title id="title">Laya for Codex</title>
-  <desc id="desc">Local, typed decisions for your Codex workflow. Original Laya, PyTorch, plugin and MCP.</desc>
+  <desc id="desc">Astra and Sol with required local Laya decisions. Native generation gate, desktop prompt gate, and eight MCP tools.</desc>
   <defs>
     <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101c32"/><stop offset="1" stop-color="#070d18"/></linearGradient>
     <linearGradient id="accent"><stop stop-color="#62e9c2"/><stop offset="1" stop-color="#75aeff"/></linearGradient>
@@ -8,22 +8,22 @@
   <rect width="1200" height="340" rx="22" fill="url(#bg)"/>
   <path d="M740 0v340M860 0v340M980 0v340M1100 0v340M700 70h500M700 170h500M700 270h500" stroke="#20304a" opacity=".42"/>
   <rect x="52" y="46" width="36" height="4" rx="2" fill="#62e9c2"/>
-  <text x="101" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="600" letter-spacing="2" fill="#9ab2cd">LOCAL INFERENCE / CODEX WORKFLOWS</text>
+  <text x="101" y="54" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="600" letter-spacing="2" fill="#9ab2cd">ASTRA + SOL / LOCAL LAYA</text>
   <text x="50" y="133" font-family="Segoe UI,Arial,sans-serif" font-size="62" font-weight="700" fill="#f1f6ff">Laya for Codex</text>
-  <text x="53" y="183" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#a9bfd9">Small, typed decisions.</text>
-  <text x="53" y="218" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#a9bfd9">Inside the way you work.</text>
+  <text x="53" y="183" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#a9bfd9">Laya runs before the work.</text>
+  <text x="53" y="218" font-family="Segoe UI,Arial,sans-serif" font-size="25" fill="#a9bfd9">Astra and Sol, with enforcement.</text>
   <g font-family="Segoe UI,Arial,sans-serif" font-size="14" fill="#c2d4e9">
     <rect x="53" y="259" width="128" height="34" rx="17" fill="#1b2d43"/><text x="73" y="281">Original Laya</text>
     <rect x="194" y="259" width="101" height="34" rx="17" fill="#1b2d43"/><text x="218" y="281">PyTorch</text>
     <rect x="308" y="259" width="138" height="34" rx="17" fill="#1b2d43"/><text x="328" y="281">Plugin + MCP</text>
   </g>
   <rect x="760" y="49" width="382" height="243" rx="17" fill="#102034" stroke="#314b66"/>
-  <circle cx="786" cy="74" r="4" fill="#62e9c2"/><text x="800" y="80" font-family="Segoe UI,Arial,sans-serif" font-size="13" letter-spacing="1" fill="#abc5de">LOCAL DECISION ENGINE</text>
+  <circle cx="786" cy="74" r="4" fill="#62e9c2"/><text x="800" y="80" font-family="Segoe UI,Arial,sans-serif" font-size="13" letter-spacing="1" fill="#abc5de">REQUIRED LOCAL DECISIONS</text>
   <path d="M782 99h337" stroke="#2b435d"/>
   <g font-family="Consolas,Menlo,monospace" font-size="19">
-    <text x="788" y="141" fill="#74e5c4">choice</text><text x="957" y="141" fill="#b7cbe2">→ label</text>
-    <text x="788" y="192" fill="#87baff">score</text><text x="957" y="192" fill="#b7cbe2">→ rubric</text>
-    <text x="788" y="243" fill="#baadff">noul</text><text x="957" y="243" fill="#b7cbe2">→ P(true)</text>
+    <text x="788" y="141" fill="#74e5c4">native</text><text x="957" y="141" fill="#b7cbe2">→ each step</text>
+    <text x="788" y="192" fill="#87baff">desktop</text><text x="957" y="192" fill="#b7cbe2">→ each task</text>
+    <text x="788" y="243" fill="#baadff">tools</text><text x="957" y="243" fill="#b7cbe2">→ 8 MCP</text>
   </g>
   <rect x="760" y="306" width="382" height="3" rx="1.5" fill="url(#accent)"/>
 </svg>

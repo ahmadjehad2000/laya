@@ -41,7 +41,7 @@ def main():
         paths += ["codex-rs/core/src/session/mod.rs", "codex-rs/core/src/session/turn.rs",
                   "codex-rs/core/src/session/step_activation.rs", "codex-rs/models-manager/src/manager.rs",
                   "codex-rs/core/src/session/step_activation_tests.rs",
-                  "codex-rs/models-manager/src/manager_tests.rs", "codex-rs/Cargo.lock",
+                  "codex-rs/models-manager/src/manager_tests.rs", "codex-rs/models-manager/models.json", "codex-rs/Cargo.lock",
                   "scripts/codex_package/cargo.py", "codex-rs/tui/src/config_update.rs",
                   "codex-rs/tui/src/config_update_tests.rs", "codex-rs/tui/src/chatwidget/model_popups.rs",
                   "codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs",

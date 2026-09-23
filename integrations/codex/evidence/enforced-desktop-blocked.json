@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "blocked_reason_visible": true,
+    "no_model_answer": true,
+    "no_completed_generation": true
+  },
+  "events": [
+    {
+      "type": "thread.started",
+      "thread_id": "01a0ceb4-75e1-7a93-aec2-78943b9a2cd5"
+    },
+    {
+      "type": "turn.started"
+    },
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 0,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "audit": [
+    {
+      "time": 1790174334.4817073,
+      "model": "gpt-6-sol",
+      "admitted": false,
+      "reason": "Required Laya assessment failed; prompt blocked. Laya did not return a valid task decision: FileNotFoundError: Checkpoint multilingual is not prepared. Run laya-for-codex prepare --model multilingual"
+    }
+  ],
+  "exit_code": 0,
+  "scope": "Stock Codex with installed trusted hook; isolated empty checkpoint directory"
+}

@@ -1,14 +1,14 @@
-# Native Astra + Laya (experimental)
+# Native Astra / Sol + Laya (experimental)
 
 `laya-for-codex` opens the native Codex CLI by default with a local Laya/PyTorch
 reasoning-effort controller and eight MCP tools. `laya-codex` remains a compatible
-launcher. The model picker calls it **Astra + Laya** (`laya-astra`); network requests
-use the real `gpt-6-astra` model. Your existing stock Codex CLI/desktop installation
+launcher. The model picker offers **Astra + Laya** (`laya-astra`) and **Sol + Laya** (`laya-sol`); network requests
+use the corresponding real `gpt-6-astra` or `gpt-6-sol` model. Your existing stock Codex CLI/desktop installation
 and its normal Laya plugin are not replaced.
 
 ## Install and launch
 
-Version 0.2.1 passes native flags, prompts, exec and resume through the unified CLI.
+Version 0.3.0 passes native flags, prompts, exec and resume through the unified CLI.
 `laya-for-codex chat --help` shows native options. Local `serve`, `doctor`, `predict`
 and other utility subcommands remain available. MCP defaults are invocation-only,
 use isolated Python, and work with `--ignore-user-config`; user CLI overrides follow
@@ -19,6 +19,18 @@ pinned native client. No global config rewrite or additional activation is requi
 records. Server instructions encourage this and other suitable workflows proactively;
 tool choice is model-dependent. Neither context selection nor effort steering changes
 permissions or creates a larger cloud context window.
+
+Select Sol explicitly with `laya-for-codex -m laya-sol` (or `laya-codex -m laya-sol`).
+To make it the native launcher's default, save `{"model":"laya-sol"}` in
+`~/.laya-for-codex/native/model.json`. With no preference file, Astra remains the
+default. Explicit `-m` arguments override this preference. The shared desktop
+configuration should use the real `gpt-6-sol` name; desktop Laya tools are provided
+by its plugin, while automatic effort steering runs only in this custom CLI.
+Restart existing sessions after installing an updated companion/native package.
+
+Sol's bundled metadata was refreshed from the local Codex model catalog on
+2026-09-23. Authenticated catalog refreshes can update its advertised capabilities;
+Laya chooses only among the current advertised efforts (excluding multi-agent Ultra).
 
 First [install the companion](../README.md#install) and prepare its multilingual
 checkpoint. You still need normal Codex authentication/access to Astra for real
@@ -53,7 +65,7 @@ does not replace the working pointer; `build.previous.json` preserves the previo
 receipt and older packages are retained. The launcher changes only its child process
 environment/options. It does not edit your global Codex config, credentials or PATH.
 The native CLI reuses normal Codex authentication and settings. Interactive settings
-changes still persist normally; selecting the Laya alias saves `gpt-6-astra` as the
+changes still persist normally; selecting the Laya alias saves the corresponding real model as the
 shared default so stock Codex never receives an unknown `laya-astra` model name.
 
 ```powershell
@@ -82,25 +94,20 @@ laya-codex -m gpt-5.6-sol
    An `APPLIED` notice/audit record is emitted only after a fresh step captures the
    expected effort. Normal permissions, approvals and tool dispatch remain native.
 
-A two-generation lease avoids reloading/reassessing predictable adjacent steps; every
-generation still checks invalidation. The worker stays warm within a turn and exits
-when the turn ends. Multiple Codex/MCP processes can each hold their own model.
-Manual/external setting changes pause adaptation for the remainder of that turn.
-New accepted user input, tool failure markers or native compaction/window changes
-invalidate the lease. Failure detection is a conservative text heuristic, not a proof
-of tool success. Cancellation drops the child process.
+Enforcement is enabled by default for aliases and regular `gpt-6-astra` and
+`gpt-6-sol` names. Every supported main-loop generation obtains a validated Laya
+decision; strict mode does not reuse two-generation leases. The worker stays warm
+within the turn. If inference fails, times out, lacks required evidence, cannot
+apply its effort, or encounters incompatible settings, generation stops with an
+explicit error. Manual setting changes stop the current enforced turn rather than
+being overwritten; submit a new turn to reassess.
 
-Missing weights/worker, protocol mismatch, memory pressure, timeout, or essential
-evidence overflow produce an explicit fallback to configured effort and stop retrying
-for that turn. Cold inference has a 120-second deadline; warm inference 30 seconds.
-Cold imports/loading can dominate a short task. Confidence is not calibrated accuracy.
-
-Only Astra standard single-agent mode with native reasoning-effort support is enabled.
-The auto-delegating `ultra` option is excluded from the Laya alias and decision rubric.
-This does not intercept subagent/guardian/internal compaction calls or stock desktop
-generations. It does not replace Astra, read its private chain of thought, authorize
-actions, or guarantee lower costs/better answers. Existing benchmark claims concern
-classification/handoffs, not this controller.
+Cold inference has a 120-second deadline; warm inference 30 seconds. Set
+`LAYA_ENFORCE=0` explicitly only to opt into the older advisory lease/fallback mode.
+The standard single-agent restriction and exclusion of auto-delegating `ultra`
+apply to Astra and Sol. Guardian, subagent, internal compaction, and stock desktop
+generation calls are outside this native gate. See the root README for desktop
+prompt-hook enforcement and its host-failure limits.
 
 ## Compaction, handoffs and audit
 
@@ -160,7 +167,7 @@ $root = "$env:USERPROFILE\.laya-for-codex\native"
 $build = Get-Content -Raw "$root\build.json" | ConvertFrom-Json
 $binary = Join-Path (Join-Path $root $build.package) "bin\codex.exe"
 & $Python integrations/codex/native/verify_native.py --binary "$binary" --output dist/native-fixture.json
-& $Python integrations/codex/native/verify_native.py --binary "$binary" --missing-worker --output dist/native-fallback.json
+& $Python integrations/codex/native/verify_native.py --binary "$binary" --missing-worker --expect-blocked --output dist/native-blocked.json
 ```
 
 This fixture validates actual CLI generations, applied settings and request payloads
@@ -169,6 +176,6 @@ responses are deterministic fixtures, so it does not establish real Astra task q
 No Jev key, proxy, listening inference service or Ares code is required.
 
 The [native Windows workflow](../../../.github/workflows/laya-native.yml) is manually
-dispatched because source builds are expensive. It always checks explicit fallback;
+dispatched because source builds are expensive. It always checks required-worker blocking;
 the optional `real_laya` input additionally prepares weights and exercises real CPU
 inference. The ordinary companion CI does not establish native-client coverage.

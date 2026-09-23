@@ -26,12 +26,12 @@ jobs:
         run: rustup toolchain install 1.95.0 --profile minimal --component rustfmt,clippy,rust-src
       - name: Build the complete pinned Windows package
         run: python integrations/codex/native/build.py --home "$env:RUNNER_TEMP/laya-native"
-      - name: Verify native fallback against local Responses fixture
+      - name: Verify required-worker blocking against local Responses fixture
         run: |
           $nativeRoot = Join-Path $env:RUNNER_TEMP 'laya-native'
           $receipt = Get-Content -Raw "$nativeRoot/build.json" | ConvertFrom-Json
           $binary = Join-Path (Join-Path $nativeRoot $receipt.package) 'bin/codex.exe'
-          python integrations/codex/native/verify_native.py --binary "$binary" --missing-worker --output dist/native-fallback.json
+          python integrations/codex/native/verify_native.py --binary "$binary" --missing-worker --expect-blocked --output dist/native-blocked.json
       - name: Install and prepare real CPU Laya
         if: inputs.real_laya
         run: |

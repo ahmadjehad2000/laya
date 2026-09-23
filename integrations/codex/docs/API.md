@@ -87,10 +87,9 @@ efforts and evidence. Responses are `decided` (effort plus lease 1 or 2) or `fal
 (reason, no inferred effort). Only the native parent applies settings and records
 an acknowledgement after capturing the actual step. See [the native contract](../native/README.md).
 
-`continue` accepts `--target codex` (default) or `--target laya-codex`. Both create a
+`continue` defaults to the unified native launcher; `--target codex` explicitly selects stock Codex. Both create a
 new thread and verify the content-addressed context artifact. Missing/empty context
-arguments include handoff recovery guidance. `--lean` still requires an explicit
-model and retains read-only sandboxing.
+arguments include handoff recovery guidance. `--lean` uses the native saved preference when no model is supplied and retains read-only sandboxing.
 
 `compact-file --controller-log PATH` optionally archives an explicit workspace-local
 native decision log as provenance; no active lease is carried into continuation.
@@ -113,3 +112,13 @@ Uncertain, low-confidence and failed classifications remain candidate records.
 Selected text remains task data; it cannot authorize tools or override instructions.
 The complete report is written to `.laya/results`, so this tool has filesystem side
 effects but makes no cloud calls itself. Excerpts returned to Codex enter cloud context.
+
+## Required gates (0.3.0)
+
+The native parent treats a missing/invalid Laya decision as a blocking error by default,
+including for regular Astra/Sol model names. `LAYA_ENFORCE=0` opts into legacy behavior:
+aliases remain advisory/adaptive and regular model names use configured fixed effort.
+The `prompt-gate` utility consumes a Codex UserPromptSubmit JSON object on stdin and
+emits hook JSON: additionalContext after valid local assessment, or decision=block on
+worker failure. The trusted desktop hook gates task admission, not every generation.
+See the root README for installation, trust, audit locations and host-failure limits.

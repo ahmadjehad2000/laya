@@ -55,14 +55,22 @@ def main(argv=None):
     if not binary.is_file():
         print("Native Codex is not built. Run: py -3.12 integrations/codex/native/build.py", file=sys.stderr)
         return 1
-    env = {**os.environ, "LAYA_CONTROLLER_PYTHON": sys.executable,
+    env = {**os.environ, "LAYA_CONTROLLER_PYTHON": sys.executable, "LAYA_NATIVE_CONTROLLER": "1",
            "LAYA_CONTROLLER_LOG_DIR": str(root / "logs")}
     # Use normal Codex authentication and permissions. CLI flags are invocation-only.
     args = list(sys.argv[1:] if argv is None else argv)
     options = ["--enable", "step_model_switching", "--enable", "reasoning_effort_override"]
     options += integration_options()
     if not has_model_option(args):
-        options += ["-m", "laya-astra"]
+        try:
+            preference = root / "model.json"
+            model = json.loads(preference.read_text(encoding="utf-8"))["model"] if preference.exists() else "laya-astra"
+            if model not in ("laya-astra", "laya-sol"):
+                raise ValueError("Expected laya-astra or laya-sol")
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            print(f"Invalid native model preference: {exc}", file=sys.stderr)
+            return 1
+        options += ["-m", model]
     try:
         return subprocess.run([str(binary), *options, *args], env=env).returncode
     except KeyboardInterrupt:

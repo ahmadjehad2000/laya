@@ -1,0 +1,70 @@
+{
+  "model": "gpt-6-sol",
+  "audit": [
+    {
+      "time": 1790174011.5737064,
+      "model": "gpt-6-sol",
+      "session_id": "01a0ceaf-8488-7160-aa08-666483b07d61",
+      "turn_id": "01a0ceaf-8876-7070-8956-3b3ff0d9f640",
+      "prompt_sha256": "197031067539b56963bcacbe94cae2ebf31a6a822eeb1c9f0651f64eab12e914",
+      "decision": {
+        "protocol": 1,
+        "id": "e5efd920-4171-41cf-b2d9-a932e54c3301",
+        "generation": 1,
+        "status": "decided",
+        "effort": "low",
+        "lease": 1,
+        "evidence_sha256": "a1dd064058047c4aa3a86f9651ecdb0e89bc8114b6a2f15df0d6bf05e30aa214",
+        "coverage": {
+          "requests": 1,
+          "recent_items": 0,
+          "omitted_items": 0
+        },
+        "checkpoint": {
+          "variant": "multilingual",
+          "repo": "convaiinnovations/laya-multilingual",
+          "revision": "052592a15d198d9ad47da779604259b10b47b7aa",
+          "weight_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204"
+        },
+        "runtime": {
+          "backend": "pytorch",
+          "device": "cuda",
+          "fallback_reason": null,
+          "memory_preflight": {
+            "checkpoint": "multilingual",
+            "cold": true,
+            "weight_file_gib": 0.59961854852736,
+            "fp32_parameters_gib": 1.1992044672369957,
+            "reserve_gib": 0.75,
+            "required_ram_gib": 2.5488230157643557,
+            "required_cuda_vram_gib": 2.5,
+            "method": "checkpoint bytes + FP32 parameter bytes + reserve; estimate, not a peak-memory guarantee",
+            "available_ram_gib": 13.355148315429688
+          },
+          "cache_hit": false,
+          "load_ms": 8569.73,
+          "inference_ms": 358.64,
+          "elapsed_ms": 10447.83
+        },
+        "original_runtime": null,
+        "context_tokens": {
+          "effort": 92,
+          "duration": 80
+        },
+        "probabilities": {
+          "low": 0.4551,
+          "medium": 0.1727,
+          "high": 0.0829,
+          "xhigh": 0.2893
+        },
+        "elapsed_ms": 10448.01
+      },
+      "admitted": true
+    }
+  ],
+  "checks": {
+    "local_hook_ran": true,
+    "turn_completed": true
+  },
+  "scope": "Stock client using the same shared desktop plugin and trusted hook configuration"
+}

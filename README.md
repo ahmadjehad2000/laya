@@ -2,16 +2,58 @@
 
 # Laya for Codex
 
-**Astra reasoning, local Laya decisions, one CLI.** Version **0.2.1 preview**.
+**Astra or Sol reasoning, local Laya decisions, one CLI.** Version **0.3.0 preview**.
 
-Built on the original [Laya/PyTorch](https://github.com/NandhaKishorM/laya), this integration combines a native Astra effort controller with local MCP tools for classification, context selection and reversible conversation handoffs.
+Built on the original [Laya/PyTorch](https://github.com/NandhaKishorM/laya), this integration combines a native Astra/Sol effort controller with local MCP tools for classification, context selection and reversible conversation handoffs.
 
 ```powershell
 laya-for-codex
+laya-for-codex -m laya-sol
 laya-for-codex exec "Inspect the failing tests and report what remains unresolved."
 ```
 
 Once the runtime, checkpoint and native package are installed, the CLI starts with **Astra + Laya** and its **eight MCP tools enabled by default**. No plugin registration or activation prompt is needed for this native path, including with `--ignore-user-config`. `laya-codex` remains a compatibility launcher. Stock `codex` and its settings remain separate.
+
+Use `-m laya-sol` for **Sol + Laya**, or set the native default in `~/.laya-for-codex/native/model.json` to `{"model":"laya-sol"}`. Both aliases retain the eight tools; stock desktop Codex uses the real model name with its Laya plugin.
+
+## Required Laya for Astra and Sol
+
+Version 0.3.0 adds runtime gates instead of relying on a model to choose a tool:
+
+| Client | Enforcement |
+|---|---|
+| Custom `laya-for-codex` CLI | A valid Laya decision is required before every supported main-loop generation, for both aliases and regular `gpt-6-astra` / `gpt-6-sol` names. Failure stops generation. |
+| Stock Codex desktop/CLI | The installed, enabled and trusted `UserPromptSubmit` hook runs Laya before each Astra/Sol task. Worker failure or timeout returns a blocking result. It supplies task context, not a change to desktop reasoning settings. |
+
+Update an existing installation (PowerShell, from this repository):
+
+```powershell
+git pull --ff-only
+& "$env:USERPROFILE/.laya-for-codex/venv/Scripts/python.exe" -m pip install --no-deps ./integrations/codex
+py -3.12 integrations/codex/bootstrap.py register
+# Review the installed local hook, then explicitly enable and trust it:
+py -3.12 integrations/codex/scripts/enable_hooks.py --enable
+py -3.12 integrations/codex/native/build.py --toolchain 1.95.0-x86_64-pc-windows-msvc
+laya-for-codex -m gpt-6-sol
+```
+
+Start a new desktop thread after updating. Select `gpt-6-sol` or `gpt-6-astra` there.
+For the native CLI, the saved preference in `~/.laya-for-codex/native/model.json`
+selects `laya-sol` or `laya-astra`; explicit `-m` overrides it.
+
+**Boundaries:** desktop hooks run at prompt submission, not every internal generation.
+Stock Codex can fail open if the hook host itself cannot launch, crashes, or is disabled;
+this plugin cannot change that host behavior. Its worker timeout is shorter than the host
+hook timeout so normal inference failures return an explicit block. Native enforcement
+covers supported standard single-agent main-loop generations, not guardian, subagent,
+or internal compaction calls. It never grants execution permissions.
+
+Native enforcement is on by default. An explicit `LAYA_ENFORCE=0` environment override
+opts into the older advisory/fallback behavior. Do not use that override when enforcement
+is required. Raw evidence overflow blocks; it is never silently truncated.
+Desktop audit records are under `~/.laya-for-codex/hook-audit/`; native decisions are in
+`~/.laya-for-codex/native/logs/`. A model saying it did not call Laya does not override
+these runtime records. Cold inference adds latency; this release makes no cost-saving claim.
 
 ## How they work together
 
@@ -172,7 +214,7 @@ memory guards just to pass a GPU check. `--require-device cuda` rejects CPU fall
 | Keep answer caching enabled | Exact repeated states and criteria | Novel states do not benefit; cache expires and release clears it |
 | `continue --lean` | Explicit new-thread handoff with fewer configured integrations | User configuration is skipped only for that invocation |
 | `-c mcp_servers.laya-for-codex.enabled=false` | Diagnose the native controller separately | Local MCP tools are unavailable for that invocation |
-| `-m gpt-6-astra` | Compare fixed effort against the adaptive alias | Explicit real-model selection leaves adaptive alias mode inactive |
+| `-m gpt-6-astra` / `-m gpt-6-sol` | Use native required Laya decisions | Regular model names are enforced too; explicit `LAYA_ENFORCE=0` restores the legacy advisory/baseline behavior |
 
 Normal launches preserve user configuration, including the existing Astra medium
 baseline. The ignored-config acceptance test only proves self-contained startup;

@@ -75,9 +75,10 @@ class Runtime:
                 "checkpoint": {"variant": "multilingual"}, "context_tokens": {"effort": 90}}
 
 
-def test_controller_preserves_constraints_when_optional_context_does_not_fit():
+@pytest.mark.parametrize("model", ["gpt-6-astra", "gpt-6-sol"])
+def test_controller_preserves_constraints_when_optional_context_does_not_fit(model):
     runtime = Runtime()
-    req = request(evidence={"requests": ["Fix tests; never deploy."], "recent": ["large output"]})
+    req = request(model=model, evidence={"requests": ["Fix tests; never deploy."], "recent": ["large output"]})
     result = decide(runtime, req)
     assert result["status"] == "decided"
     assert result["coverage"] == {"requests": 1, "recent_items": 0, "omitted_items": 1}

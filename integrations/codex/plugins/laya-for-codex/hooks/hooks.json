@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "laya-for-codex prompt-gate",
+            "timeout": 150
+          }
+        ]
+      }
+    ]
+  }
+}

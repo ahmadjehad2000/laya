@@ -1,9 +1,10 @@
+<!-- Companion release 0.3.0: see the root README for required prompt/native gates. -->
 # Laya for Codex
 
 A local Codex companion built directly on [NandhaKishorM/laya](https://github.com/NandhaKishorM/laya).
 Original Laya and PyTorch only. No Laya-MLX code or runtime is used.
 
-**Preview 0.2.1.** Real companion inference passed on Windows CPU/CUDA, Linux CPU, and macOS
+**Preview 0.3.0.** Real companion inference passed on Windows CPU/CUDA, Linux CPU, and macOS
 ARM64 CPU. See [verification](docs/VERIFICATION.md) for evidence and unverified paths.
 
 ## What you can do
@@ -22,12 +23,13 @@ Raw-code role classification failed 3/4 cases and is excluded from the recommend
 workflow. Sales/billing and explicit refund negation also produced errors. The plugin
 requires source review rather than treating confidence as a correctness guarantee.
 
-## Native Astra + Laya
+## Native Astra / Sol + Laya
 
 The [native client](native/README.md) is the default launch path for `laya-for-codex`.
-It starts the Astra effort controller and configures all eight local MCP tools for
+It starts the required Astra/Sol effort controller and configures all eight local MCP tools for
 that invocation without plugin registration. `laya-codex` remains compatible.
-Actual provider requests use `gpt-6-astra`. Native code still requires the documented
+Use `-m laya-sol` for Sol + Laya. Actual provider requests use `gpt-6-astra` or
+`gpt-6-sol` according to the selected alias. Native code still requires the documented
 source build; stock Codex is not replaced. Local utility subcommands retain their
 behavior. `continue` now defaults to the unified CLI; choose `--target codex` for stock.
 
