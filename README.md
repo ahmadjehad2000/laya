@@ -113,15 +113,6 @@ This combines Codex generation with local Laya selection. It does not turn Laya 
 
 Start with the [universal domain task prompt](integrations/codex/SESSION_PROMPT.md). Fill in the domain, task, constraints, and acceptance criteria. It includes coding, security, research, document, and data-review criteria. Prompts guide workflow; native runtime checks enforce inference participation.
 
-## How it works
-
-1. The native client sends accepted task requests and bounded public progress to a local worker. Hidden reasoning and provider credential environment variables are excluded.
-2. Laya assesses effort and milestone advice. Oversized requests are split for effort assessment without dropping request characters. Milestone excerpts have explicit coverage metadata.
-3. Native Codex validates the decision and applies supported effort. Validated milestone labels enter the next provider request as advisory context.
-4. Codex executes authorized work and reassesses after new results. Decisions, timing, device and evidence hashes are recorded locally.
-5. At normal task completion, the native client displays usage and timing. Cached input is included in input; reasoning output is included in output. Neither is counted twice.
-
-Audit logs: `~/.laya-for-codex/native/logs/`. Desktop hook audit: `~/.laya-for-codex/hook-audit/`.
 
 ## Original Laya safeguards
 
