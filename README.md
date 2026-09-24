@@ -50,6 +50,614 @@ For a CPU installation, replace the install flags with `--torch-index cpu --devi
 
 The native launcher enables its controller and eight MCP tools automatically. `laya-codex` is a compatible command. Native build instructions and platform limitations are in the [native guide](integrations/codex/native/README.md).
 
+## Linux Installation
+
+Laya for Codex supports Linux with both:
+
+- **CPU inference** using PyTorch CPU
+- **NVIDIA CUDA inference** using PyTorch CUDA
+
+The instructions below are intended for **Ubuntu 24.04 LTS / Debian-compatible x86_64 systems**.
+
+### Requirements
+
+Recommended:
+
+- Ubuntu 24.04 LTS
+- Python 3.12+
+- Git
+- 4 GB RAM minimum
+- 8 GB+ RAM recommended for building native Codex
+- Several GB of free disk space
+- NVIDIA driver for CUDA installations
+
+Check Python:
+
+```bash
+python3.12 --version
+```
+
+Expected:
+
+```text
+Python 3.12.x
+```
+
+---
+
+### 1. Install Linux dependencies
+
+```bash
+sudo apt update
+
+sudo apt install -y \
+  git \
+  curl \
+  ca-certificates \
+  build-essential \
+  pkg-config \
+  libcap-dev \
+  musl \
+  musl-dev \
+  musl-tools \
+  clang \
+  lld \
+  g++ \
+  libc++-dev \
+  libc++abi-dev \
+  cmake \
+  make \
+  perl \
+  xz-utils \
+  file \
+  python3 \
+  python3-venv \
+  python3-pip
+```
+
+---
+
+### 2. Clone Laya for Codex
+
+```bash
+cd ~
+
+git clone https://github.com/ahmadjehad2000/laya-for-codex.git
+
+cd laya-for-codex
+```
+
+---
+
+# CPU Installation
+
+Use this path for:
+
+- VMs without NVIDIA GPUs
+- General-purpose Linux systems
+- Cloud VMs using CPU-only inference
+- Development and testing
+
+Install Laya using the CPU PyTorch backend:
+
+```bash
+python3.12 integrations/codex/bootstrap.py install \
+  --torch-index cpu \
+  --device cpu
+```
+
+The installer will:
+
+- Create the Laya virtual environment
+- Install the pinned PyTorch CPU runtime
+- Install Laya and the Codex companion
+- Download and verify the configured checkpoint
+- Register the Laya Codex plugin
+- Install the `laya-for-codex` and `laya-codex` commands
+
+Ensure the local binary directory is available:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+To make this permanent:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Verify:
+
+```bash
+which laya-for-codex
+laya-for-codex doctor
+```
+
+The doctor output should report:
+
+```text
+device: cpu
+runtime: upstream-laya-pytorch
+```
+
+---
+
+# NVIDIA CUDA Installation
+
+Use this path only when the Linux host has a supported NVIDIA GPU and working NVIDIA drivers.
+
+First verify the GPU:
+
+```bash
+nvidia-smi
+```
+
+You should see your GPU, driver version, memory usage, and supported CUDA version.
+
+Then install Laya using the CUDA PyTorch backend:
+
+```bash
+python3.12 integrations/codex/bootstrap.py install \
+  --torch-index cu128 \
+  --device cuda
+```
+
+Ensure the local commands are available:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Persist the PATH:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Verify:
+
+```bash
+laya-for-codex doctor
+```
+
+For an active CUDA runtime, the resulting runtime should use:
+
+```text
+device: cuda
+```
+
+You can also verify CUDA directly inside the Laya environment:
+
+```bash
+"$HOME/.laya-for-codex/venv/bin/python" - <<'PY'
+import torch
+
+print("PyTorch:", torch.__version__)
+print("CUDA available:", torch.cuda.is_available())
+print("CUDA runtime:", torch.version.cuda)
+
+if torch.cuda.is_available():
+    print("GPU:", torch.cuda.get_device_name(0))
+    print(
+        "VRAM:",
+        round(
+            torch.cuda.get_device_properties(0).total_memory
+            / 1024**3,
+            2,
+        ),
+        "GiB",
+    )
+PY
+```
+
+Expected:
+
+```text
+CUDA available: True
+GPU: <your NVIDIA GPU>
+```
+
+If CUDA reports `False`, fix the NVIDIA driver / CUDA environment before continuing.
+
+---
+
+# Build the Native Codex Client
+
+The Laya runtime and Codex plugin can be installed independently, but the `laya-for-codex` launcher also requires the native Codex client to be built.
+
+If running:
+
+```bash
+laya-for-codex
+```
+
+returns:
+
+```text
+Native Codex is not built.
+```
+
+install the Rust build environment.
+
+### Install Rust
+
+```bash
+curl --proto '=https' \
+  --tlsv1.2 \
+  -sSf https://sh.rustup.rs | sh
+```
+
+Load Rust into the current shell:
+
+```bash
+source "$HOME/.cargo/env"
+```
+
+Ensure Rust binaries have priority:
+
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+Install the required Rust toolchain:
+
+```bash
+rustup toolchain install 1.95.0 --profile minimal
+```
+
+Set it as the default:
+
+```bash
+rustup default 1.95.0
+```
+
+Install the MUSL target required by the Codex Linux package:
+
+```bash
+rustup target add \
+  x86_64-unknown-linux-musl \
+  --toolchain 1.95.0
+```
+
+Verify:
+
+```bash
+cargo --version
+rustc --version
+
+rustup target list \
+  --installed \
+  --toolchain 1.95.0
+```
+
+Expected targets:
+
+```text
+x86_64-unknown-linux-gnu
+x86_64-unknown-linux-musl
+```
+
+Verify that Rust can locate the MUSL standard library:
+
+```bash
+rustc +1.95.0 \
+  --print target-libdir \
+  --target x86_64-unknown-linux-musl
+```
+
+---
+
+### Test the MUSL toolchain
+
+Before compiling Codex, verify that a simple static Rust binary can be built.
+
+```bash
+cat >/tmp/laya-rust-musl-test.rs <<'EOF'
+fn main() {
+    println!("Rust MUSL toolchain works.");
+}
+EOF
+
+rustc +1.95.0 \
+  --target x86_64-unknown-linux-musl \
+  /tmp/laya-rust-musl-test.rs \
+  -o /tmp/laya-rust-musl-test
+```
+
+Run it:
+
+```bash
+/tmp/laya-rust-musl-test
+```
+
+Expected:
+
+```text
+Rust MUSL toolchain works.
+```
+
+Inspect it:
+
+```bash
+file /tmp/laya-rust-musl-test
+```
+
+---
+
+### Build native Codex
+
+Return to the repository:
+
+```bash
+cd ~/laya-for-codex
+```
+
+For machines with limited RAM, restrict Cargo parallelism:
+
+```bash
+export CARGO_BUILD_JOBS=1
+```
+
+Then build:
+
+```bash
+python3.12 integrations/codex/native/build.py
+```
+
+On larger systems you may increase build parallelism:
+
+```bash
+export CARGO_BUILD_JOBS=2
+```
+
+or remove `CARGO_BUILD_JOBS` entirely and allow Cargo to select the build concurrency.
+
+---
+
+# Final Verification
+
+After installation:
+
+```bash
+cd ~/laya-for-codex
+```
+
+Check the launcher:
+
+```bash
+which laya-for-codex
+```
+
+Expected:
+
+```text
+/home/<user>/.local/bin/laya-for-codex
+```
+
+Run diagnostics:
+
+```bash
+laya-for-codex doctor
+```
+
+Then launch:
+
+```bash
+laya-for-codex
+```
+
+---
+
+# CPU Quick Install
+
+For an Ubuntu CPU-only system:
+
+```bash
+sudo apt update
+
+sudo apt install -y \
+  git \
+  curl \
+  ca-certificates \
+  build-essential \
+  pkg-config \
+  libcap-dev \
+  musl \
+  musl-dev \
+  musl-tools \
+  clang \
+  lld \
+  g++ \
+  libc++-dev \
+  libc++abi-dev \
+  cmake \
+  make \
+  perl \
+  xz-utils \
+  file \
+  python3 \
+  python3-venv \
+  python3-pip
+
+cd ~
+
+git clone https://github.com/ahmadjehad2000/laya-for-codex.git
+
+cd laya-for-codex
+
+python3.12 integrations/codex/bootstrap.py install \
+  --torch-index cpu \
+  --device cpu
+
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+
+laya-for-codex doctor
+```
+
+---
+
+# CUDA Quick Install
+
+For an NVIDIA Linux system:
+
+```bash
+nvidia-smi
+
+sudo apt update
+
+sudo apt install -y \
+  git \
+  curl \
+  ca-certificates \
+  build-essential \
+  pkg-config \
+  libcap-dev \
+  musl \
+  musl-dev \
+  musl-tools \
+  clang \
+  lld \
+  g++ \
+  libc++-dev \
+  libc++abi-dev \
+  cmake \
+  make \
+  perl \
+  xz-utils \
+  file \
+  python3 \
+  python3-venv \
+  python3-pip
+
+cd ~
+
+git clone https://github.com/ahmadjehad2000/laya-for-codex.git
+
+cd laya-for-codex
+
+python3.12 integrations/codex/bootstrap.py install \
+  --torch-index cu128 \
+  --device cuda
+
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+
+laya-for-codex doctor
+```
+
+---
+
+# Common Linux Issues
+
+### `cargo: command not found`
+
+Install Rust using `rustup`:
+
+```bash
+curl --proto '=https' \
+  --tlsv1.2 \
+  -sSf https://sh.rustup.rs | sh
+
+source "$HOME/.cargo/env"
+```
+
+---
+
+### `can't find crate for core`
+
+The MUSL Rust target is missing.
+
+Run:
+
+```bash
+rustup target add \
+  x86_64-unknown-linux-musl \
+  --toolchain 1.95.0
+```
+
+Verify:
+
+```bash
+rustup target list \
+  --installed \
+  --toolchain 1.95.0
+```
+
+---
+
+### `file: command not found`
+
+Install the Linux `file` utility:
+
+```bash
+sudo apt install -y file
+```
+
+---
+
+### `Native Codex is not built`
+
+Build the native client:
+
+```bash
+cd ~/laya-for-codex
+
+source "$HOME/.cargo/env"
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+python3.12 integrations/codex/native/build.py
+```
+
+---
+
+### Build terminated or killed
+
+This is usually caused by insufficient RAM during the Rust build.
+
+Limit Cargo to one build job:
+
+```bash
+export CARGO_BUILD_JOBS=1
+```
+
+Then retry:
+
+```bash
+python3.12 integrations/codex/native/build.py
+```
+
+On very small VMs, adding swap or temporarily increasing VM memory is recommended.
+
+---
+
+### CUDA is not detected
+
+Check:
+
+```bash
+nvidia-smi
+```
+
+Then:
+
+```bash
+"$HOME/.laya-for-codex/venv/bin/python" -c \
+'import torch; print(torch.cuda.is_available()); print(torch.version.cuda)'
+```
+
+If the result is:
+
+```text
+False
+```
+
+the NVIDIA driver / CUDA environment is not ready for Laya CUDA inference. Fix the GPU environment before reinstalling or switching Laya to CUDA.
+
 ### Update an existing installation
 
 From your checkout:
